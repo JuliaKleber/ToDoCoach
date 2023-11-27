@@ -1,9 +1,9 @@
 puts 'Clearing the database ...'
 
 TaskCategory.destroy_all
-User.destroy_all
 Task.destroy_all
 Category.destroy_all
+User.destroy_all
 
 puts 'Creating users ...'
 
@@ -11,10 +11,10 @@ puts 'Creating users ...'
 user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia']
 
 users = user_names.map do |name|
-  User.create(user_name: name, email: "#{name.downcase}@todocoach.com", password: '123456')
+  User.create(user_name: name, email: "#{name.downcase}@example.com", password: 'password')
 end
 
-puts User.all
+puts 'Creating categories ....'
 
 # Create categories for each user
 categories = users.flat_map do |user|
@@ -23,10 +23,12 @@ categories = users.flat_map do |user|
   end
 end
 
+puts 'Creating tasks...'
+
 # Create tasks for each user due in the next two weeks and assign categories
 users.each do |user|
   30.times do |n|
-    due_date = Time.now + (n / 3).days
+    due_date = Time.now + n.days
     task = user.tasks.create(
       title: "Task #{n + 1} for #{user.user_name}",
       description: "Description for task #{n + 1}",
@@ -35,7 +37,11 @@ users.each do |user|
       due_date: due_date,
       reminder_date: due_date - 1.day
     )
-    # Assign random categories to the task
-    task.categories << categories.sample(rand(1..3))
+
+    # Assign random categories to the task through TaskCategory
+    task_categories = categories.sample(rand(1..3))
+    task_categories.each do |category|
+      TaskCategory.create(task: task, category: category)
+    end
   end
 end
