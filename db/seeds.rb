@@ -11,7 +11,7 @@ puts 'Creating users ...'
 user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia']
 
 users = user_names.map do |name|
-  User.create(user_name: name, email: "#{name.downcase}@example.com", password: 'password')
+  User.create(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
 end
 
 puts 'Creating categories ....'
@@ -26,9 +26,10 @@ end
 puts 'Creating tasks...'
 
 # Create tasks for each user due in the next two weeks and assign categories
+current_time = Time.now
 users.each do |user|
   30.times do |n|
-    due_date = Time.now + n.days
+    due_date = (current_time + (n / 2).days)
     task = user.tasks.create(
       title: "Task #{n + 1} for #{user.user_name}",
       description: "Description for task #{n + 1}",

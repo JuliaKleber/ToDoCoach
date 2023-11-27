@@ -1,6 +1,7 @@
 <p>Here someone can put the search bar</p>
-<% @grouped_tasks.each do |tasks| %>
-  <h4><%= tasks[0].due_date %></h4>
+
+<% @grouped_tasks.each_with_index do |tasks, index| %>
+  <h4><%= @dates[index] %></h4>
   <div class='card'>
     <% tasks.each do |task| %>
       <span>
@@ -11,11 +12,11 @@
         <% end %>
         <%= task.title %>
         <% if task.priority == 1 %>
-          <p>purple dot</p>
+          <span>purple dot</span>
         <% elsif task.priority == 2 %>
-          <p>green dot</p>
+          <span>green dot</span>
         <% else %>
-          <p>yellow dot</p>
+          <span>yellow dot</span>
         <% end %>
       </span>
     <% end %>

@@ -6,11 +6,12 @@ class TasksController < ApplicationController
     @tasks = Task.where(user_id: current_user)
     @dates = Set.new([])
     @tasks.each do |task|
-      @dates << task.due_date
+      @dates << task.due_date.strftime('%a, %d %B')
     end
+    @dates = @dates.to_a
     @grouped_tasks = []
     @dates.each do |date|
-      dated_tasks = @tasks.select { |task| task.due_date = date }
+      dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
       @grouped_tasks << dated_tasks
     end
   end
