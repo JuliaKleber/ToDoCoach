@@ -1,0 +1,23 @@
+<p>Here someone can put the search bar</p>
+<% @grouped_tasks.each do |tasks| %>
+  <h4><%= tasks[0].due_date %></h4>
+  <div class='card'>
+    <% tasks.each do |task| %>
+      <span>
+        <% if task.completed %>
+          <i cla ss="fa-regular fa-square-check"></i>
+        <% else %>
+          <i class="fa-regular fa-square"></i>
+        <% end %>
+        <%= task.title %>
+        <% if task.priority == 1 %>
+          <p>purple dot</p>
+        <% else task.priority == 2 %>
+          <p>green dot</p>
+        <% else %>
+          <p>yellow dot</p>
+        <% end %>
+      </span>
+    <% end %>
+  </div>
+<% end %>
