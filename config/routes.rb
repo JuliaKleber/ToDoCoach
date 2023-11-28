@@ -5,5 +5,8 @@ Rails.application.routes.draw do
     collection do
       get :todays_tasks, as: 'todays'
     end
+    member do
+      patch :toggle_completed
+    end
   end
 end

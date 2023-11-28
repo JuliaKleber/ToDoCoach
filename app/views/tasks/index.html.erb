@@ -6,18 +6,24 @@
     <% tasks.each do |task| %>
       <span>
         <% if task.completed %>
-          <i cla ss="fa-regular fa-square-check"></i>
+          <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
+            <i class='fa-regular fa-circle-check'></i>
+          <% end %>
         <% else %>
-          <i class="fa-regular fa-square"></i>
+          <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
+            <i class='fa-regular fa-circle'></i>
+          <% end %>
         <% end %>
-        <%= task.title %>
-        <% if task.priority == 1 %>
-          <span>purple dot</span>
-        <% elsif task.priority == 2 %>
-          <span>green dot</span>
-        <% else %>
-          <span>yellow dot</span>
+        <%= link_to task_path(task) do %>
+          <%= task.title %>
         <% end %>
+      <% if task.priority == 1 %>
+        <span class='high-priority-color'><i class='fa-solid fa-circle'></i></span>
+      <% elsif task.priority == 2 %>
+        <span class='medium-priority-color'><i class='fa-solid fa-circle'></i></span>
+      <% else %>
+        <span class='low-priority-color'><i class='fa-solid fa-circle'></i></span>
+      <% end %>
       </span>
     <% end %>
   </div>
