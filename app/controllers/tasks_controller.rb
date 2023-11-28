@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: %i[show toggle_completed edit update destroy]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -9,10 +9,12 @@ class TasksController < ApplicationController
     @all_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
+    @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
   end
 
   def index
     @tasks = Task.where(user_id: current_user)
+    @tasks = @tasks.order(due_date: :asc, priority: :desc)
     @dates = Set.new([])
     @tasks.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
@@ -46,11 +48,21 @@ class TasksController < ApplicationController
   end
 
   def update
-      @task.update(task_params)
-      redirect_to task_path(@task)
+    @task = Task.find(params[:id])
+    @task.update(task_params)
+    redirect_to task_path(@task)
+  end
+
+  def toggle_completed
+    @task.update(completed: !@task.completed)
+    # redirect_to motivational_message
+    redirect_back(fallback_location: todays_tasks_path)
   end
 
   def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
+    redirect_to tasks_path, status: :see_other
   end
 
   private
@@ -67,8 +79,6 @@ class TasksController < ApplicationController
       @message = "Good evening #{current_user.user_name}"
     end
   end
-
-  private
 
   def set_task
     @task = Task.find(params[:id])
