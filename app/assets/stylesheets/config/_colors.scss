@@ -1,22 +1,23 @@
 // Define variables for your color scheme
 
-// For example:
-$red: #D13852;
-$light-blue: #05C3FD;
+// MAIN COLOUR SCHEME:
 $dark-blue: #242474;
-$yellow: #EACB49;
+// for the navbar, and as accent colour
 $orange: #F58C40;
-$background-color: #F9F5F5;
+// secondary colour, for buttons and other small components (medium-priority)
+$background-color: #F6F1EF;
 
-$high-priority-color: #E41C1C;
-$medium-priority-color: #F58C40;
-$low-priority-color: #40AE36;
+// PRIORITY COLOUR CODING
+$high-priority: #E84A4A;
+$medium-priority: #F4C778;
+$low-priority: #75C16C;
 
-$grocery-color: #E41C1C;
-$medical-color: #F58C40;
-$vacation-color: #40AE36;
-$study-color: #E41C1C;
-$work-color: #F58C40;
+// CATEGORY COLOUR CODING
+$grocery-color: #E8500F;
+$medical-color: #1F9586;
+$vacation-color: #8ECAE6;
+$study-color: #B6244F;
+$work-color: #5310f1;
 
 // for some strange reasons it wants to have all the colors
 // Pre-set colors:
