@@ -9,7 +9,7 @@
         <%= link_to "Cathegories", "#", class: "btn btn-secondary" %>
         </p>
         <h3><%=@task.title %>
-          <% if @task.priority = 1 %>
+        <% if @task.priority = 1 %>
           <i class="fa-solid fa-droplet" style="color: #ff0000;"></i>
         <% elsif @task.priority = 2 %>
           <i class="fa-solid fa-droplet" style="color: #ff2780;"></i>
