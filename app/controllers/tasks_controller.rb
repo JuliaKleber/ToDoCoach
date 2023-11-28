@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_task, only: [:show]
+  
   def todays_tasks
   end
 
@@ -32,5 +34,15 @@ class TasksController < ApplicationController
   end
 
   def destroy
+  end
+
+  private
+
+  def set_task
+    @task = Task.find(params[:id])
+  end
+
+  def task_params
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date )
   end
 end
