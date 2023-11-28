@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show toggle_completed edit update]
+  before_action :set_task, only: %i[show toggle_completed edit update destroy]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -85,6 +85,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date )
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
   end
 end
