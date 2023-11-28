@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show toggle_completed]
+  before_action :set_task, only: %i[show toggle_completed edit update]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -48,6 +48,9 @@ class TasksController < ApplicationController
   end
 
   def update
+    @task = Task.find(params[:id])
+    @task.update(task_params)
+    redirect_to task_path(@task)
   end
 
   def toggle_completed
@@ -57,6 +60,9 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
+    redirect_to tasks_path, status: :see_other
   end
 
   private
