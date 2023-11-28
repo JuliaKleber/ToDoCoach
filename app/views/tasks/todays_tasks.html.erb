@@ -24,9 +24,13 @@
       <p><%= task.description.split.first(4).join(' ') %> ...</p>
     </div>
     <div class='m-3'>
-      <p>
-        <i class='fa-solid fa-circle'></i>
-      </p>
+      <% if task.priority == 0 %>
+        <p class='high-priority-color'><i class='fa-solid fa-circle'></i></p>
+      <% elsif task.priority == 1 %>
+        <p class='medium-priority-color'><i class='fa-solid fa-circle'></i></p>
+      <% else %>
+        <p class='low-priority-color'><i class='fa-solid fa-circle'></i></p>
+      <% end %>
       <p>
         <% if task.completed %>
           <i class='fa-regular fa-circle-check'></i>

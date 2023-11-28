@@ -1,0 +1,13 @@
+@import '../config/colors.scss';
+
+.high-priority-color {
+  color: $high-priority-color
+}
+
+.medium-priority-color {
+  color: $medium-priority-color
+}
+
+.low-priority-color {
+  color: $low-priority-color
+}
