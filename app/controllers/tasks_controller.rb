@@ -2,6 +2,17 @@ class TasksController < ApplicationController
   before_action :set_task, only: [:show]
   
   def todays_tasks
+    @tasks = Task.where(user_id: current_user)
+    @dates = Set.new([])
+    @tasks.each do |task|
+      @dates << task.due_date.strftime('%a, %d %B')
+    end
+    @dates = @dates.to_a
+    @grouped_tasks = []
+    @dates.each do |date|
+      dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
+      @grouped_tasks << dated_tasks
+    end
   end
 
   def index
@@ -22,9 +33,17 @@ class TasksController < ApplicationController
   end
 
   def new
+    @task = Task.new
   end
 
   def create
+    @task = Task.new(task_params)
+    @task.user = current_user
+    if @task.save
+      redirect_to task_path(@task)
+    else
+      render :new
+    end
   end
 
   def edit
@@ -37,7 +56,7 @@ class TasksController < ApplicationController
   end
 
   private
-
+  
   def set_task
     @task = Task.find(params[:id])
   end

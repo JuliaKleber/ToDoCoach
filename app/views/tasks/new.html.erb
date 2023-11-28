@@ -1,1 +1,11 @@
 <p>Here you can add a new task</p>
+<div>
+<%= simple_form_for(@task) do |f| %>
+  <%= f.input :title %>
+  <%= f.input :description %>
+  <%= f.input :priority %>
+  <%= f.input :due_date, as: :datetime, html5: true %>
+  <%= f.input :reminder_date, as: :datetime, html5: true %>
+  <%= f.submit %>
+<% end %>
+</div>
