@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_task, only: [:show]
+  
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
@@ -27,9 +29,17 @@ class TasksController < ApplicationController
   end
 
   def new
+    @task = Task.new
   end
 
   def create
+    @task = Task.new(task_params)
+    @task.user = current_user
+    if @task.save
+      redirect_to task_path(@task)
+    else
+      render :new
+    end
   end
 
   def edit
@@ -55,5 +65,12 @@ class TasksController < ApplicationController
       @message = "Good evening #{current_user.user_name}"
     end
   end
+  
+  def set_task
+    @task = Task.find(params[:id])
+  end
 
+  def task_params
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date )
+  end
 end

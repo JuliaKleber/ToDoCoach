@@ -1,1 +1,47 @@
-<p>Here you can see the details of a task</p>
+<div>
+ <div class="row">
+    <div class="col-12 col-md-6 offset-lg-3">
+      <div class="bg-white rounded p-3 shadow">
+        <h2>TASK</h2>
+
+        <hr>
+        <%= link_to "Cathegories", "#", class: "btn btn-secondary col align-self-center" %>
+        <h3><%=@task.title %>
+          <% if @task.priority = 1 %>
+          <i class="fa-solid fa-droplet" style="color: #ff0000;"></i>
+        <% elsif @task.priority = 2 %>
+          <i class="fa-solid fa-droplet" style="color: #ff2780;"></i>
+        <% else %>
+          <i class="fa-solid fa-droplet" style="color: #ff8080;"></i>
+        <% end %>
+        </h3>
+        <p>------------------------</p>
+          <%=@task.description %>
+        <p>------------------------</p>
+
+          <% if @task.completed?%>
+            <i class="fa-regular fa-square-check" style="color: #c0c0c0;"></i> Task completed
+          <% else %>
+            <i class="fa-regular fa-square" style="color: #c0c0c0;"></i> Task not completed
+          <% end %>
+        <p>------------------------</p>
+
+          <%=@task.due_date %>
+        <p>------------------------</p>
+
+        <%=@task.reminder_date %>
+
+      <hr>
+      <p>
+        <%= link_to tasks_path do %>
+          <i class="fa fa-history"></i> Back to Task Lists
+        <% end %>
+        </p>
+        <p>
+        <%= link_to edit_task_path(@task.id) do %>
+          <i class="fa fa-pencil"></i> Edit this task
+        <% end %>
+       </p>
+    </div>
+   </div>
+  </div>
