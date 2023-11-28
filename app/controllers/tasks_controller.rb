@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update]
+  before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -67,12 +67,14 @@ class TasksController < ApplicationController
       @message = "Good evening #{current_user.user_name}"
     end
   end
-  
+
+  private
+
   def set_task
     @task = Task.find(params[:id])
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date )
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
   end
 end
