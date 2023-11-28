@@ -1,15 +1,11 @@
 class TasksController < ApplicationController
   def todays_tasks
-    @tasks = Task.where(user_id: current_user)
-    @dates = Set.new([])
-    @tasks.each do |task|
-      @dates << task.due_date.strftime('%a, %d %B')
-    end
-    @dates = @dates.to_a
-    @grouped_tasks = []
-    @dates.each do |date|
-      dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
-      @grouped_tasks << dated_tasks
+    @today = Time.now.strftime('%a, %d %B')
+    @welcome_message = welcome_message
+    @all_tasks = Task.where(user_id: current_user)
+    @tasks = []
+    @all_tasks.each do |task|
+      (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
   end
 
@@ -43,5 +39,20 @@ class TasksController < ApplicationController
   end
 
   def destroy
+  end
+
+  private
+
+  def welcome_message
+    todays_hour = Time.now.hour
+    if todays_hour < 2
+      @message = "Good evening #{current_user.user_name}"
+    elsif todays_hour < 12
+      @message = "Good morning #{current_user.user_name}"
+    elsif todays_hour < 18
+      @message = "Good afternoon #{current_user.user_name}"
+    else
+      @message = "Good evening #{current_user.user_name}"
+    end
   end
 end

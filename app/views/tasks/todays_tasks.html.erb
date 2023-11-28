@@ -1,24 +1,47 @@
-<p>Here you can see the tasks that are due today</p>
+<div class='container'>
 
-<% @grouped_tasks.each_with_index do |tasks, index| %>
-  <h4><%= @dates[index] %></h4>
-  <div class='card'>
-    <% tasks.each do |task| %>
-      <span>
+<p> Here we need the mascot </p>
+<p> <%= @today %> </p>
+<p> <%= @message %> </p>
+<p> Isn't it a wonderful day to accomplish some more? </p>
+
+<% @tasks.each do |task| %>
+  <div class='card d-flex flex-row'>
+    <div class='m-3'>
+      <i class="fa-solid fa-briefcase"></i>
+    </div>
+    <div class='m-3'>
+      <p><%= task.title %></p>
+      <p>
+        <% if task.due_date.hour < 12 %>
+          <%= task.due_date.strftime("%H:%M") %>
+          am
+        <% else %>
+          <%= (task.due_date - (12*60*60)).strftime("%H:%M") %>
+          pm
+        <% end %>
+      </p>
+      <p><%= task.description.split.first(4).join(' ') %> ...</p>
+    </div>
+    <div class='m-3'>
+      <p>
+        <i class='fa-solid fa-circle'></i>
+      </p>
+      <p>
         <% if task.completed %>
-          <i cla ss="fa-regular fa-square-check"></i>
+          <i class='fa-regular fa-circle-check'></i>
         <% else %>
-          <i class="fa-regular fa-square"></i>
+          <i class='fa-regular fa-circle'></i>
         <% end %>
-        <%= task.title %>
-        <% if task.priority == 1 %>
-          <span>purple dot</span>
-        <% elsif task.priority == 2 %>
-          <span>green dot</span>
-        <% else %>
-          <span>yellow dot</span>
-        <% end %>
-      </span>
-    <% end %>
+      </p>
+    </div>
   </div>
 <% end %>
+
+<div class='text-end'>
+  <%= link_to new_task_path do %>
+    <i class="fa-solid fa-plus"></i>
+  <% end %>
+</div>
+
+</div>
