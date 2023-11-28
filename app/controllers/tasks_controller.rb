@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_task, only: [:show]
+  
   def todays_tasks
     @tasks = Task.where(user_id: current_user)
     @dates = Set.new([])
@@ -54,8 +56,12 @@ class TasksController < ApplicationController
   end
 
   private
+  
+  def set_task
+    @task = Task.find(params[:id])
+  end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :due_date, :reminder_date)
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date )
   end
 end
