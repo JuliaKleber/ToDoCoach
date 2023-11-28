@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show]
-  
+  before_action :set_task, only: [:show, :edit, :update]
+
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
@@ -46,6 +46,8 @@ class TasksController < ApplicationController
   end
 
   def update
+      @task.update(task_params)
+      redirect_to task_path(@task)
   end
 
   def destroy
