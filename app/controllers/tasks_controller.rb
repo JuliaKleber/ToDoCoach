@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show]
-  
+  before_action :set_task, only: [:show, :edit, :update]
+
   def todays_tasks
     @tasks = Task.where(user_id: current_user)
     @dates = Set.new([])
@@ -50,13 +50,15 @@ class TasksController < ApplicationController
   end
 
   def update
+      @task.update(task_params)
+      redirect_to task_path(@task)
   end
 
   def destroy
   end
 
   private
-  
+
   def set_task
     @task = Task.find(params[:id])
   end

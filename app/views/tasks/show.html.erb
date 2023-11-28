@@ -1,11 +1,13 @@
 <div>
  <div class="row">
-    <div class="col-12 col-md-6 offset-lg-3">
-      <div class="bg-white rounded p-3 shadow">
+    <div class="col-12 col-md-6">
+      <div class="bg-white rounded p-3">
         <h2>TASK</h2>
 
         <hr>
-        <%= link_to "Cathegories", "#", class: "btn btn-secondary col align-self-center" %>
+        <p>
+        <%= link_to "Cathegories", "#", class: "btn btn-secondary" %>
+        </p>
         <h3><%=@task.title %>
           <% if @task.priority = 1 %>
           <i class="fa-solid fa-droplet" style="color: #ff0000;"></i>
