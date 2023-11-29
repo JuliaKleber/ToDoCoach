@@ -5,12 +5,21 @@
 <h2> <%= @message %> </h2>
 <p> Isn't it a wonderful day to accomplish some more? </p>
 
-<% @tasks.each do |task| %>
+<% @tasks.each_with_index do |task, index| %>
   <div class='card d-flex flex-row'>
-    <div class='m-3 d-flex align-items-center'>
-      <i class="fa-solid fa-briefcase"></i>
-    </div>
 
+    <div class='m-3 d-flex align-items-center'>
+      <% if @tasks_category_names[index].include?("Work") %>
+        <i class="fa-solid fa-briefcase"></i>
+      <% elsif @tasks_category_names[index].include?("Groceries") %>
+        <i class="fa-solid fa-basket-shopping"></i>
+      <% elsif @tasks_category_names[index].include?("Personal") %>
+        <i class="fa-solid fa-user"></i>
+      <% else %>
+        <i class="fa-solid fa-ghost"></i>
+      <% end %>
+    </div>
+<% raise %>
     <div>
       <div class='d-flex flex-row'>
         <div class='m-3'>

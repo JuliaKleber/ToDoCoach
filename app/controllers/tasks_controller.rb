@@ -10,6 +10,9 @@ class TasksController < ApplicationController
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
     @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks_category_names = @tasks.map do |task|
+      category_names(task.id)
+    end
   end
 
   def dates_tasks
@@ -39,12 +42,7 @@ class TasksController < ApplicationController
   end
 
   def show
-    task_categories = TaskCategory.where(task_id: params[:id])
-    @category_names = []
-    task_categories.each do |tc|
-      category = Category.where(id: tc.category_id)
-      @category_names << category.first.name
-    end
+    category_names(params[:id])
   end
 
   def new
@@ -104,5 +102,15 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
+  end
+
+  def category_names(task_id)
+    task_categories = TaskCategory.where(task_id: task_id)
+    @category_names = []
+    task_categories.each do |tc|
+      category = Category.where(id: tc.category_id)
+      @category_names << category.first.name
+    end
+    return @category_names
   end
 end
