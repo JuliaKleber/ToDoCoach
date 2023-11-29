@@ -14,9 +14,11 @@
             <i class='fa-regular fa-circle'></i>
           <% end %>
         <% end %>
+        
         <%= link_to task_path(task) do %>
           <%= task.title %>
         <% end %>
+
       <% if task.priority == "high" %>
         <span class='high-priority-color'><i class='fa-solid fa-circle'></i></span>
       <% elsif task.priority == "medium" %>
@@ -24,6 +26,7 @@
       <% else %>
         <span class='low-priority-color'><i class='fa-solid fa-circle'></i></span>
       <% end %>
+
       </span>
     <% end %>
   </div>
