@@ -1,25 +1,21 @@
 
 <nav class="navbar fixed-top navbar navbar-dark bg-secondary d-flex justify-content-between">
   <div>
-     <li>
-      <%=link_to destroy_user_session_path do  %>
-       <%= image_tag "todocoach.png", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }%>
-    <% end %>
-   </li>
+    <li>
+      <%= link_to todays_tasks_path do %>
+        <%= image_tag "todocoach.png", class: "avatar" %>
+      <% end %>
+    </li>
   </div>
   <div>
-    <% if user_signed_in? && current_user.photo.attached? %>
-      <li>
+    <li>
+      <% if user_signed_in? && current_user.photo.attached? %>
         <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }%>
-      </li>
       <% else %>
-      <p>
-      <li>
         <%= link_to new_user_session_path do%>
-        <%= image_tag "image.jpg", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }%>
-    <% end %>
-     </li>
-     </p>
-   <% end %>
+          <%= image_tag "image.jpg", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }%>
+        <% end %>
+      <% end %>
+    </li>
   </div>
 </nav>

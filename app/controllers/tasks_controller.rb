@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show toggle_completed edit update destroy]
+  before_action :set_task, only: %i[show edit update destroy toggle_completed dates_tasks]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -8,6 +8,17 @@ class TasksController < ApplicationController
     @tasks = []
     @all_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
+    end
+    @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+  end
+
+  def dates_tasks
+    @day = @task.due_date.strftime('%a, %d %B')
+    @welcome_message = welcome_message
+    @all_tasks = Task.where(user_id: current_user)
+    @tasks = []
+    @all_tasks.each do |task|
+      (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
     @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
   end
@@ -45,6 +56,7 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save
       redirect_to task_path(@task)
+      ReminderJob.set(wait_until: @task.reminder_date).perform_later
     else
       render :new
     end
