@@ -32,12 +32,13 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
+    @task.task_categories.build
   end
 
   def create
     @task = Task.new(task_params)
     @task.user = current_user
-    if @task.save
+    if @task.save!
       redirect_to task_path(@task)
     else
       render :new
@@ -85,6 +86,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [:category_id])
   end
 end

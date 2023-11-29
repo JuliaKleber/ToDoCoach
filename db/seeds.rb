@@ -17,10 +17,8 @@ end
 puts 'Creating categories ....'
 
 # Create categories for each user
-categories = users.flat_map do |user|
-  ['Work', 'Personal', 'Study'].map do |category_name|
-    user.categories.create(name: category_name)
-  end
+categories = ['Work', 'Personal', 'Groceries'].map do |category_name|
+  User.last.categories.create(name: category_name)
 end
 
 puts 'Creating tasks...'
