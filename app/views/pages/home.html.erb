@@ -1,8 +1,8 @@
-<% if user_signed_in? %>
-  <%= link_to todays_tasks_path do %>
-    <button class="btn btn-primary">Go to Today's Tasks</button>
-  <% end %>
-<% else %>
+<p>blablabla</p>
+<p>blablabla</p>
+<p>blablabla</p>
+
+<% if !user_signed_in? %>
   <%= link_to new_user_registration_path do %>
     <button class="btn btn-primary">Sign up</button>
   <% end %>

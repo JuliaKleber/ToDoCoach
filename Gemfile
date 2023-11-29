@@ -78,3 +78,5 @@ group :test do
 end
 
 gem "devise"
+gem "sidekiq", "<7"
+gem "sidekiq-failures", "~> 1.0"

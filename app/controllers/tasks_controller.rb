@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show toggle_completed edit update destroy]
+  before_action :set_task, only: %i[show edit update destroy toggle_completed dates_tasks]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -10,11 +10,34 @@ class TasksController < ApplicationController
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
     @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks_category_names = @tasks.map do |task|
+      category_names(task.id)
+    end
+  end
+
+  def dates_tasks
+    @day = @task.due_date.strftime('%a, %d %B')
+    @welcome_message = welcome_message
+    @all_tasks = Task.where(user_id: current_user)
+    @tasks = []
+    @all_tasks.each do |task|
+      (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
+    end
+    @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
   end
 
   def index
     @tasks = Task.where(user_id: current_user)
     @tasks = @tasks.order(due_date: :asc, priority: :desc)
+
+    search_query = params.dig(:search, :query)
+    if search_query.present?
+      @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%")
+    end
+    search_category_id = params.dig(:search, :category)
+    if search_category_id.present?
+      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id})
+    end
     @dates = Set.new([])
     @tasks.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
@@ -27,7 +50,15 @@ class TasksController < ApplicationController
     end
   end
 
+  def filter_by
+    @categorys = Category.where(nil)
+    filtering_params(params).each do |key, value|
+      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
+    end
+  end
+
   def show
+    category_names(params[:id])
   end
 
   def new
@@ -40,6 +71,7 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save!
       redirect_to task_path(@task)
+      ReminderJob.set(wait_until: @task.reminder_date).perform_later
     else
       render :new
     end
@@ -51,7 +83,12 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     @task.update(task_params)
-    redirect_to task_path(@task)
+    # redirect_to task_path(@task)
+
+    respond_to do |format|
+      format.html { redirect_to todays_tasks_path }
+      format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
+    end
   end
 
   def toggle_completed
@@ -67,6 +104,9 @@ class TasksController < ApplicationController
   end
 
   private
+  def filtering_params(params)
+    params.slice(:name)
+  end
 
   def welcome_message
     todays_hour = Time.now.hour
@@ -87,5 +127,15 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [:category_id])
+  end
+
+  def category_names(task_id)
+    task_categories = TaskCategory.where(task_id: task_id)
+    @category_names = []
+    task_categories.each do |tc|
+      category = Category.where(id: tc.category_id)
+      @category_names << category.first.name
+    end
+    return @category_names
   end
 end
