@@ -1,5 +1,7 @@
 class Task < ApplicationRecord
   belongs_to :user
+  has_many :task_categories, dependent: :destroy
+  has_many :categories, through: :task_categories
 
   validates :title, presence: true, length: {minimum: 10, maximum: 60}
 

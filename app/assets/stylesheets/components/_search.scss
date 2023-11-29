@@ -1,0 +1,22 @@
+.search-form-control {
+  margin: 70px 20px;
+}
+
+// .icon {
+//   position: absolute;
+//   top: 8px;
+//   left: 8px;
+//   font-size: 18px;
+// }
+
+.search-form {
+  height: 3.5rem;
+  box-shadow: 6px 6px 6px rgba(0,0,0,0.08);
+  border: 1px solid #E7E7E7;
+}
+
+.search-form-control .form-control:focus {
+  border: 1px solid #1EDD88;
+  outline: none !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
