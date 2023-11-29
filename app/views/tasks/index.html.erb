@@ -8,27 +8,13 @@
   <div class='card'>
     <% tasks.each do |task| %>
       <span>
-        <% if task.completed %>
-          <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-            <i class='fa-regular fa-circle-check'></i>
-          <% end %>
-        <% else %>
-          <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-            <i class='fa-regular fa-circle'></i>
-          <% end %>
-        <% end %>
+        <%= render 'toggle_completed', task: task %>
 
         <%= link_to task_path(task) do %>
           <%= task.title %>
         <% end %>
 
-      <% if task.priority == "high" %>
-        <span class='high-priority-color'><i class='fa-solid fa-circle'></i></span>
-      <% elsif task.priority == "medium" %>
-        <span class='medium-priority-color'><i class='fa-solid fa-circle'></i></span>
-      <% else %>
-        <span class='low-priority-color'><i class='fa-solid fa-circle'></i></span>
-      <% end %>
+      <%= render 'priority_dot', task: task %>
 
       </span>
     <% end %>

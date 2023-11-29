@@ -1,0 +1,7 @@
+<% if task.priority == "high" %>
+  <span class='high-priority-color'><i class='fa-solid fa-circle'></i></span>
+<% elsif task.priority == "medium" %>
+  <span class='medium-priority-color'><i class='fa-solid fa-circle'></i></span>
+<% else %>
+  <span class='low-priority-color'><i class='fa-solid fa-circle'></i></span>
+<% end %>
