@@ -25,16 +25,50 @@ end
 
 puts 'Creating tasks...'
 
+task_titles = [
+  "Doing the groceries",
+  "Dentist appointment",
+  "Buying a birthday present for Charles",
+  "Meeting with the project team",
+  "Writing a blog post",
+  "Calling mom",
+  "Preparing for the presentation",
+  "Gym workout",
+  "Sending invoices",
+  "Attending a networking event",
+  "Book club meeting",
+  "Walking the dog",
+  "Paying bills",
+  "Updating resume",
+  "Cooking dinner",
+  "Researching new technology trends",
+  "Volunteering at the local shelter",
+  "Planning a weekend getaway",
+  "Attending a yoga class",
+  "Fixing a leaky faucet",
+  "Reading a chapter of a novel",
+  "Organizing the closet",
+  "Learning a new recipe",
+  "Scheduling a doctor's appointment",
+  "Taking the car for maintenance",
+  "Attending a language learning meetup",
+  "Watching a documentary",
+  "Planting flowers in the garden",
+  "Attending a community clean-up event",
+  "Creating a budget for the month"
+]
+
 # Create tasks for each user due in the next two weeks and assign categories
 current_time = Time.now
 users.each do |user|
   30.times do |n|
-    due_date = (current_time + (n / 2).days)
+    task_title = task_titles.sample
+    due_date = (current_time + (n.to_f / 3).days)
     task = user.tasks.create(
-      title: "Task #{n + 1} for #{user.user_name}",
-      description: "Description for task #{n + 1}",
-      priority: rand(1..3),
-      completed: rand(0..1) == 0,
+      title: task_title,
+      description: "Description for '#{task_title}'",
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(0..1).zero?,
       due_date: due_date,
       reminder_date: due_date - 1.day
     )

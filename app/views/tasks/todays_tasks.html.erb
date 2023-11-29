@@ -31,9 +31,9 @@
         </div>
 
         <div class='m-3'>
-          <% if task.priority == 1 %>
+          <% if task.priority == "high" %>
             <p class='high-priority-color'><i class='fa-solid fa-circle'></i></p>
-          <% elsif task.priority == 2 %>
+          <% elsif task.priority == "medium" %>
             <p class='medium-priority-color'><i class='fa-solid fa-circle'></i></p>
           <% else %>
             <p class='low-priority-color'><i class='fa-solid fa-circle'></i></p>
