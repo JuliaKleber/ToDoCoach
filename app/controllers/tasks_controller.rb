@@ -29,6 +29,15 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.where(user_id: current_user)
     @tasks = @tasks.order(due_date: :asc, priority: :desc)
+
+    search_query = params.dig(:search, :query)
+    if search_query.present?
+      @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%")
+    end
+    search_category_id = params.dig(:search, :category)
+    if search_category_id.present?
+      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id})
+    end
     @dates = Set.new([])
     @tasks.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
@@ -38,6 +47,13 @@ class TasksController < ApplicationController
     @dates.each do |date|
       dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
       @grouped_tasks << dated_tasks
+    end
+  end
+
+  def filter_by
+    @categorys = Category.where(nil)
+    filtering_params(params).each do |key, value|
+      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
     end
   end
 
@@ -66,7 +82,12 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     @task.update(task_params)
-    redirect_to task_path(@task)
+    # redirect_to task_path(@task)
+
+    respond_to do |format|
+      format.html { redirect_to todays_tasks_path }
+      format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
+    end
   end
 
   def toggle_completed
@@ -82,6 +103,9 @@ class TasksController < ApplicationController
   end
 
   private
+  def filtering_params(params)
+    params.slice(:name)
+  end
 
   def welcome_message
     todays_hour = Time.now.hour
@@ -101,7 +125,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo)
   end
 
   def category_names(task_id)
