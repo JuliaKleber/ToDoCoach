@@ -1,3 +1,5 @@
+# require "sidekiq/web"
+
 Rails.application.routes.draw do
   devise_for :users
   root to: 'pages#home'
@@ -10,8 +12,7 @@ Rails.application.routes.draw do
       get :dates_tasks, as: 'dates'
     end
   end
-  require "sidekiq/web"
-  authenticate :user, ->(user) { user.admin? } do
-    mount Sidekiq::Web => '/sidekiq'
-  end
+  # authenticate :user, ->(user) { user.admin? } do
+  #   mount Sidekiq::Web => '/sidekiq'
+  # end
 end
