@@ -1,28 +1,26 @@
 
-  <div class='card task-card d-flex flex-row'>
+<div class='card task-card d-flex flex-row'>
     <div class='m-3 d-flex align-items-center'>
       <i class="fa-solid fa-briefcase"></i>
     </div>
 
+  <div class='task-info'>
     <div data-controller="edit-task">
-      <div class='d-flex flex-row' data-action="hover->edit-task#displayButton">
+      <div class='d-flex flex-row'>
         <div class='m-3'>
 
           <p data-edit-task-target="info">
             <%= link_to task_path(task) do %>
               <%= task.title %>
             <% end %>
-          <i class="fa-solid fa-pen fa-xs" style="color: #8c8c8c;"
-            data-edit-task-target="button"
-            data-action="click->edit-task#displayForm"></i>
           </p>
 
-           <%= simple_form_for task, html: {
+           <%# <%= simple_form_for task, html: {
               class: "d-none", data: {
                 edit_task_target: "form" }} do |f| %>
-                <%= f.input :title %>
-                <%= f.submit "Update task", class: "btn btn-sm btn-primary" %>
-              <% end %>
+                <%# <%= f.input :title %>
+                <%# <%= f.submit "Update task", class: "btn btn-sm btn-primary" %>
+              <%# <% end %>
 
           <p>
             <% if task.due_date.hour < 12 %>
@@ -55,6 +53,7 @@
             <% end %>
           </p>
         </div>
+
       </div>
 
       <p style='margin-left: 16px'>
@@ -66,4 +65,37 @@
       </p>
     </div>
 
+     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Update <%= task.title %></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+       <%= simple_form_for task do |f| %>
+        <%= f.input :title %>
+        <%= f.input :description %>
+        <%= f.input :due_date, as: :datetime, html5: true %>
+        <%= f.submit "Save changes", class:"btn btn-primary rounded" %>
+       <% end %>
+      </div>
+
+          <%# <div class="modal-footer">
+            <button type="button"
+                    class="btn btn-primary rounded">Save changes</button>
+          </div> %>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <%# <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> %>
+    <i class="fa-solid fa-pen" style="color: #242474;"
+            data-action="click->edit-task#displayForm"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop"></i>
+  <%# </button> %>
+
+</div>
