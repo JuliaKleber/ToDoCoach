@@ -68,7 +68,12 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     @task.update(task_params)
-    redirect_to task_path(@task)
+    # redirect_to task_path(@task)
+
+    respond_to do |format|
+      format.html { redirect_to todays_tasks_path }
+      format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
+    end
   end
 
   def toggle_completed
@@ -103,6 +108,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo )
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo)
   end
 end
