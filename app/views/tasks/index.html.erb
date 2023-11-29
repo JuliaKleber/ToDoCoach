@@ -1,7 +1,10 @@
 <p>Here someone can put the search bar</p>
 
 <% @grouped_tasks.each_with_index do |tasks, index| %>
-  <h4><%= @dates[index] %></h4>
+
+  <%= link_to dates_task_path(tasks[0]) do %>
+    <h4><%= @dates[index] %></h4>
+  <% end %>
   <div class='card'>
     <% tasks.each do |task| %>
       <span>
@@ -14,7 +17,7 @@
             <i class='fa-regular fa-circle'></i>
           <% end %>
         <% end %>
-        
+
         <%= link_to task_path(task) do %>
           <%= task.title %>
         <% end %>

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     end
     member do
       patch :toggle_completed
+      get :dates_tasks, as: 'dates'
     end
   end
 end
