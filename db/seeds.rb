@@ -33,8 +33,8 @@ users.each do |user|
     task = user.tasks.create(
       title: "Task #{n + 1} for #{user.user_name}",
       description: "Description for task #{n + 1}",
-      priority: rand(1..3),
-      completed: rand(0..1) == 0,
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(0..1).zero?,
       due_date: due_date,
       reminder_date: due_date - 1.day
     )
