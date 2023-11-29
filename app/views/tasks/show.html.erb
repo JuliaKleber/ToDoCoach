@@ -6,23 +6,9 @@
         <h2>TASK</h2>
 
         <hr>
-        <p>
-        <%= link_to "Categories", "#", class: "btn btn-secondary" %>
-        </p>
+
         <% @task.categories.each do |category| %>
           <span class="border rounded"><%= category.name %></span>
-        <% end %>
-        <h3><%=@task.title %>
-
-        <% if @task.priority = 1 %>
-          <i class="fa-solid fa-droplet" style="color: #ff0000;"></i>
-        <% elsif @task.priority = 2 %>
-          <i class="fa-solid fa-droplet" style="color: #ff2780;"></i>
-        <% else %>
-          <i class="fa-solid fa-droplet" style="color: #ff8080;"></i>
-
-        <% @category_names.each do |category| %>
-          <span><%= category %></span>
         <% end %>
 
         <h3>
@@ -46,7 +32,7 @@
 
         <span> Reminder:<br>
         <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-          
+
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>

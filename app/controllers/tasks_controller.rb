@@ -58,7 +58,6 @@ class TasksController < ApplicationController
   end
 
   def show
-    category_names(params[:id])
   end
 
   def new
