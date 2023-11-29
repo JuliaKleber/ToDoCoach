@@ -15,6 +15,15 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.where(user_id: current_user)
     @tasks = @tasks.order(due_date: :asc, priority: :desc)
+
+    search_query = params.dig(:search, :query)
+    if search_query.present?
+      @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%")
+    end
+    search_category_id = params.dig(:search, :category)
+    if search_category_id.present?
+      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id})
+    end
     @dates = Set.new([])
     @tasks.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
@@ -24,6 +33,13 @@ class TasksController < ApplicationController
     @dates.each do |date|
       dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
       @grouped_tasks << dated_tasks
+    end
+  end
+
+  def filter_by
+    @categorys = Category.where(nil)
+    filtering_params(params).each do |key, value|
+      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
     end
   end
 
@@ -66,6 +82,9 @@ class TasksController < ApplicationController
   end
 
   private
+  def filtering_params(params)
+    params.slice(:name)
+  end
 
   def welcome_message
     todays_hour = Time.now.hour
