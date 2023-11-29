@@ -1,12 +1,14 @@
 .navbar-team {
   // justify-content: space-between;
-  background: rgb(43, 42, 42);
+  background:  #242474;
+  height: 70px;
+  padding: 2px;
 }
 
 .navbar-lewagon.navbar-collapse {
   flex-grow: 0;
 }
 
-.navbar-lewagon .navbar-brand img {
-  width: 40px;
-}
+// .navbar-brand {
+//   width: 50px;
+// }
