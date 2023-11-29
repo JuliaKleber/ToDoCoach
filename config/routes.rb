@@ -7,6 +7,11 @@ Rails.application.routes.draw do
     end
     member do
       patch :toggle_completed
+      get :dates_tasks, as: 'dates'
     end
+  end
+  require "sidekiq/web"
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 end

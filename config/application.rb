@@ -14,6 +14,8 @@ module ToDoCoach
       generate.test_framework :test_unit, fixture: false
     end
 
+    config.active_job.queue_adapter = :sidekiq
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 

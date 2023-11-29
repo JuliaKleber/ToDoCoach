@@ -1,0 +1,69 @@
+
+  <div class='card task-card d-flex flex-row'>
+    <div class='m-3 d-flex align-items-center'>
+      <i class="fa-solid fa-briefcase"></i>
+    </div>
+
+    <div data-controller="edit-task">
+      <div class='d-flex flex-row' data-action="hover->edit-task#displayButton">
+        <div class='m-3'>
+
+          <p data-edit-task-target="info">
+            <%= link_to task_path(task) do %>
+              <%= task.title %>
+            <% end %>
+          <i class="fa-solid fa-pen fa-xs" style="color: #8c8c8c;"
+            data-edit-task-target="button"
+            data-action="click->edit-task#displayForm"></i>
+          </p>
+
+           <%= simple_form_for task, html: {
+              class: "d-none", data: {
+                edit_task_target: "form" }} do |f| %>
+                <%= f.input :title %>
+                <%= f.submit "Update task", class: "btn btn-sm btn-primary" %>
+              <% end %>
+
+          <p>
+            <% if task.due_date.hour < 12 %>
+              <%= task.due_date.strftime("%H:%M") %>
+              am
+            <% else %>
+              <%= (task.due_date - (12*60*60)).strftime("%H:%M") %>
+              pm
+            <% end %>
+          </p>
+        </div>
+
+        <div class='m-3'>
+          <% if task.priority == 1 %>
+            <p class='high-priority-color'><i class='fa-solid fa-circle'></i></p>
+          <% elsif task.priority == 2 %>
+            <p class='medium-priority-color'><i class='fa-solid fa-circle'></i></p>
+          <% else %>
+            <p class='low-priority-color'><i class='fa-solid fa-circle'></i></p>
+          <% end %>
+          <p>
+            <% if task.completed %>
+              <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
+                <i class='fa-regular fa-circle-check'></i>
+              <% end %>
+            <% else %>
+              <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
+                <i class='fa-regular fa-circle'></i>
+              <% end %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+
+      <p style='margin-left: 16px'>
+        <% if task.description.split('').length > 30 %>
+          <%= task.description.split.first(4).join(' ') %> ...
+        <% else %>
+          <%= task.description %>
+        <% end %>
+      </p>
+    </div>
+
+  </div>
