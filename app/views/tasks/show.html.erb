@@ -27,13 +27,7 @@
 
         <h3>
           <%=@task.title %>
-          <% if @task.priority == "high" %>
-            <span class='high-priority-color'><i class='fa-solid fa-circle'></i></span>
-          <% elsif @task.priority == "medium" %>
-            <span class='medium-priority-color'><i class='fa-solid fa-circle'></i></span>
-          <% else %>
-            <span class='low-priority-color'><i class='fa-solid fa-circle'></i></span>
-          <% end %>
+          <%= render 'priority_dot', task: @task %>
         </h3>
 
         <p>------------------------</p>
@@ -42,15 +36,7 @@
 
         <p>------------------------</p>
 
-        <% if @task.completed %>
-          <%= link_to toggle_completed_task_path(@task), data: {turbo_method: :patch} do %>
-            <span> <i class='fa-regular fa-circle-check'></i> Task completed </span>
-          <% end %>
-        <% else %>
-          <%= link_to toggle_completed_task_path(@task), data: {turbo_method: :patch} do %>
-            <span> <i class='fa-regular fa-circle'></i> Task completed </span>
-          <% end %>
-        <% end %>
+        <%= render 'toggle_completed', task: @task %>
 
         <p>------------------------</p>
 
