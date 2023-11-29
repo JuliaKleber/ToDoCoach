@@ -10,4 +10,8 @@ Rails.application.routes.draw do
       get :dates_tasks, as: 'dates'
     end
   end
+  require "sidekiq/web"
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

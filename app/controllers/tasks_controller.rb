@@ -56,6 +56,7 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save
       redirect_to task_path(@task)
+      ReminderJob.set(wait_until: @task.reminder_date).perform_later
     else
       render :new
     end
