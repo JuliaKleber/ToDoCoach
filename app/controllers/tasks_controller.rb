@@ -28,6 +28,12 @@ class TasksController < ApplicationController
   end
 
   def show
+    task_categories = TaskCategory.where(task_id: params[:id])
+    @category_names = []
+    task_categories.each do |tc|
+      category = Category.where(id: tc.category_id)
+      @category_names << category.first.name
+    end
   end
 
   def new
