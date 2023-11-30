@@ -17,10 +17,13 @@
         </div>
 
         <div class="reminder-container mt-5 position-relative">
-          <p>You're on a roll! How about adding another?</p>
-          <button class="btn btn-reminder">Add new task</button>
+          <p>How about adding another?</p>
         </div>
-        <%# </div> %>
+
+      <div>
+        <%= render 'task_card', task: @remaining_task  , index: 0 %>
+        <button class="btn-message btn btn-reminder"><%= link_to "Add a new one!", "new_task_path" %></button>
+      </div>        <%# </div> %>
       <%# </div> %>
       <%# </div> %>
     </div>

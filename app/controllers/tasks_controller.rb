@@ -102,6 +102,8 @@ class TasksController < ApplicationController
 
   def message
     @task = Task.find(params[:id])
+    @remaining_task = Task.where(completed: false, priority: 'high').first
+    @tasks_category_names = [category_names(@remaining_task[:id])]
   end
 
   private
