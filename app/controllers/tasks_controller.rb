@@ -18,9 +18,9 @@ class TasksController < ApplicationController
   def dates_tasks
     @day = @task.due_date.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @all_tasks = Task.where(user_id: current_user)
+    @users_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
     @tasks = []
-    @all_tasks.each do |task|
+    @users_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
     @tasks = @tasks.sort_by { |task| [task.due_date] }
