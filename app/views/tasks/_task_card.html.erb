@@ -55,7 +55,11 @@
           <%= task.description %>
         <% end %>
       </p>
+      <%= link_to task_path(task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      <% end %>
     </div>
+
 
      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
