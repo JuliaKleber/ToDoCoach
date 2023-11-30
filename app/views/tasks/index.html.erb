@@ -1,5 +1,3 @@
-<%= link_to %>
-
 <%= simple_form_for :search, url: tasks_path, method: :get do |f| %>
   <div class="search-form-control form-group d-flex search-form">
     <input class="form-control string required" type="text" name="search[query]" id="search_query" value="<%= params.dig(:search, :query) %>" placeholder="search by task name or category"/>
@@ -11,40 +9,40 @@
   </div>
 <% end %>
 
-<%= link_to tasks_without_date_tasks_path do %>
+<%= link_to tasks_without_date_tasks_path, class: "text-black-50" do %>
   <h4>Someday</h4>
 <% end %>
-<div class='card'>
-  <% @tasks_without_due_date.each do |task| %>
-    <span>
-      <%= render 'toggle_completed', task: task %>
-
-      <%= link_to task_path(task) do %>
-        <%= task.title %>
-      <% end %>
-
-    <%= render 'priority_dot', task: task %>
-
-    </span>
-  <% end %>
-</div>
-
-<% @grouped_tasks.each_with_index do |tasks, index| %>
-  <%= link_to dates_task_path(tasks[0]) do %>
-    <h4><%= @dates[index] %></h4>
-  <% end %>
-  <div class='card'>
-    <% tasks.each do |task| %>
-      <span>
-        <%= render 'toggle_completed', task: task %>
-
+<% @tasks_without_due_date.each do |task| %>
+  <div class='card task-card'>
+    <div class='d-flex flex-row justify-content-between'>
+      <div>
+        <%= render 'priority_dot', task: task %>
         <%= link_to task_path(task) do %>
           <%= task.title %>
         <% end %>
-
-      <%= render 'priority_dot', task: task %>
-
-      </span>
-    <% end %>
+      </div>
+      <%= render 'toggle_completed', task: task %>
+    </div>
+    <p style="font-size: 14px"> <%= task.description %> </p>
   </div>
+<% end %>
+
+<% @grouped_tasks.each_with_index do |tasks, index| %>
+  <%= link_to dates_task_path(tasks[0]), class: "text-black-50" do %>
+    <h4><%= @dates[index] %></h4>
+  <% end %>
+  <% tasks.each do |task| %>
+    <div class='card task-card'>
+      <div class='d-flex flex-row justify-content-between'>
+        <div>
+          <%= render 'priority_dot', task: task %>
+          <%= link_to task_path(task) do %>
+            <%= task.title %>
+          <% end %>
+        </div>
+        <%= render 'toggle_completed', task: task %>
+      </div>
+      <p style="font-size: 14px"> <%= task.description %> </p>
+    </div>
+  <% end %>
 <% end %>
