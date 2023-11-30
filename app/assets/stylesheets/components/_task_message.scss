@@ -1,12 +1,6 @@
-.modal-body > .img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.modal-content {
-  border-radius: 4px;
-}
+// .modal-content {
+//   border-radius: 4px;
+// }
 
 #pop-up-avatar{
   width: 120px;
@@ -29,4 +23,12 @@
 
 .btn-close {
   color: whitesmoke;
+}
+
+.reminder-container{
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  font-size: 14px;
+  margin: 0;
 }
