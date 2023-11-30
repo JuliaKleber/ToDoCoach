@@ -54,7 +54,7 @@
         <% end %>
        </p>
        <p>
-          <%= link_to "Delete", tasks_path, method: :delete do %>
+          <%= link_to task_path(@task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
             <i class="fa fa-trash" aria-hidden="true"></i>
           <% end %>
        </p>
