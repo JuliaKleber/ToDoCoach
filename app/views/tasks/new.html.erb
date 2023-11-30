@@ -1,4 +1,5 @@
-<p>Here you can add a new task</p>
+<div class="container mt-5">
+<h5>Here you can add a new task</h5>
 <div>
 <%= simple_form_for(@task) do |f| %>
   <%= f.input :title %>
@@ -9,6 +10,7 @@
   <%= f.input :priority %>
   <%= f.input :due_date, as: :datetime, html5: true %>
   <%= f.input :reminder_date, as: :datetime, html5: true %>
-  <%= f.submit 'Save Task', class: "btn btn-primary w-25 btn-save" %>
-<% end %>
-</div>
+  <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
+  <%# </a> %>
+  <%= f.submit "Save Task", class:"btn btn-primary w-25 btn-save" %>
+  <% end %>

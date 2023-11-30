@@ -70,7 +70,7 @@ class TasksController < ApplicationController
     @task['priority'] = @task['priority'].to_i
       @task.user = current_user
     if @task.save!
-      redirect_to task_path(@task)
+      redirect_to message_task_path(@task)
       ReminderJob.set(wait_until: @task.reminder_date).perform_later
     else
       render :new
@@ -93,14 +93,21 @@ class TasksController < ApplicationController
 
   def toggle_completed
     @task.update(completed: !@task.completed)
-    # redirect_to motivational_message
-    redirect_back(fallback_location: todays_tasks_path)
+    if @task.completed?
+      redirect_to message_task_path(@task)
+    else
+      redirect_back(fallback_location: todays_tasks_path)
+    end
   end
 
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
     redirect_to tasks_path, status: :see_other
+  end
+
+  def message
+    @task = Task.find(params[:id])
   end
 
   private
