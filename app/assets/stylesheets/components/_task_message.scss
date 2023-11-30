@@ -10,7 +10,7 @@
   padding: 0px 0px 40px;
 }
 
-.modal-body > h1 {
+.message-slogan {
   color: $dark-blue;
 }
 
@@ -31,4 +31,17 @@
   line-height: 50px;
   font-size: 14px;
   margin: 0;
+  p{
+    margin: 0;
+  }
+}
+
+.upcomming-task{
+  .card{
+    margin-top: 0;
+  }
+  .btn-message{
+    width: 88dvw;
+    padding: 0.75rem 0;
+  }
 }

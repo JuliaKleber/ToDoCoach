@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container">
   <div class="row">
     <div class="col-12 col-lg-6">
         <%# <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -7,22 +7,22 @@
         <div class="position-relative">
         </div>
 
-        <div class="container mt-1 text-center">
-           <%= image_tag "todocoach.png", class: "avatar text-center mt-4", id: "pop-up-avatar" %>
+        <div class="container text-center">
+           <%= image_tag "todocoach.png", class: "avatar text-center", id: "pop-up-avatar" %>
         </div>
 
-        <div class="modal-body text-center">
-        <h1 class="modal-title fs-5 text-center fw-bolder" id="exampleModalLabel">You crushed this!</h1>
-          Now on to the next one.
+        <div class="text-center">
+        <h1 class="message-slogan text-center fw-bolder">You crushed this!</h1>
+         <span> Congratulations on completing: </span><strong><%= @task.title %> </strong>🎉
         </div>
 
-        <div class="reminder-container mt-5 position-relative">
-          <p>How about adding another?</p>
+        <div class="reminder-container mt-4 position-relative">
+          <p>On to the next one!</p>
         </div>
 
-      <div>
+      <div class="upcomming-task">
         <%= render 'task_card', task: @remaining_task  , index: 0 %>
-        <button class="btn-message btn btn-reminder"><%= link_to "Add a new one!", "new_task_path" %></button>
+        <button class="btn-message btn btn-reminder"><%= link_to "Let's Add a New Task", "new_task_path" %></button>
       </div>        <%# </div> %>
       <%# </div> %>
       <%# </div> %>
