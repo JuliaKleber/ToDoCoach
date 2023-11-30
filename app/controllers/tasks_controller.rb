@@ -4,7 +4,7 @@ class TasksController < ApplicationController
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @all_tasks = Task.where(user_id: current_user)
+    @all_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
     @tasks = []
     @all_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
@@ -24,6 +24,9 @@ class TasksController < ApplicationController
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
     @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks_category_names = @tasks.map do |task|
+      category_names(task.id)
+    end
   end
 
   def index
@@ -39,13 +42,14 @@ class TasksController < ApplicationController
       @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id})
     end
     @dates = Set.new([])
-    @tasks.each do |task|
+    @tasks_with_due_date = @tasks.where.not(due_date: nil)
+    @tasks_with_due_date.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
     end
     @dates = @dates.to_a
     @grouped_tasks = []
     @dates.each do |date|
-      dated_tasks = @tasks.select { |task| task.due_date.strftime('%a, %d %B') == date }
+      dated_tasks = @tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
       @grouped_tasks << dated_tasks
     end
   end
@@ -67,8 +71,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task['priority'] = @task['priority'].to_i
-      @task.user = current_user
+    @task.user = current_user
     if @task.save!
       redirect_to task_path(@task)
       ReminderJob.set(wait_until: @task.reminder_date).perform_later
@@ -100,6 +103,7 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
+    flash[:success] = "The to-do item was successfully deleted."
     redirect_to tasks_path, status: :see_other
   end
 
@@ -126,7 +130,18 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [:category_id])
+    # sanitize_categories
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
+  end
+
+  def sanitize_categories
+    params[:task][:task_categories_attributes]["0"][:category_id] = params[:task][:task_categories_attributes]["0"][:category_id].compact_blank.map do |category_id|
+      if category_id.to_i.zero?
+        Category.create(user: current_user, name: category_id).id
+      else
+        category_id.to_i
+      end
+    end
   end
 
   def category_names(task_id)

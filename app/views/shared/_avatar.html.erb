@@ -1,30 +1,27 @@
 <div class="navbar fixed-top navbar navbar-dark bg-secondary d-flex justify-content-between">
-  <div class="container-fluid d-flex justify-content-between">
+  <div class="container-fluid d-flex justify-content-around">
     <%= link_to root_path, class: "navbar-brand" do %>
       <%= image_tag "todocoach.png", class: "avatar" %>
     <% end %>
 
+    <h2>To Do Coach</h2>
 
-    <ul>
-      <% if user_signed_in? %>
-        <li class="nav-item dropdown">
-            <% if current_user.photo.attached? %>
-              <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
-            <% else %>
-              <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
-            <% end %>
-            </a>
-
-          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-          </div>
-        </li>
+    <% if user_signed_in? %>
+      <% if current_user.photo.attached? %>
+        <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
       <% else %>
-        <li class="nav-item">
-          <%= link_to "Login", new_user_session_path, class: "nav-link" %>
-        </li>
+        <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
       <% end %>
-    </ul>
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+      </div>
+    <% else %>
+      <nav class="nav-item">
+        <%= link_to new_user_session_path, class: "nav-link" do %>
+          <i class="fa-solid fa-right-to-bracket"></i>
+        <% end %>
+      </nav>
+    <% end %>
 
   </div>
 </div>

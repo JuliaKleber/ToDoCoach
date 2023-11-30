@@ -29,6 +29,7 @@
         </span>
         </div>
 
+
       </div>
       <div class="search-show">
      <p>
@@ -39,6 +40,23 @@
             <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
            </p>
      <p>
+        <p>------------------------</p>
+
+        <%= render 'toggle_completed', task: @task %>
+
+        <p>------------------------</p>
+        <% if @task.due_date? %>
+          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+
+        <% end %>
+
+        <p>------------------------</p>
+        <% if @task.reminder_date? %>
+          <span> Reminder:<br>
+          <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
+        <% end %>
+
+
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
