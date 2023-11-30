@@ -2,6 +2,7 @@
 @import "config/fonts";
 @import "config/colors";
 @import "config/bootstrap_variables";
+@import "config/font-sizes";
 
 // External libraries
 @import "bootstrap";
@@ -12,4 +13,5 @@
 @import "pages/index";
 @import "components/priority_circles";
 @import "components/card";
-
+@import "components/links";
+@import "components/headers";

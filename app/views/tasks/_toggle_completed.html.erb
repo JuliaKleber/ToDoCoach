@@ -1,10 +1,9 @@
 <% if task.completed %>
   <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-    <i class='fa-regular fa-circle-check'></i>
+    <i class='fa-regular fa-circle-check large-font'></i>
   <% end %>
-    <%= render 'task_done_message', task: task %>
 <% else %>
   <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-    <i class='fa-regular fa-circle'></i>
+    <i class='fa-regular fa-circle large-font'></i>
   <% end %>
 <% end %>
