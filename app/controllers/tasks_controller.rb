@@ -24,6 +24,9 @@ class TasksController < ApplicationController
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
     @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks_category_names = @tasks.map do |task|
+      category_names(task.id)
+    end
   end
 
   def index
