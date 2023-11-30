@@ -9,7 +9,7 @@ class TasksController < ApplicationController
     @all_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
-    @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks = @tasks.sort_by { |task| [task.due_date] }
     @tasks_category_names = @tasks.map do |task|
       category_names(task.id)
     end
@@ -23,7 +23,7 @@ class TasksController < ApplicationController
     @all_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
-    @tasks = @tasks.sort_by { |task| [task.due_date, -task.priority] }
+    @tasks = @tasks.sort_by { |task| [task.due_date] }
     @tasks_category_names = @tasks.map do |task|
       category_names(task.id)
     end
@@ -73,8 +73,8 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
     @task.user = current_user
     if @task.save!
+      # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
       redirect_to task_path(@task)
-      ReminderJob.set(wait_until: @task.reminder_date).perform_later
     else
       render :new
     end
@@ -85,7 +85,9 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
+    # @old_task = @task
     @task.update(task_params)
+    # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
     # redirect_to task_path(@task)
 
     respond_to do |format|
@@ -108,6 +110,7 @@ class TasksController < ApplicationController
   end
 
   private
+
   def filtering_params(params)
     params.slice(:name)
   end
@@ -145,7 +148,7 @@ class TasksController < ApplicationController
   end
 
   def category_names(task_id)
-    task_categories = TaskCategory.where(task_id: task_id)
+    task_categories = TaskCategory.where(task_id)
     @category_names = []
     task_categories.each do |tc|
       category = Category.where(id: tc.category_id)
