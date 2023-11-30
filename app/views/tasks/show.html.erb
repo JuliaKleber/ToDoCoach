@@ -1,16 +1,15 @@
-<div class="container">
-  <div class="row">
+<div>
+ <div class="row">
     <div class="col-12 col-md-6">
       <div class="bg-white rounded p-3">
-
         <h2>TASK</h2>
 
         <hr>
         <p>
-        <%= link_to "Categories", "#", class: "btn btn-secondary" %>
+        <%= link_to "Cathegories", "#", class: "btn btn-secondary" %>
         </p>
         <% @task.categories.each do |category| %>
-          <span class="border rounded"><%= category.name %></span>
+          <span class="badge badge-primary"><%= category.name %></span>
         <% end %>
         <h3><%=@task.title %>
 
@@ -20,49 +19,45 @@
           <i class="fa-solid fa-droplet" style="color: #ff2780;"></i>
         <% else %>
           <i class="fa-solid fa-droplet" style="color: #ff8080;"></i>
-
-        <% @category_names.each do |category| %>
-          <span><%= category %></span>
         <% end %>
-
-        <h3>
-          <%=@task.title %>
-          <%= render 'priority_dot', task: @task %>
         </h3>
-
+        <p>------------------------</p>
+          <%=@task.description %>
         <p>------------------------</p>
 
-        <%=@task.description %>
-
+          <% if @task.completed?%>
+            <i class="fa-regular fa-square-check" style="color: #c0c0c0;"></i> Task completed
+          <% else %>
+            <i class="fa-regular fa-square" style="color: #c0c0c0;"></i> Task not completed
+          <% end %>
         <p>------------------------</p>
 
-        <%= render 'toggle_completed', task: @task %>
-
+          <%=@task.due_date %>
         <p>------------------------</p>
 
-        <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+        <%=@task.reminder_date %>
 
-        <p>------------------------</p>
-
-        <span> Reminder:<br>
-        <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-          
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
-        <hr>
 
-        <p>
-          <%= link_to 'javascript:history.back()', remote: true do %>
-            <i class="fa fa-history"></i> Back to Task Lists
-          <% end %>
+
+      <hr>
+      <p>
+        <%= link_to tasks_path do %>
+          <i class="fa fa-history"></i> Back to Task Lists
+        <% end %>
         </p>
-
         <p>
-        <%= link_to edit_task_path(@task) do %>
+        <%= link_to edit_task_path(@task.id) do %>
           <i class="fa fa-pencil"></i>
         <% end %>
        </p>
+       <p>
+          <%= link_to "Delete", tasks_path, method: :delete do %>
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          <% end %>
+       </p>
     </div>
+   </div>
   </div>
-<div>
