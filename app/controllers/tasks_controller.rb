@@ -4,29 +4,29 @@ class TasksController < ApplicationController
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @all_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
+    @users_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
     @tasks = []
-    @all_tasks.each do |task|
+    @users_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
     end
-    @tasks = @tasks.sort_by { |task| [task.due_date] }
-    @tasks_category_names = @tasks.map do |task|
-      category_names(task.id)
-    end
+    @tasks_category_names = @tasks.map { |task| category_names(task.id) }
   end
 
   def dates_tasks
     @day = @task.due_date.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @all_tasks = Task.where(user_id: current_user)
+    @users_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
     @tasks = []
-    @all_tasks.each do |task|
+    @users_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
     end
-    @tasks = @tasks.sort_by { |task| [task.due_date] }
-    @tasks_category_names = @tasks.map do |task|
-      category_names(task.id)
-    end
+    @tasks_category_names = @tasks.map { |task| category_names(task.id) }
+  end
+
+  def tasks_without_date
+    @welcome_message = welcome_message
+    @tasks = Task.where(user_id: current_user).where(due_date: nil)
+    @tasks_category_names = @tasks.map { |task| category_names(task.id) }
   end
 
   def index

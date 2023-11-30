@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :tasks do
     collection do
       get :todays_tasks, as: 'todays'
+      get :tasks_without_date
     end
     member do
       patch :toggle_completed
