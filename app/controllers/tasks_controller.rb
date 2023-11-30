@@ -31,15 +31,15 @@ class TasksController < ApplicationController
 
   def index
     @tasks = Task.where(user_id: current_user).order(due_date: :asc, priority: :desc)
-    @dates = dates_of_tasks
-    @tasks_grouped_by_dates = group_tasks_by_date
-    @tasks_without_due_date = @tasks.where(due_date: nil)
     search_query = params.dig(:search, :query)
     @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%") if search_query.present?
     search_category_id = params.dig(:search, :category)
     if search_category_id.present?
       @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id })
     end
+    @tasks_without_due_date = @tasks.where(due_date: nil)
+    @dates = dates_of_tasks
+    @tasks_grouped_by_dates = group_tasks_by_date
   end
 
   def filter_by
@@ -136,7 +136,7 @@ class TasksController < ApplicationController
   end
 
   def category_names(task_id)
-    task_categories = TaskCategory.where(task_id)
+    task_categories = TaskCategory.where(task_id: task_id)
     @category_names = []
     task_categories.each do |tc|
       category = Category.where(id: tc.category_id)
