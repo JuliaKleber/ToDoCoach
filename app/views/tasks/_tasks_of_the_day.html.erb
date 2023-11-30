@@ -8,7 +8,6 @@
 <% @tasks.each_with_index do |task, index| %>
   <%= render 'task_card', task: task, index: index %>
 <% end %>
-
 <div class='d-flex justify-content-end mt-4'>
   <%= link_to new_task_path do %>
     <i class="fa-solid fa-plus btn-circle"></i>
