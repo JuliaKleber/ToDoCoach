@@ -30,27 +30,15 @@ class TasksController < ApplicationController
   end
 
   def index
-    @tasks = Task.where(user_id: current_user)
-    @tasks = @tasks.order(due_date: :asc, priority: :desc)
-
+    @tasks = Task.where(user_id: current_user).order(due_date: :asc, priority: :desc)
+    @dates = dates_of_tasks
+    @tasks_grouped_by_dates = group_tasks_by_date
+    @tasks_without_due_date = @tasks.where(due_date: nil)
     search_query = params.dig(:search, :query)
-    if search_query.present?
-      @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%")
-    end
+    @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%") if search_query.present?
     search_category_id = params.dig(:search, :category)
     if search_category_id.present?
-      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id})
-    end
-    @dates = Set.new([])
-    @tasks_with_due_date = @tasks.where.not(due_date: nil)
-    @tasks_with_due_date.each do |task|
-      @dates << task.due_date.strftime('%a, %d %B')
-    end
-    @dates = @dates.to_a
-    @grouped_tasks = []
-    @dates.each do |date|
-      dated_tasks = @tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
-      @grouped_tasks << dated_tasks
+      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id })
     end
   end
 
@@ -155,5 +143,22 @@ class TasksController < ApplicationController
       @category_names << category.first.name
     end
     return @category_names
+  end
+
+  def dates_of_tasks
+    @dates = Set.new([])
+    @tasks_with_due_date = @tasks.where.not(due_date: nil)
+    @tasks_with_due_date.each do |task|
+      @dates << task.due_date.strftime('%a, %d %B')
+    end
+    @dates = @dates.to_a
+  end
+
+  def group_tasks_by_date
+    @grouped_tasks = []
+    @dates.each do |date|
+      dated_tasks = @tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
+      @grouped_tasks << dated_tasks
+    end
   end
 end
