@@ -1,25 +1,45 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-6">
-      <div class="bg-white rounded p-3">
+      <div class="bg-background-color rounded p-3">
 
         <h2>TASK</h2>
 
-        <hr>
 
+      <div>
         <% @task.categories.each do |category| %>
-          <span class="border rounded"><%= category.name %></span>
-        <% end %>
-
+        <div class="d-flex justify-content-center">
+          <span class="border rounded category"><%= category.name %></span>
+        </div>
+      <% end %>
+      </div>
+      <p>
+      <div class="text-center">
         <h3>
           <%=@task.title %>
           <%= render 'priority_dot', task: @task %>
         </h3>
+      </div>
+     </p>
 
-        <p>------------------------</p>
-
+       <div class="search-show d-flex align-items-center">
+       <span>
+         <%= render 'toggle_completed', task: @task %>
         <%=@task.description %>
+        </span>
+        </div>
 
+
+      </div>
+      <div class="search-show">
+     <p>
+        <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+     </p>
+          <p>
+           <span> Reminder:
+            <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
+           </p>
+     <p>
         <p>------------------------</p>
 
         <%= render 'toggle_completed', task: @task %>
@@ -40,6 +60,8 @@
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
+      </div>
+    </p>
         <hr>
 
         <p>
