@@ -58,7 +58,10 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    task_categories_attributes = task_params[:task_categories_attributes]
+    create_params = task_params.except(:task_categories_attributes)
+    formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
+    @task = Task.new(create_params.merge({task_categories_attributes: formatted_task_categories_attributes}))
     @task.user = current_user
     if @task.save!
       redirect_to message_task_path(@task)
@@ -128,16 +131,16 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    # sanitize_categories
     params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
   end
 
-  def sanitize_categories
-    params[:task][:task_categories_attributes]["0"][:category_id] = params[:task][:task_categories_attributes]["0"][:category_id].compact_blank.map do |category_id|
-      if category_id.to_i.zero?
-        Category.create(user: current_user, name: category_id).id
+  def sanitize_categories(attributes_array)
+    attributes_array.compact_blank.map do |category_info|
+      if category_info.to_i.zero?
+        new_category = Category.create(user: current_user, name: category_info)
+        { category_id: new_category.id }
       else
-        category_id.to_i
+        { category_id: category_info.to_i }
       end
     end
   end
