@@ -4,7 +4,7 @@
   <%= f.input :title %>
   <%= f.input :description %>
   <%= f.fields_for :task_categories do |tc| %>
-    <%= tc.association :category, collection: Category.all, input_html: { data: { controller: "tom-select" } } %>
+    <%= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
   <% end %>
   <%= f.input :priority %>
   <%= f.input :due_date, as: :datetime, html5: true %>

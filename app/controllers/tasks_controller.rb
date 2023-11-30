@@ -100,6 +100,7 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
+    flash[:success] = "The to-do item was successfully deleted."
     redirect_to tasks_path, status: :see_other
   end
 
@@ -126,6 +127,11 @@ class TasksController < ApplicationController
   end
 
   def task_params
+    category_ids = params.dig(:task, :task_categories_attributes, "0", :category_id).compact_blank.map do |category_id|
+      next unless category_id.to_i.zero?
+      Category.create(user: current_user, name: category_id).id
+    end
+
     params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [:category_id])
   end
 
