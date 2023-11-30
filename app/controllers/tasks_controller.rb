@@ -136,7 +136,7 @@ class TasksController < ApplicationController
   end
 
   def category_names(task_id)
-    task_categories = TaskCategory.where(task_id)
+    task_categories = TaskCategory.where(task_id: task_id)
     @category_names = []
     task_categories.each do |tc|
       category = Category.where(id: tc.category_id)
