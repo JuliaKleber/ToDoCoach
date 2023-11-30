@@ -5,7 +5,6 @@
 
         <h2>TASK</h2>
 
-
       <div>
         <% @task.categories.each do |category| %>
         <div class="d-flex justify-content-center">
@@ -16,47 +15,34 @@
       <p>
       <div class="text-center">
         <h3>
-          <%=@task.title %>
           <%= render 'priority_dot', task: @task %>
+          <%=@task.title %>
         </h3>
       </div>
      </p>
 
-       <div class="search-show d-flex align-items-center">
+       <div class="search-showpage d-flex align-items-center showpage">
        <span>
          <%= render 'toggle_completed', task: @task %>
-        <%=@task.description %>
+        <%= @task.description %>
         </span>
         </div>
 
-
       </div>
-      <div class="search-show">
-     <p>
-        <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+      <div class="search-show showpage">
+       <p>
+       <% if @task.due_date? %>
+          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+        <% end %>
      </p>
           <p>
-           <span> Reminder:
-            <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-           </p>
-     <p>
-        <p>------------------------</p>
-
-        <%= render 'toggle_completed', task: @task %>
-
-        <p>------------------------</p>
-        <% if @task.due_date? %>
-          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
-
-        <% end %>
-
-        <p>------------------------</p>
-        <% if @task.reminder_date? %>
-          <span> Reminder:<br>
+          <% if @task.reminder_date? %>
+          <span> Reminder:
           <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
         <% end %>
 
-
+           </p>
+     <p>
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
