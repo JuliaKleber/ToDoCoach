@@ -1,7 +1,15 @@
 
 <div class='card task-card d-flex flex-row'>
     <div class='m-3 d-flex align-items-center'>
-      <i class="fa-solid fa-briefcase"></i>
+      <% if @tasks_category_names[index].include?("Work") %>
+        <i class="fa-solid fa-briefcase"></i>
+      <% elsif @tasks_category_names[index].include?("Groceries") %>
+        <i class="fa-solid fa-basket-shopping"></i>
+      <% elsif @tasks_category_names[index].include?("Personal") %>
+        <i class="fa-solid fa-user"></i>
+      <% else %>
+        <i class="fa-solid fa-ghost"></i>
+      <% end %>
     </div>
 
   <div class='task-info'>
@@ -34,24 +42,8 @@
         </div>
 
         <div class='m-3'>
-          <% if task.priority == 1 %>
-            <p class='high-priority-color'><i class='fa-solid fa-circle'></i></p>
-          <% elsif task.priority == 2 %>
-            <p class='medium-priority-color'><i class='fa-solid fa-circle'></i></p>
-          <% else %>
-            <p class='low-priority-color'><i class='fa-solid fa-circle'></i></p>
-          <% end %>
-          <p>
-            <% if task.completed %>
-              <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-                <i class='fa-regular fa-circle-check'></i>
-              <% end %>
-            <% else %>
-              <%= link_to toggle_completed_task_path(task), data: {turbo_method: :patch} do %>
-                <i class='fa-regular fa-circle'></i>
-              <% end %>
-            <% end %>
-          </p>
+          <p><%= render 'priority_dot', task: task %></p>
+          <p><%= render 'toggle_completed', task: task %></p>
         </div>
 
       </div>
