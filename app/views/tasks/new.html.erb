@@ -3,10 +3,10 @@
 <%= simple_form_for(@task) do |f| %>
   <%= f.input :title %>
   <%= f.input :description %>
-  <%= f.fields_for :task_categories do |tc| %>
-    <%= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
-  <% end %>
-  <%= f.input :priority %>
+  <%#= f.fields_for :task_categories do |tc| %>
+    <%#= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
+  <%# end %>
+  <%= f.input :priority, as: :select, collection: Task.priorities.keys %>
   <%= f.input :due_date, as: :datetime, html5: true %>
   <%= f.input :reminder_date, as: :datetime, html5: true %>
   <%= f.submit 'Save Task', class: "btn btn-primary w-25 btn-save" %>
