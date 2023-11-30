@@ -1,57 +1,58 @@
-<div>
- <div class="row">
+<div class="container">
+  <div class="row">
     <div class="col-12 col-md-6">
       <div class="bg-white rounded p-3">
+
         <h2>TASK</h2>
 
         <hr>
+
         <% @task.categories.each do |category| %>
-          <span class="badge badge-primary"><%= category.name %></span>
+          <span class="border rounded"><%= category.name %></span>
         <% end %>
 
         <h3>
           <%=@task.title %>
           <%= render 'priority_dot', task: @task %>
-
         </h3>
-        <p>------------------------</p>
-          <%=@task.description %>
+
         <p>------------------------</p>
 
-          <% if @task.completed?%>
-            <i class="fa-regular fa-square-check" style="color: #c0c0c0;"></i> Task completed
-          <% else %>
-            <i class="fa-regular fa-square" style="color: #c0c0c0;"></i> Task not completed
-          <% end %>
+        <%=@task.description %>
+
         <p>------------------------</p>
 
-          <%=@task.due_date %>
-        <p>------------------------</p>
+        <%= render 'toggle_completed', task: @task %>
 
-        <span> Reminder:<br>
-        <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
+        <p>------------------------</p>
+        <% if @task.due_date? %>
+          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+
+        <% end %>
+
+        <p>------------------------</p>
+        <% if @task.reminder_date? %>
+          <span> Reminder:<br>
+          <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
+        <% end %>
+
 
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
+        <hr>
 
-
-      <hr>
-      <p>
-        <%= link_to tasks_path do %>
-          <i class="fa fa-history"></i> Back to Task Lists
-        <% end %>
-        </p>
         <p>
-        <%= link_to edit_task_path(@task.id) do %>
+          <%= link_to 'javascript:history.back()', remote: true do %>
+            <i class="fa fa-history"></i> Back to Task Lists
+          <% end %>
+        </p>
+
+        <p>
+        <%= link_to edit_task_path(@task) do %>
           <i class="fa fa-pencil"></i>
         <% end %>
        </p>
-       <p>
-          <%= link_to task_path(@task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
-            <i class="fa fa-trash" aria-hidden="true"></i>
-          <% end %>
-       </p>
     </div>
-   </div>
   </div>
+<div>
