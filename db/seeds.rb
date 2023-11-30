@@ -77,4 +77,19 @@ users.each do |user|
       TaskCategory.create(task: task, category: category)
     end
   end
+  5.times do |n|
+    task_title = task_titles.sample
+    task = user.tasks.create(
+      title: task_title,
+      description: "Description for '#{task_title}'",
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(0..1).zero?
+    )
+
+    # Assign random categories to the task through TaskCategory
+    task_categories = categories.sample(rand(1..3))
+    task_categories.each do |category|
+      TaskCategory.create(task: task, category: category)
+    end
+  end
 end

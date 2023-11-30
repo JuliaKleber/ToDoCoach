@@ -1,41 +1,53 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-6">
-      <div class="bg-white rounded p-3">
+      <div class="bg-background-color rounded p-3">
 
         <h2>TASK</h2>
 
-        <hr>
-
+      <div>
         <% @task.categories.each do |category| %>
-          <span class="border rounded"><%= category.name %></span>
+        <div class="d-flex justify-content-center">
+          <span class="border rounded category"><%= category.name %></span>
+        </div>
+      <% end %>
+      </div>
+      <p>
+      <div class="text-center">
+        <h3>
+          <%= render 'priority_dot', task: @task %>
+          <%=@task.title %>
+        </h3>
+      </div>
+     </p>
+
+       <div class="search-showpage d-flex align-items-center showpage">
+       <span>
+         <%= render 'toggle_completed', task: @task %>
+        <%= @task.description %>
+        </span>
+        </div>
+
+      </div>
+      <div class="search-show showpage">
+       <p>
+       <% if @task.due_date? %>
+          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+        <% end %>
+     </p>
+          <p>
+          <% if @task.reminder_date? %>
+          <span> Reminder:
+          <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
         <% end %>
 
-        <h3>
-          <%=@task.title %>
-          <%= render 'priority_dot', task: @task %>
-        </h3>
-
-        <p>------------------------</p>
-
-        <%=@task.description %>
-
-        <p>------------------------</p>
-
-        <%= render 'toggle_completed', task: @task %>
-
-        <p>------------------------</p>
-
-        <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
-
-        <p>------------------------</p>
-
-        <span> Reminder:<br>
-        <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-
+           </p>
+     <p>
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-reminder">Set reminder</button>
       </div>
+      </div>
+    </p>
         <hr>
 
         <p>
