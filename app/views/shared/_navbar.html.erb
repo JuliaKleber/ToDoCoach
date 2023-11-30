@@ -1,16 +1,15 @@
 
-<nav class="navbar fixed-bottom navbar navbar-dark bg-secondary d-flex justify-content-around">
-  <div>
-    <a class="navbar-brand">  <i class="fa-solid fa-magnifying-glass"></i></a>
-  </div>
-  <div>
-    <%= link_to todays_tasks_path do %>
+<nav class="navbar fixed-bottom navbar-team d-flex justify-content-between">
+
+    <div class="navbar-brand">
+    <i class="fa-solid fa-list"></i>
+   </div>
+   <div class="navbar-brand">
+    <%# <%= link_to todays_tasks_path do %>
       <i class="fa-solid fa-house-user"></i>
-    <% end %>
-  </div>
-  <div>
-    <li>
-      <%= image_tag "image", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }%>
-   </li>
-  </div>
+    <%# <% end %>
+   </div>
+   <div class="navbar-brand">
+      <i class="fa-solid fa-user-group"></i>
+   </div>
 </nav>

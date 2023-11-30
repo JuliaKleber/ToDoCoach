@@ -58,7 +58,6 @@ class TasksController < ApplicationController
   end
 
   def show
-    category_names(params[:id])
   end
 
   def new
@@ -68,7 +67,8 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.user = current_user
+    @task['priority'] = @task['priority'].to_i
+      @task.user = current_user
     if @task.save!
       redirect_to task_path(@task)
       ReminderJob.set(wait_until: @task.reminder_date).perform_later
