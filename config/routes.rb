@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     member do
       patch :toggle_completed
       get :dates_tasks, as: 'dates'
+      get :message
     end
   end
 end

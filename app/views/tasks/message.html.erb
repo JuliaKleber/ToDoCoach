@@ -1,0 +1,5 @@
+<% if @task.completed? %>
+  <%= render "tasks/task_done_message" %>
+<% else %>
+  <%= render "tasks/task_saved_message" %>
+<% end %>

@@ -13,8 +13,14 @@
   </head>
 
   <body>
-    <%= render "shared/avatar" %>
-          <%= yield %>
-    <%= render "shared/navbar" %>
+    <div class="container mt-5">
+     <div class="row justify-content-center">
+      <div class="col-12 col-lg-6">
+        <%= render "shared/avatar" %>
+              <%= yield %>
+        <%= render "shared/navbar" %>
+      </div>
+     </div>
+    </div>
   </body>
 </html>

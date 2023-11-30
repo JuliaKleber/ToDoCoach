@@ -23,13 +23,6 @@
             <% end %>
           </p>
 
-           <%# <%= simple_form_for task, html: {
-              class: "d-none", data: {
-                edit_task_target: "form" }} do |f| %>
-                <%# <%= f.input :title %>
-                <%# <%= f.submit "Update task", class: "btn btn-sm btn-primary" %>
-              <%# <% end %>
-
           <p>
             <% if task.due_date.hour < 12 %>
               <%= task.due_date.strftime("%H:%M") %>

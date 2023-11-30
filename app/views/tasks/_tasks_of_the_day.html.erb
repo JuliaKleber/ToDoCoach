@@ -1,9 +1,9 @@
 <div class='container todays-tasks'>
 
 <p> Here we need the mascot </p>
-<p> <%= day %> </p>
+<h6> <%= @today %> </h6>
 <h2> <%= @message %> </h2>
-<p> Isn't it a wonderful day to accomplish some more? </p>
+<p> Today is a brand new day. And it's yours. </p>
 
 <% @tasks.each_with_index do |task, index| %>
   <%= render 'task_card', task: task, index: index %>
