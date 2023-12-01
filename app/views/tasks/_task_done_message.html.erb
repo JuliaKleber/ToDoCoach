@@ -13,7 +13,7 @@
 
         <div class="text-center">
         <h1 class="message-slogan text-center fw-bolder">You crushed this!</h1>
-         <span> Congratulations on completing: </span><strong><%= @task.title %> </strong>🎉
+         <span> Congratulations on completing: </span> <p><%= @task.title %> 🎉 </p>
         </div>
 
         <div class="reminder-container mt-4 position-relative">
@@ -21,11 +21,12 @@
         </div>
 
       <div class="upcomming-task">
-        <%= render 'task_card', task: @remaining_task  , index: 0 %>
-        <button class="btn-message btn btn-reminder"><%= link_to "Let's Add a New Task", "new_task_path" %></button>
-      </div>        <%# </div> %>
-      <%# </div> %>
-      <%# </div> %>
+         <%= render 'task_card', task: @remaining_task  , index: 0 %>
+        <%= link_to new_task_path do%>
+           <button class="btn-message btn btn-reminder">Let's Add a New Task</button>
+        <% end %>
+
+      </div>
     </div>
   </div>
 </div>

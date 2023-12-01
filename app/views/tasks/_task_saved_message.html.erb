@@ -17,12 +17,12 @@
         </div>
 
         <div class="reminder-container mt-5 position-relative">
-          <p>Do you want to add another task?</p>
-          <button class="btn btn-reminder">Set reminder</button>
+          <p>Do you want to add another one?</p>
+          <%= link_to new_task_path do%>
+           <button class="btn-message btn btn-reminder">Add a New Task</button>
+        <% end %>
         </div>
-      <%# </div>
-     </div> %>
-    <%# </div> %>
+     </div>
  </div>
 </div>
 </div>
