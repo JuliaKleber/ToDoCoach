@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container mt-2">
 <h5>Here you can add a new task</h5>
 <div>
 <%= simple_form_for(@task) do |f| %>
@@ -12,5 +12,5 @@
   <%= f.input :reminder_date, as: :datetime, html5: true %>
   <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
   <%# </a> %>
-  <%= f.submit "Save Task", class:"btn btn-primary w-25 btn-save" %>
+  <%= f.submit "Save Task", class:"btn btn-primary btn-save" %>
   <% end %>

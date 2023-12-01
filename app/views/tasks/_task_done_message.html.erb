@@ -1,24 +1,32 @@
-<div class="container mt-5">
-     <div class="row">
-      <div class="col-12 col-lg-6">
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-lg-6">
+        <%# <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content"> %>
         <div class="position-relative">
-          <button id="close" type="button" class="position-absolute top-0 end-0 me-1 mt-1 rounded-circle" data-bs-dismiss="modal" aria-label="Close" style="color: white">x</button>
         </div>
 
-        <div class="container mt-1 text-center">
-           <%= image_tag "todocoach.png", class: "avatar text-center mt-4", id: "pop-up-avatar" %>
+        <div class="container text-center">
+           <%= image_tag "To Do Coach glasses (1).png", class: "avatar text-center", id: "pop-up-avatar" %>
         </div>
 
-        <div class="modal-body text-center">
-        <h1 class="modal-title fs-5 text-center fw-bolder" id="exampleModalLabel">You crushed this!</h1>
-          Now on to the next one.
+        <div class="text-center">
+        <h1 class="message-slogan text-center fw-bolder">You crushed this!</h1>
+         <span> Congratulations on completing: </span> <p><%= @task.title %> 🎉 </p>
         </div>
+
+        <div class="reminder-container mt-4 position-relative">
+          <p>On to the next one!</p>
+        </div>
+
+      <div class="upcomming-task">
+         <%= render 'task_card', task: @remaining_task  , index: 0 %>
+        <%= link_to new_task_path do%>
+           <button class="btn-message btn btn-reminder">Let's Add a New Task</button>
+        <% end %>
+
       </div>
-     </div>
     </div>
- </div>
-</div>
+  </div>
 </div>
