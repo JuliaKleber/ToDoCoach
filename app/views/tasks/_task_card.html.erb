@@ -13,7 +13,10 @@
   </div>
 
   <div class='task-info'>
-    <div data-controller="edit-task">
+    <div data-controller="edit-task"
+         data-action="dblclick->edit-task#displayForm"
+         data-bs-toggle="modal"
+         data-bs-target="#staticBackdrop">
       <div class='d-flex flex-row'>
         <div class='m-3'>
 
@@ -63,25 +66,22 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
-          <div class="modal-body">
-            <%= simple_form_for task do |f| %>
-              <%= f.input :title %>
-              <%= f.input :description %>
-              <%= f.input :due_date, as: :datetime, html5: true %>
-              <%= f.submit "Save changes", class:"btn btn-primary rounded" %>
-            <% end %>
+          <div class="container modal-body">
+            <div class="row">
+              <div class="col-10">
+              <%= simple_form_for task do |f| %>
+                <%= f.input :title %>
+                <%= f.input :description %>
+                <%= f.input :due_date, as: :datetime, html5: true %>
+                <%= f.submit "Save changes", class:"btn btn-primary rounded" %>
+              <% end %>
+              </div>
+            </div>
           </div>
 
         </div>
       </div>
     </div>
   </div>
-
-  <i class="fa-solid fa-pen"
-      style="color: #242474;"
-      data-action="click->edit-task#displayForm"
-      data-bs-toggle="modal"
-      data-bs-target="#staticBackdrop">
-  </i>
 
 </div>
