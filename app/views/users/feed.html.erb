@@ -1,0 +1,27 @@
+<h2>Latest from your friends</h2>
+<div class='d-flex flex-row'>
+  <div class='card d-flex flex-row'>
+    <div class='card'>Following</div>
+    <%# link to 'Achievements', path %>
+    <div class='card'>Achievements</div>
+  </div class='card'>
+  <div class='card'>
+    <i class="fa-regular fa-bell"></i>
+  </div>
+  <%= link_to connect_user_path(current_user), class: 'card' do %>
+    <i class="fa-solid fa-user-plus"></i>
+  <% end %>
+</div>
+
+<% @followed.each do |followee| %>
+  <div class='card'>
+    <% if current_user.photo.attached? %>
+      <%= cl_image_tag current_user.photo.key, class: "avatar" %>
+    <% else %>
+      <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+    <% end %>
+    <%= followee.user_name %>
+    <p>Some kind of message</p>
+    <p>Congratulate them / Add to task list<p>
+  </div>
+<% end %>

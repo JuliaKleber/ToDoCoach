@@ -3,6 +3,7 @@ puts 'Clearing the database ...'
 TaskCategory.destroy_all
 Task.destroy_all
 Category.destroy_all
+Follow.destroy_all
 User.destroy_all
 
 puts 'Creating users ...'
