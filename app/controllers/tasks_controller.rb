@@ -64,7 +64,8 @@ class TasksController < ApplicationController
     @task = Task.new(create_params.merge({task_categories_attributes: formatted_task_categories_attributes}))
     @task.user = current_user
     if @task.save!
-      redirect_to message_task_path(@task)
+      redirect_to message_task_path(@task), notice: "Good job!
+      Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new
@@ -100,7 +101,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.destroy
     flash[:success] = "The to-do item was successfully deleted."
-    redirect_to tasks_path, status: :see_other
+    redirect_back(fallback_location: tasks_path, status: :see_other)
   end
 
   def message
