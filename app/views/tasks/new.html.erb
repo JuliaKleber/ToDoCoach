@@ -2,13 +2,14 @@
 <h5>Here you can add a new task</h5>
 <div>
 <%= simple_form_for(@task) do |f| %>
-  <%= f.input :title %>
-  <%= f.input :description %>
+  <%= f.input :title, label:false, input_html: { class: 'task-new'} %>
+  <%= f.input :title, label:false, input_html: { class: 'task-new'} %>
   <%= f.fields_for :task_categories do |tc| %>
     <%= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
   <% end %>
-  <%= f.input :priority, as: :select, collection: Task.priorities.keys %>
-  <%= f.input :due_date, as: :datetime, html5: true %>
+  <p><strong>When is this task due?</strong></p>
+   <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'task-new'} %>
+   <%= f.input :priority, as: :select, collection: Task.priorities.keys %>
   <%= f.input :reminder_date, as: :datetime, html5: true %>
   <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
   <%# </a> %>
