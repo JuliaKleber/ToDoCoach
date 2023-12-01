@@ -1,0 +1,12 @@
+<% @other_users.each do |user| %>
+  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row') do |form| %>
+    <% if current_user.photo.attached? %>
+      <%= cl_image_tag current_user.photo.key, class: "avatar" %>
+    <% else %>
+      <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+    <% end %>
+    <%= user.user_name %>
+    <%= form.hidden_field :followed_id, value: user.id %>
+    <%= form.submit "Connect", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
