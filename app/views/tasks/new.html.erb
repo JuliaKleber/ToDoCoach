@@ -1,17 +1,37 @@
-<div class="container mt-2">
-<h5>Here you can add a new task</h5>
-<div>
+<%# <div class="container mt-2">
+  <div class="row"> %>
+
+<h5 class="text-center">Here you can add a new task</h5>
+
 <%= simple_form_for(@task) do |f| %>
-  <%= f.input :title, label:false, input_html: { class: 'task-new'} %>
-  <%= f.input :title, label:false, input_html: { class: 'task-new'} %>
+  <div class='m-4'>
+   <%= f.input :title, label:false, input_html: { class: 'task-due'}%>
+  </div>
+  <div class='m-4'>
+  <%= f.input :description, label:false, input_html: { class: 'task-due'} %>
+  </div>
   <%= f.fields_for :task_categories do |tc| %>
-    <%= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
+   <div class='task-due m-4 p-2'>
+     <p>When is this task due?</p>
+       <%= f.input :due_date, label: false, as: :datetime, html5: true %>
+    </div>
+   <div class= "task-due m-4 p-1">
+   <p>Would you like to categorize this task?
+    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select"}} %>
   <% end %>
-  <p><strong>When is this task due?</strong></p>
-   <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'task-new'} %>
-   <%= f.input :priority, as: :select, collection: Task.priorities.keys %>
-  <%= f.input :reminder_date, as: :datetime, html5: true %>
+  </p>
+  </div>
+  <div class= "task-due m-4 p-2">
+  <p> How important is this to you?
+    <%= f.input :priority, as: :select, label:false, collection: Task.priorities.keys %>
+   </p>
+   </div>
+   <div class= "task-due m-4 p-2">
+     <%= f.input :reminder_date, as: :datetime, html5: true %>
   <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
   <%# </a> %>
-  <%= f.submit "Save Task", class:"btn btn-primary btn-save" %>
+  </div>
+  <%= f.submit "Save Task", class:"btn btn-primary btn-save m-4" %>
   <% end %>
+  </div>
+ </div>
