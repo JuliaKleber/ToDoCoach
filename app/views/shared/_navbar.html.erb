@@ -10,7 +10,11 @@
     <% end %>
   </div>
   <div class="navbar-brand">
-    <%= link_to feed_user_path(current_user) do %>
+    <% if user_signed_in? %>
+      <%= link_to feed_user_path(current_user) do %>
+        <i class="fa-solid fa-user-group"></i>
+      <% end %>
+    <% else %>
       <i class="fa-solid fa-user-group"></i>
     <% end %>
   </div>
