@@ -46,13 +46,7 @@
 
       </div>
 
-      <p style='margin-left: 16px'>
-        <% if task.description.split('').length > 30 %>
-          <%= task.description.split.first(4).join(' ') %> ...
-        <% else %>
-          <%= task.description %>
-        <% end %>
-      </p>
+     
       <%= link_to task_path(task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
         <i class="fa fa-trash" aria-hidden="true"></i>
       <% end %>
