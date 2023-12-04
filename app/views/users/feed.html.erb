@@ -4,12 +4,15 @@
     <div class='card'>Following</div>
     <%# link to 'Achievements', path %>
     <div class='card'>Achievements</div>
-  </div class='card'>
+  </div>
   <div class='card'>
     <i class="fa-regular fa-bell"></i>
   </div>
   <%= link_to connect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-plus"></i>
+  <% end %>
+  <%= link_to disconnect_user_path(current_user), class: 'card' do %>
+    <i class="fa-solid fa-user-slash"></i>
   <% end %>
 </div>
 

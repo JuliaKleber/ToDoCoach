@@ -10,12 +10,14 @@ Rails.application.routes.draw do
       get :feed
       get :connect
       post :build_connection
+      get :disconnect
+      delete :destroy_connection
     end
   end
 
   root to: 'pages#home'
   get 'pages/reminder', to: 'pages#reminder'
-  
+
   resources :tasks do
     collection do
       get :todays_tasks, as: 'todays'
