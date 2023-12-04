@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   def feed
-    @followed = Follow.where(follower_id: current_user)
+    @followed = current_user.followeds.includes(:achievements)
   end
 
   def achievements
