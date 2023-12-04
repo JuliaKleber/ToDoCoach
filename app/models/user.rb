@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :tasks
   has_many :categories
+  has_many :user_achievements
+  has_many :achievements, through: :user_achievements
   has_one_attached :photo
 
   has_many :follows_as_follower, class_name: "Follow", foreign_key: "follower_id"
