@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit update destroy toggle_completed]
+  before_action :set_task, only: %i[show edit update destroy toggle_completed dates_tasks]
   before_action :set_last_collection_path, only: %i[todays_tasks index dates_tasks tasks_without_date]
-  
+
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
@@ -94,7 +94,7 @@ class TasksController < ApplicationController
   def toggle_completed
     @task.update(completed: !@task.completed)
     if @task.completed?
-      redirect_to message_task_path(@task)
+      check_for_achievements(@task)
     else
       redirect_back(fallback_location: todays_tasks_path)
     end
@@ -132,17 +132,17 @@ class TasksController < ApplicationController
     end
   end
 
-    def set_task
-      @task = Task.find(params[:id])
-    end
+  def set_task
+    @task = Task.find(params[:id])
+  end
 
-    def set_last_collection_path
-      session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
-    end
+  def set_last_collection_path
+    session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
+  end
 
-    def task_params
-      params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
-    end
+  def task_params
+    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
+  end
 
   def sanitize_categories(attributes_array)
     attributes_array.compact_blank.map do |category_info|
@@ -181,4 +181,46 @@ class TasksController < ApplicationController
       @grouped_tasks << dated_tasks
     end
   end
+
+  def check_for_achievements(task)
+    threshold = [1, 5, 10, 20, 50, 100]
+    achievements = {
+      1 => ["Bronze", "You've completed 1 task! Keep it up!"],
+      5 => ["Silver", "5 tasks completed! Well done!"],
+      10 => ["Gold", "10 tasks completed! You're doing great!"],
+      20 => ["Platinum", "20 tasks completed! You're on the right track!"],
+      50 => ["Diamond", "50 tasks completed! Incredible achievement!"],
+      100 => ["Master", "100 tasks completed! You're a task management master!"]
+    }
+    user_progress = UserProgress.find_by(user_id: current_user.id)
+    user_progress.number_completed_all += 1
+    user_progress.save
+    if threshold.include?(user_progress.number_completed_all)
+      new_achievement = UserAchievement.new(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id)
+      new_achievement.save
+      redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch"
+    else
+      redirect_to message_task_path(task), notice: "Task completed successfully"
+    end
+  end
+
+  # def check_for_category_batch(task)
+  #   threshold = [1, 5, 10, 20, 50, 100]
+  #   user_progress = UserProgress.find(user_id: current_user.id)
+  #   if task.category == 'Work'
+  #     user_progress.number_completed_work += 1
+  #     if threshold.includes(user_progress.number_completed_work)
+  #       UserAchievement.new(user_id: current_user.id, achievement_id: Achievement.find()
+  #       redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch"
+  #     elsif task.category == 'Personal'
+  #     user_progress.number_completed_personal += 1
+  #     redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch" if threshold.includes(user_progress.number_completed_personal)
+  #   elsif task.category == 'Groceries'
+  #     user_progress.number_completed_groceries += 1
+  #     redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch" if threshold.includes(user_progress.number_completed_groceries)
+  #   end
+  # end
+
+  # def check_for_priority_batch
+  # end
 end

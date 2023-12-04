@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_04_113403) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_04_162606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -97,6 +97,20 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_113403) do
     t.index ["user_id"], name: "index_user_achievements_on_user_id"
   end
 
+  create_table "user_progresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "number_completed_low_priority", default: 0, null: false
+    t.integer "number_completed_medium_priority", default: 0, null: false
+    t.integer "number_completed_high_priority", default: 0, null: false
+    t.integer "number_completed_all", default: 0, null: false
+    t.integer "number_completed_work", default: 0, null: false
+    t.integer "number_completed_personal", default: 0, null: false
+    t.integer "number_completed_groceries", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_progresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -121,4 +135,5 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_04_113403) do
   add_foreign_key "tasks", "users"
   add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"
+  add_foreign_key "user_progresses", "users"
 end
