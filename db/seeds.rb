@@ -8,89 +8,108 @@ User.destroy_all
 
 puts 'Creating users ...'
 
-# Create users
-user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia']
+user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia', 'Ali']
 
 users = user_names.map do |name|
   User.create(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
 end
 
-puts 'Creating categories ....'
+puts 'Creating categories ...'
 
-# Create categories for each user
-categories = ['Work', 'Personal', 'Groceries'].map do |category_name|
-  User.last.categories.create(name: category_name)
+User.all.each do |user|
+  general_categories = ['Work', 'Personal', 'Groceries'].map do |category_name|
+    category = user.categories.create(name: category_name, user_id: user.id)
+  end
 end
 
-puts 'Creating tasks...'
-
-task_titles = [
-  "Doing the groceries",
-  "Dentist appointment",
-  "Buying a birthday present for Charles",
-  "Meeting with the project team",
-  "Writing a blog post",
-  "Calling mom",
-  "Preparing for the presentation",
-  "Gym workout",
-  "Sending invoices",
-  "Attending a networking event",
-  "Book club meeting",
-  "Walking the dog",
-  "Paying bills",
-  "Updating resume",
-  "Cooking dinner",
-  "Researching new technology trends",
-  "Volunteering at the local shelter",
-  "Planning a weekend getaway",
-  "Attending a yoga class",
-  "Fixing a leaky faucet",
-  "Reading a chapter of a novel",
-  "Organizing the closet",
-  "Learning a new recipe",
-  "Scheduling a doctor's appointment",
-  "Taking the car for maintenance",
-  "Attending a language learning meetup",
-  "Watching a documentary",
-  "Planting flowers in the garden",
-  "Attending a community clean-up event",
-  "Creating a budget for the month"
+user_specific_categories = [
+  'Work Projects',
+  'Personal Goals',
+  'Fitness Routine',
+  'Travel Plans',
+  'Hobby Projects',
+  'Learning Journey',
+  'Family Events',
+  'Creative Ventures',
+  'Health and Wellness',
+  'Financial Planning'
 ]
 
-# Create tasks for each user due in the next two weeks and assign categories
-current_time = Time.now
-users.each do |user|
-  30.times do |n|
-    task_title = task_titles.sample
-    due_date = (current_time + (n.to_f / 3).days)
-    task = user.tasks.create(
-      title: task_title,
-      description: "Description for '#{task_title}'",
-      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
-      completed: rand(0..1).zero?,
-      due_date: due_date,
-      reminder_date: due_date - 1.day
-    )
+User.all.each do |user|
+  category = user.categories.create(name: user_specific_categories.sample)
+end
 
-    # Assign random categories to the task through TaskCategory
-    task_categories = categories.sample(rand(1..3))
+puts 'Creating tasks ...'
+
+tasks = [
+  ["Doing the groceries", "Pick up fresh produce and household essentials from the local grocery store."],
+  ["Dentist appointment", "Visit the dentist for a routine checkup and cleaning."],
+  ["Buying a birthday present for Charles", "Select a thoughtful birthday gift for your friend Charles."],
+  ["Meeting with the project team", "Collaborate with the project team to discuss progress and upcoming tasks."],
+  ["Writing a blog post", "Create engaging content for your blog on a topic of interest."],
+  ["Calling mom", "Catch up with your mom and share the latest updates."],
+  ["Preparing for the presentation", "Gather information and create visuals for an upcoming presentation."],
+  ["Gym workout", "Engage in a full-body workout session at the gym."],
+  ["Sending invoices", "Issue invoices to clients for completed services or products."],
+  ["Attending a networking event", "Expand your professional network at a local networking event."],
+  ["Book club meeting", "Read and prepare for the discussion at the upcoming book club meeting."],
+  ["Walking the dog", "Take your furry friend for a refreshing walk in the park."],
+  ["Paying bills", "Manage and pay your monthly bills to stay on top of your finances."],
+  ["Updating resume", "Revise and update your resume with recent accomplishments and skills."],
+  ["Cooking dinner", "Prepare a delicious and nutritious dinner for yourself or your family."],
+  ["Researching new technology trends", "Explore the latest advancements in technology to stay informed."],
+  ["Volunteering at the local shelter", "Offer your time to support and help at the nearby animal shelter."],
+  ["Planning a weekend getaway", "Research and plan a relaxing weekend getaway destination."],
+  ["Attending a yoga class", "Participate in a yoga class to rejuvenate your mind and body."],
+  ["Fixing a leaky faucet", "Address and repair a leaky faucet in your home."],
+  ["Reading a chapter of a novel", "Enjoy some leisure time by reading a chapter of a captivating novel."],
+  ["Organizing the closet", "Declutter and organize your closet for a more efficient space."],
+  ["Learning a new recipe", "Experiment with a new recipe to broaden your culinary skills."],
+  ["Scheduling a doctor's appointment", "Book an appointment with your healthcare provider for a routine checkup."],
+  ["Taking the car for maintenance", "Schedule and take your car for regular maintenance to ensure optimal performance."],
+  ["Attending a language learning meetup", "Practice and improve your language skills at a local language learning meetup."],
+  ["Watching a documentary", "Explore a documentary on a topic that interests and educates you."],
+  ["Planting flowers in the garden", "Enhance your garden by planting colorful and fragrant flowers."],
+  ["Attending a community clean-up event", "Contribute to your community by participating in a clean-up event."],
+  ["Creating a budget for the month", "Plan and create a budget to manage your finances for the upcoming month."]
+]
+
+current_time = Time.now
+User.all.each do |user|
+  30.times do |n|
+    random_task = tasks.sample
+    due_date = (current_time + (n.to_f / 3).days + rand(0..8).hours + rand(0..60).minutes)
+    task = user.tasks.create(
+      title: random_task[0],
+      description: random_task[1],
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(2).zero?,
+      due_date: due_date,
+      reminder_date: due_date - rand(1..24).hours
+    )
+    task_categories = user.categories.sample(rand(1..2)).compact
     task_categories.each do |category|
       TaskCategory.create(task: task, category: category)
     end
   end
-  5.times do |n|
-    task_title = task_titles.sample
+  5.times do
+    random_task = tasks.sample
     task = user.tasks.create(
-      title: task_title,
-      description: "Description for '#{task_title}'",
+      title: random_task[0],
+      description: random_task[1],
       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
       completed: rand(0..1).zero?
     )
-
-    # Assign random categories to the task through TaskCategory
-    task_categories = categories.sample(rand(1..3))
+    task_categories = user.categories.sample(rand(1..2)).compact
     task_categories.each do |category|
       TaskCategory.create(task: task, category: category)
     end
   end
+end
+
+puts 'Connecting users ...'
+
+User.all.each do |user|
+  followed = Follow.create(follower_id: user.id, followed_id: User.all.where.not(id: user.id).pluck(:id).sample)
+  Follow.create(follower_id: user.id, followed_id: User.all.where.not(id: user.id).where.not(id: followed.followed_id).pluck(:id).sample)
 end
