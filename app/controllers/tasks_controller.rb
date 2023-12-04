@@ -136,7 +136,6 @@ class TasksController < ApplicationController
       @task = Task.find(params[:id])
     end
 
-
     def set_last_collection_path
       session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
     end
@@ -144,7 +143,6 @@ class TasksController < ApplicationController
     def task_params
       params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
     end
-
 
   def sanitize_categories(attributes_array)
     attributes_array.compact_blank.map do |category_info|

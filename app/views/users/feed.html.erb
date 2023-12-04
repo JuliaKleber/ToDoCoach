@@ -1,15 +1,18 @@
-<h2>Latest from your friends</h2>
-<div class='d-flex flex-row'>
-  <div class='card d-flex flex-row'>
-    <div class='card'>Following</div>
+<%# <h2 class='text-center'>Latest from your friends</h2> %>
+<div class='d-flex flex-row justify-content-between'>
+  <%# <div class='card d-flex flex-row'> %>
+    <div class='card' style='background-color: blue; color: white'>Following</div>
     <%# link to 'Achievements', path %>
-    <div class='card'>Achievements</div>
-  </div class='card'>
-  <div class='card'>
+    <div class='card'>Your Achievements</div>
+  <%# </div> %>
+  <%# <div class='card'>
     <i class="fa-regular fa-bell"></i>
-  </div>
+  </div> %>
   <%= link_to connect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-plus"></i>
+  <% end %>
+  <%= link_to disconnect_user_path(current_user), class: 'card' do %>
+    <i class="fa-solid fa-user-slash"></i>
   <% end %>
 </div>
 

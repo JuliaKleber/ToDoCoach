@@ -1,5 +1,5 @@
-<% @not_following.each do |user| %>
-  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>
+<% @following.each do |user| %>
+  <%= form_with(model: follow, url: destroy_connection_user_path(current_user), method: :delete, class: 'card d-flex flex-row justify-content-around') do |form| %>
     <% if current_user.photo.attached? %>
       <%= cl_image_tag current_user.photo.key, class: "avatar" %>
     <% else %>
@@ -7,6 +7,6 @@
     <% end %>
     <%= user.user_name %>
     <%= form.hidden_field :followed_id, value: user.id %>
-    <%= form.submit "Connect", class: "btn-reminder" %>
+    <%= form.submit "Disconnect", class: "btn-reminder" %>
   <% end %>
 <% end %>
