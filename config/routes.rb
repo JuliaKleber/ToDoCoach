@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :users, except: %i[index new create edit update destroy] do
     member do
       get :feed
+      get :achievements
       get :connect
       post :build_connection
       get :disconnect

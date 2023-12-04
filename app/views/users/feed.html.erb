@@ -1,9 +1,9 @@
-<%# <h2 class='text-center'>Latest from your friends</h2> %>
 <div class='d-flex flex-row justify-content-between'>
   <%# <div class='card d-flex flex-row'> %>
     <div class='card' style='background-color: blue; color: white'>Following</div>
-    <%# link to 'Achievements', path %>
-    <div class='card'>Your Achievements</div>
+    <%= link_to achievements_user_path, class: 'card' do %>
+      Your Achievements
+    <% end %>
   <%# </div> %>
   <%# <div class='card'>
     <i class="fa-regular fa-bell"></i>
@@ -16,17 +16,21 @@
   <% end %>
 </div>
 
+<h2 class='text-center'>Latest from your friends</h2>
+
 <% @followed.each do |followed| %>
-  <div class='card'>
-    <%# if followed.photo.attached? %>
-      <%# cl_image_tag current_user.photo.key, class: "avatar" %>
-    <%# else %>
-      <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
-    <%# end %>
-    <%# followed.user_name %>
-    <p>Name of the user <%= "#{followed.id}" %><p>
-    <p>Some kind of message</p>
-    <p>Congratulate them / Add to task list<p>
-    <p>Symbol</p>
-  </div>
+  <%# followed.achievements.each do |achievement| %>
+    <div class='card'>
+      <%# if followed.photo.attached? %>
+        <%# cl_image_tag current_user.photo.key, class: "avatar" %>
+      <%# else %>
+        <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+      <%# end %>
+      <%# followed.user_name %>
+      <p>Name of the user <%= "#{followed.id}" %><p>
+      <p> <%# achievement.name %> </p>
+      <p>Congratulate them / Add to task list<p>
+      <p>Symbol</p>
+    </div>
+  <%# end %>
 <% end %>
