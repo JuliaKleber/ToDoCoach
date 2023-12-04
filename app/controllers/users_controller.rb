@@ -3,6 +3,10 @@ class UsersController < ApplicationController
     @followed = Follow.where(follower_id: current_user)
   end
 
+  def achievements
+    @achievements = current_user.achievements
+  end
+
   def connect
     @follow = Follow.new
     @not_following = User.where.not(id: current_user.id).where.not(id: current_user.followeds.pluck(:id))
