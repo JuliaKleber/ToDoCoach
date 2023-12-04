@@ -41,7 +41,7 @@ class TasksController < ApplicationController
     @dates = dates_of_tasks
     @tasks_grouped_by_dates = group_tasks_by_date
   end
-
+  
   def show
   end
 
@@ -58,7 +58,8 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save!
       redirect_to message_task_path(@task), notice: "Good job!
-      Todo is very proud of you!"
+      Todo is very proud of you!" and return
+
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new
