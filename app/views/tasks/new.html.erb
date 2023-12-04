@@ -1,34 +1,35 @@
-<h5 class="text-center">Here you can add a new task 🚀</h5>
+<div class="row">
+  <div class="col-12 col-sm-6">
+   <h5 class="text-center">Here you can add a new task 🚀</h5>
 
-<%= simple_form_for(@task) do |f| %>
-  <div class='m-4'>
-   <%= f.input :title, label:false, input_html: { class: 'task-due', id:"task-shadow"} %>
+  <%= simple_form_for(@task) do |f| %>
+  <div class='m-2'>
+   <%= f.input :title, label:false, input_html: { class: "task-new", id:"task-shadow"} %>
   </div>
-  <div class='m-4'>
-  <%= f.input :description, label:false, input_html: { class: 'task-due', id: "task-shadow"} %>
+  <div class='m-2'>
+  <%= f.input :description, label:false, input_html: { class: "task-due", id: "task-shadow"} %>
   </div>
   <%= f.fields_for :task_categories do |tc| %>
-   <div class='task-due m-4 p-2' id="task-shadow">
-     <p>When is this task due?</p>
-       <%= f.input :due_date, label: false, as: :datetime, html5: true %>
+  <div >
+     <span class="p-4"> When is this task due?</span>
+       <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { id: "task-shadow"} %>
     </div>
-   <div class= "task-due m-4 p-1" id="task-shadow">
-   <p>Would you like to categorize this task?
-    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select"}} %>
+   <div>
+   <span class="p-4">Categorize the task?</span>
+    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: {id: "task-shadow", data: { controller: "tom-select"}} %>
   <% end %>
-  </p>
   </div>
-  <div class= "task-due m-4 p-2" id="task-shadow">
-  <p> How important is this to you?
-    <%= f.input :priority, as: :select, label:false, collection: Task.priorities.keys %>
-   </p>
+  <div>
+  <span class="p-4">How important is this to you?</span>
+    <%= f.input :priority, as: :select, label:false, collection: Task.priorities.keys, input_html: { id: "task-shadow"} %>
    </div>
-   <div class= "task-due m-4 p-2"id="task-shadow">
-     <%= f.input :reminder_date, as: :datetime, html5: true %>
+   <div>
+    <span  class="p-4">Reminder Date</span>
+     <%= f.input :reminder_date, label:false, as: :datetime, html5: true, input_html: { id: "task-shadow"} %>
   <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
   <%# </a> %>
-  </div>
-  <%= f.submit "Save Task", class:"btn btn-primary btn-save m-4" %>
+  </div class="d-flex justify-content-center">
+  <%= f.submit "Save Task", class:"btn btn-primary btn-save" %>
   <% end %>
   </div>
  </div>
