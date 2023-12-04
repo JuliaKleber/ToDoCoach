@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit update destroy toggle_completed dates_tasks]
+  before_action :set_task, only: %i[show edit update destroy toggle_completed]
+  before_action :set_last_collection_path, only: %i[todays_tasks index dates_tasks tasks_without_date]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -101,7 +102,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.destroy
     flash[:success] = "The to-do item was successfully deleted."
-    redirect_to tasks_path, status: :see_other
+    redirect_to session[:last_collection_path], status: :see_other
   end
 
   def message
@@ -133,9 +134,14 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-  def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
-  end
+
+    def set_last_collection_path
+      session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
+    end
+
+    def task_params
+      params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
+    end
 
   def sanitize_categories(attributes_array)
     attributes_array.compact_blank.map do |category_info|
