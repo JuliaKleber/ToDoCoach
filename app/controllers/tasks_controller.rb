@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[show edit update destroy toggle_completed]
   before_action :set_last_collection_path, only: %i[todays_tasks index dates_tasks tasks_without_date]
-
+  
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
@@ -42,7 +42,16 @@ class TasksController < ApplicationController
     @dates = dates_of_tasks
     @tasks_grouped_by_dates = group_tasks_by_date
   end
-  
+
+  def filter_by
+    @categorys = Category.where(nil)
+    filtering_params(params).each do |key, value|
+      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
+    end
+  end
+
+  # testing
+
   def show
   end
 
@@ -59,8 +68,7 @@ class TasksController < ApplicationController
     @task.user = current_user
     if @task.save!
       redirect_to message_task_path(@task), notice: "Good job!
-      Todo is very proud of you!" and return
-
+      Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new
@@ -124,10 +132,9 @@ class TasksController < ApplicationController
     end
   end
 
-  def set_task
-    @task = Task.find(params[:id])
-  end
-
+    def set_task
+      @task = Task.find(params[:id])
+    end
 
     def set_last_collection_path
       session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
