@@ -1,0 +1,47 @@
+.header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0px;
+  margin-top: 100px;
+}
+
+.img-home{
+  height: 300px;
+  width: 300px;
+  display: inline-block;
+  margin-left: 30px;
+  margin-bottom: 5%;
+}
+
+.btn-sign-home{
+  border-radius: 8px;
+  color: white;
+  font-weight: bolder;
+}
+
+.btn-log-home{
+  border-radius: 8px;
+  color: white;
+  font-weight: bolder;
+}
+
+.sign-up{
+  margin-top: 20px;
+}
+
+.btn-sgnup{
+  border-radius: 8px;
+  color: white;
+  font-weight: bolder;
+  background-color: $orange;
+  margin-top: 10px;
+}
+
+.img-sign-up{
+  height: 80px;
+  width: 80px;
+  display: inline-block;
+  // margin-left: 30px;
+  // margin-bottom: 5%;
+}
+
