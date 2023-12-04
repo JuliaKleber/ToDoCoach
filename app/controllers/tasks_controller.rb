@@ -42,13 +42,6 @@ class TasksController < ApplicationController
     @tasks_grouped_by_dates = group_tasks_by_date
   end
 
-  def filter_by
-    @categorys = Category.where(nil)
-    filtering_params(params).each do |key, value|
-      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
-    end
-  end
-
   def show
   end
 
