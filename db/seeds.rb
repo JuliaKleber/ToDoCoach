@@ -1,5 +1,6 @@
 puts 'Clearing the database ...'
 
+UserProgress.destroy_all
 UserAchievement.destroy_all
 Achievement.destroy_all
 TaskCategory.destroy_all
@@ -116,47 +117,4 @@ User.all.each do |user|
   Follow.create(follower_id: user.id, followed_id: User.all.where.not(id: user.id).where.not(id: followed.followed_id).pluck(:id).sample)
 end
 
-puts 'Creating achievements ...'
-
-achievements = [
-  ["Multitasking Master", "You unlocked a new badge for adding tasks for 30 consecutive days"],
-  ["Busy Bee", "You have added 20 tasks in the category Work this week"],
-  ["Productivity Pro", "Completed 10 tasks in a single day"],
-  ["Task Explorer", "Explored and completed tasks in 5 different categories"],
-  ["Early Bird", "Completed a task before 8 AM"],
-  ["Night Owl", "Completed a task after midnight"],
-  ["Streak Starter", "Added tasks for 7 consecutive days"],
-  ["Weekend Warrior", "Completed tasks on both Saturday and Sunday"],
-  ["Focused Finisher", "Completed a task with high priority"],
-  ["Diverse Achiever", "Added tasks covering work, personal, and fitness categories in a single day"],
-  ["Master Planner", "Scheduled tasks for the entire week"],
-  ["Inspiration Seeker", "Added a task inspired by something you read or heard"],
-  ["Mindful Achiever", "Completed a task with mindful intent"],
-  ["Explorer", "Added a task related to a new hobby or interest"],
-  ["Task Ninja", "Quickly completed a task within 10 minutes of adding it"],
-  ["Team Player", "Collaborated on a task with a fellow user"],
-  ["Tech Guru", "Added and completed a task related to technology or learning"],
-  ["Health Hero", "Completed a task related to health and wellness"],
-  ["Social Butterfly", "Added tasks for social events or gatherings"],
-  ["Memory Maker", "Added a task to capture a special memory"],
-  ["Green Thumb", "Completed a task related to gardening or plants"],
-  ["Bookworm", "Added a task to read a chapter of a book"],
-  ["Chef Extraordinaire", "Completed a task to try a new recipe"],
-  ["Adventurer", "Added a task for a spontaneous adventure or outing"],
-  ["Gratitude Journalist", "Completed a task expressing gratitude"],
-  ["Tech Detox Master", "Completed a task after a day without screens"],
-  ["Learning Legend", "Added a task related to a new skill you want to learn"],
-  ["Explorer of the Unknown", "Completed a task outside your comfort zone"],
-  ["Task Marathoner", "Completed 5 tasks in a single day"],
-  ["Creative Dynamo", "Added a task for a creative project or idea"]
-]
-
-achievements.each do |achievement|
-  Achievement.create(name: achievement[0], description: achievement[1])
-end
-
-User.all.each do |user|
-  user_achievement1 = UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.sample.id)
-  user_achievement2 = UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.where.not(id: user_achievement1.achievement_id).sample.id)
-  UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.where.not(id: user_achievement1.achievement_id).where.not(id: user_achievement2.achievement_id).sample.id)
-end
+require_relative 'seeds/achievements'
