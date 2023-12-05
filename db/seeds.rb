@@ -12,15 +12,25 @@ User.destroy_all
 
 puts 'Creating users ...'
 
-user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia', 'Ali']
+user_names = {
+  "Aisiri" => "aisiri.jpg",
+  "Bilal" => "bilal.jpg",
+  "Elena" => "elena.jpg",
+  "Julia" => "julia.jpg",
+  "Ali" => "bilal.jpg"
+}
 
-users = user_names.map do |name|
-  User.create(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
+users = user_names.map do |name, file_name|
+  user = User.new(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
+  file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
+  user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
+  user.save
+  user
 end
 
 puts 'Creating categories ...'
 
-User.all.each do |user|
+users.each do |user|
   general_categories = ['Work', 'Personal', 'Groceries'].map do |category_name|
     category = user.categories.create(name: category_name, user_id: user.id)
   end
