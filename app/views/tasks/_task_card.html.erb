@@ -1,81 +1,104 @@
 
-<div class='card task-card d-flex flex-row'>
-  <div class='m-3 d-flex align-items-center'>
-    <% if @tasks_category_names[index].include?("Work") %>
-      <i class="fa-solid fa-briefcase"></i>
-    <% elsif @tasks_category_names[index].include?("Groceries") %>
-      <i class="fa-solid fa-basket-shopping"></i>
-    <% elsif @tasks_category_names[index].include?("Personal") %>
-      <i class="fa-solid fa-user"></i>
-    <% else %>
-      <i class="fa-solid fa-ghost"></i>
-    <% end %>
-  </div>
+<div
+  class="swipeable"
+  data-controller="edit-task">
+  <div class='inner card task-card d-flex flex-grow-1'
+      data-edit-task-target="inner"
+      data-edit-task-id="<%= task.id %>">
 
-  <div class='task-info'>
-    <div data-controller="edit-task"
-         data-action="dblclick->edit-task#displayForm"
-         data-bs-toggle="modal"
-         data-bs-target="#staticBackdrop">
-      <div class='d-flex flex-row'>
-        <div class='m-3'>
-
-          <p data-edit-task-target="info">
-            <%= link_to task_path(task) do %>
-              <%= task.title %>
-            <% end %>
-          </p>
-
-          <% if task.due_date != nil %>
-            <p>
-              <% if task.due_date.hour < 12 %>
-                <%= task.due_date.strftime("%H:%M") %>
-                am
-              <% else %>
-                <%= (task.due_date - (12*60*60)).strftime("%H:%M") %>
-                pm
-              <% end %>
-            </p>
+    <div>
+      <div class="flex-container buttons">
+        <div class='m-3 d-flex align-items-center'>
+          <% if @tasks_category_names[index].include?("Work") %>
+            <i class="fa-solid fa-briefcase"></i>
+          <% elsif @tasks_category_names[index].include?("Groceries") %>
+            <i class="fa-solid fa-basket-shopping"></i>
+          <% elsif @tasks_category_names[index].include?("Personal") %>
+            <i class="fa-solid fa-user"></i>
+          <% else %>
+            <i class="fa-solid fa-ghost"></i>
           <% end %>
         </div>
 
-        <div class='m-3'>
-          <p><%= render 'priority_dot', task: task %></p>
-          <p><%= render 'toggle_completed', task: task %></p>
+        <div class='task-info'>
+          <div id="modal-target">
+            <div class='d-flex flex-row'>
+              <div class='m-3 flex-grow-1'>
+                <p data-edit-task-target="info">
+                  <%= link_to task_path(task) do %>
+                    <%= task.title %>
+                  <% end %>
+                </p>
+
+                <% if task.due_date != nil %>
+                  <p>
+                    <% if task.due_date.hour < 12 %>
+                      <%= task.due_date.strftime("%H:%M") %>
+                      am
+                    <% else %>
+                      <%= (task.due_date - (12*60*60)).strftime("%H:%M") %>
+                      pm
+                    <% end %>
+                  </p>
+                <% end %>
+              </div>
+
+              <div class='m-3'>
+                <p><%= render 'priority_dot', task: task %></p>
+                <p><%= render 'toggle_completed', task: task %></p>
+              </div>
+            </div>
+
+            <p style='margin-left: 16px'>
+              <% if task.description.split('').length > 30 %>
+                <%= task.description.split.first(4).join(' ') %> ...
+              <% else %>
+                <%= task.description %>
+              <% end %>
+            </p>
+          </div>
         </div>
-
-      </div>
-
-     
-      <%= link_to task_path(task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
-        <i class="fa fa-trash" aria-hidden="true"></i>
-      <% end %>
+          </div>
     </div>
+  </div>
+  
+  <div class="position-absolute d-flex actions-container">
+    <div class="flex-child action-button-delete delete" data-action="click->edit-task#deleteTask">
+          <%= link_to task_path(task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
+              <i class="fa fa-trash fa-lg" style="color: #e3e3e8;" aria-hidden="true"></i>
+              <% end %>
+    </div>
+    <div class="flex-child action-button-edit"
+         data-edit-task-target="modal">
+        <i class="fa-solid fa-pen fa-lg"
+           style="color: #e3e3e8;"
+           aria-hidden="true"
+           data-action="click->edit-task#displayForm"></i>
+    </div>
+  </div>
+</div>
 
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Update <%= task.title %></h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Update <%= task.title %></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
           <div class="container modal-body">
             <div class="row">
               <div class="col-10">
-              <%= simple_form_for task do |f| %>
-                <%= f.input :title %>
-                <%= f.input :description %>
-                <%= f.input :due_date, as: :datetime, html5: true %>
-                <%= f.submit "Save changes", class:"btn btn-primary rounded" %>
-              <% end %>
+                <%= simple_form_for task do |f| %>
+                  <%= f.input :title %>
+                  <%= f.input :description %>
+                  <%= f.input :due_date, as: :datetime, html5: true %>
+                  <%= f.submit "Save changes", class:"btn btn-primary rounded" %>
+                  <% end %>
               </div>
             </div>
           </div>
 
         </div>
       </div>
-    </div>
-  </div>
-
 </div>
