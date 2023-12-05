@@ -4,8 +4,9 @@ UserProgress.destroy_all
 UserAchievement.destroy_all
 Achievement.destroy_all
 TaskCategory.destroy_all
-Task.destroy_all
 Category.destroy_all
+TaskUser.destroy_all
+Task.destroy_all
 Follow.destroy_all
 User.destroy_all
 
@@ -92,7 +93,7 @@ User.all.each do |user|
     )
     task_categories = user.categories.sample(rand(1..2)).compact
     task_categories.each do |category|
-      TaskCategory.create(task: task, category: category)
+      TaskCategory.create(task_id: task.id, category_id: category.id)
     end
   end
   5.times do
@@ -105,7 +106,7 @@ User.all.each do |user|
     )
     task_categories = user.categories.sample(rand(1..2)).compact
     task_categories.each do |category|
-      TaskCategory.create(task: task, category: category)
+      TaskCategory.create(task_id: task.id, category_id: category.id)
     end
   end
 end
