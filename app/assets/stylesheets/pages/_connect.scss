@@ -1,0 +1,17 @@
+.flexbox-class {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .btn-primary {
+    margin-bottom: 16px;
+    margin-right:10px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.form-border {
+  border-radius: 8px;
+}

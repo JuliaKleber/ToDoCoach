@@ -6,7 +6,7 @@
     <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'date-field'} %>
     <%= f.fields_for :task_categories do |tc| %>
       <span class='p-3'>Categorize the task!</span>
-      <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
+      <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select', tom_select_options_value: { create: true }.to_json } } %>
     <% end %>
     <span class='p-3'>How important is this to you?</span>
     <%= f.input :priority, as: :select, label: false, collection: Task.priorities.keys, input_html: { class: 'input-field'} %>
