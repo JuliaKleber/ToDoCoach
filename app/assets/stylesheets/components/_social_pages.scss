@@ -1,6 +1,6 @@
 /* The switch - the box around the slider */
 .toggle-look {
-  background-color: #bfb7b3;
+  background-color: #e6d8d2;
   border-radius: 30px;
   padding: 8px;
 }
@@ -12,5 +12,20 @@
 }
 
 .achievement-card {
-  background:linear-gradient(135deg, #efbc1465 0%,#da06428f 100%);
+  background:linear-gradient(75deg, #fffbee 15%,rgba(218, 109, 6, 0.449) 100%);
+}
+
+.achievement-img {
+  width: 100px;
+  height: 100px;
+}
+
+.achievement-info {
+  color: $dark-blue;
+}
+
+.unlocked-achievement-img {
+  filter: grayscale(100%);
+  width: 100px;
+  height: 100px;
 }

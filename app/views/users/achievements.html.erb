@@ -7,20 +7,38 @@
     <div class='card' style='background-color: #242474; color: white'>Achievements</div>
   </div>
 
-  <%= link_to connect_user_path(current_user), class: 'card' do %>
+  <%= link_to connect_user_path(current_user), class: 'card connect-card' do %>
     <i class="fa-solid fa-user-plus"></i>
   <% end %>
-  <%= link_to disconnect_user_path(current_user), class: 'card' do %>
+  <%= link_to disconnect_user_path(current_user), class: 'card connect-card' do %>
     <i class="fa-solid fa-user-slash"></i>
   <% end %>
 
 </div>
 
-<div class="achievements mt-4">
+<h2 class='latest text-center mt-3 mb-0'>Way to go!</h2>
+
+<div class="achievements mt-3">
   <% @achievements.each do |achievement| %>
-    <div class="card achievement-card my-3">
-      <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
+  <div class="card achievement-card d-flex flex-row my-3">
+    <%=image_tag url_for("todo-badge.png"), class: 'achievement-img' %>
+
+    <div class="achievement-info">
+      <h4></i> <%= achievement.name %> </h4>
       <%= achievement.description %>
     </div>
+  </div>
+  <% end %>
+
+  <h2 class='latest text-center mt-5 mb-0'>Todo can't wait for you to unlock some more rewards</h2>
+  <% @achievements.each do |achievement| %>
+  <div class="card unlocked-achievement-card d-flex flex-row my-3">
+    <%=image_tag url_for("todo-badge.png"), class: 'unlocked-achievement-img' %>
+
+    <div class="unlocked-achievement-info">
+      <h4></i> <%= achievement.name %> </h4>
+      <%= achievement.description %>
+    </div>
+  </div>
   <% end %>
 </div>
