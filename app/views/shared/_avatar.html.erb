@@ -1,13 +1,11 @@
-<% if user_signed_in?  %>
-<div class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+<% if user_signed_in? %>
+<div class="navbar navbar-expand navbar-light">
   <div class="container-fluid navbar-lewagon navbar-brand img">
     <%= link_to user_session_path, class: "navbar-brand" do %>
       <%= image_tag "todocoach.png" %>
     <% end %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+
 
     <div class="collapse navbar-collapse avatar-img" id="navbarSupportedContent avatar-image">
       <ul class="navbar-nav me-auto avatar-img avatar-image">
@@ -15,7 +13,7 @@
           <% if current_user.photo.attached?%>
             <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
           <% else %>
-            <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
+            <%= image_tag "image.jpg", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
           <% end %>
 
           <li class="nav-item dropdown">
