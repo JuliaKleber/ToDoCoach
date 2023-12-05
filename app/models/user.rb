@@ -4,7 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :tasks
-  has_many :categories
+  has_many :user_categories
+  has_many :categories, through: :user_categories
   has_many :user_achievements
   has_many :achievements, through: :user_achievements
   has_one_attached :photo
