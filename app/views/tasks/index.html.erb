@@ -18,7 +18,7 @@
   <h4 class="m-3">Tasks with no dates assigned</h4>
 <% end %>
 <% @tasks_without_due_date.each do |task| %>
-  <div class='card task-card'>
+  <div id="index-cards" class='card task-card'>
     <div class='d-flex flex-row justify-content-between'>
       <div>
         <%= render 'priority_dot', task: task %>

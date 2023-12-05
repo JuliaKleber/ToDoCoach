@@ -1,26 +1,26 @@
 <div class='d-flex flex-row justify-content-between'>
-  <%# <div class='card d-flex flex-row'> %>
+
+   <div class="toggle-look d-flex">
     <%= link_to feed_user_path, class: 'card' do %>
       Following
     <% end %>
-    <div class='card' style='background-color: blue; color: white'>Your Achievements</div>
-  <%# </div> %>
-  <%# <div class='card'>
-    <i class="fa-regular fa-bell"></i>
-  </div> %>
+    <div class='card' style='background-color: #242474; color: white'>Achievements</div>
+  </div>
+
   <%= link_to connect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-plus"></i>
   <% end %>
   <%= link_to disconnect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-slash"></i>
   <% end %>
+
 </div>
 
-<h2 class='text-center'>Your achievements</h2>
-
-<% @achievements.each do |achievement| %>
-  <div class='card'>
-    <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
-    <%= achievement.description %>
-  </div>
-<% end %>
+<div class="achievements mt-4">
+  <% @achievements.each do |achievement| %>
+    <div class="card achievement-card my-3">
+      <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
+      <%= achievement.description %>
+    </div>
+  <% end %>
+</div>
