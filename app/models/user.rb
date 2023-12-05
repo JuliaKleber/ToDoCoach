@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :achievements, through: :user_achievements
   has_one_attached :photo
 
+  has_many :task_users, dependent: :destroy
+  has_many :tasks, through: :task_users
+
   has_many :follows_as_follower, class_name: "Follow", foreign_key: "follower_id"
   has_many :followeds, through: :follows_as_follower, class_name: "User"
   has_many :follows_as_followed, class_name: "Follow", foreign_key: "followed_id"
