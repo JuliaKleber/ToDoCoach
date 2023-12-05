@@ -1,21 +1,20 @@
-<div class="col-12 col-sm-6">
-  <%= simple_form_for(@task) do |f| %>
-    <%= f.input :title, label: false, input_html: { class: 'input-field', placeholder: 'Enter task title' }  %>
-    <%= f.input :description, label: false, input_html: { class: 'input-field', placeholder: 'Enter task description' } %>
-    <span class='p-3'> When is this task due?</span>
-    <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'date-field'} %>
-    <%= f.fields_for :task_categories do |tc| %>
-      <span class='p-3'>Categorize the task!</span>
-      <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select', tom_select_options_value: { create: true }.to_json } } %>
-    <% end %>
-    <span class='p-3'>How important is this to you?</span>
-    <%= f.input :priority, as: :select, label: false, collection: Task.priorities.keys, input_html: { class: 'input-field'} %>
-    <span  class='p-3'>Reminder Date</span>
-    <%= f.input :reminder_date, label: false, as: :datetime, html5: true, input_html: { class: 'date-field'} %>
-    <%# <span  class='p-3'>Do you want to connect another user to the task?</span> %>
-    <%# f.input :connected_user, label: false, as: :select, html5: true, input_html: { class: 'input-field'} %>
-    <div class='d-flex justify-content-center'>
-      <%= f.submit 'Save Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
-    </div>
+<%= simple_form_for(@task) do |f| %>
+  <%= f.input :title, label: false, input_html: { class: 'input-field', placeholder: 'Enter task title' }  %>
+  <%= f.input :description, label: false, input_html: { class: 'input-field', placeholder: 'Enter task description' } %>
+  <span class='p-3'> When is this task due?</span>
+  <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'date-field'} %>
+  <%= f.fields_for :task_categories do |tc| %>
+    <span class='p-3'>Categorize the task!</span>
+    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
   <% end %>
-</div>
+
+  <span class='p-3'>How important is this to you?</span>
+  <%= f.input :priority, as: :select, label: false, collection: Task.priorities.keys, input_html: { class: 'input-field'} %>
+  <span  class='p-3'>Reminder Date</span>
+  <%= f.input :reminder_date, label: false, as: :datetime, html5: true, input_html: { class: 'date-field'} %>
+  <span  class='p-3'>Do you want to connect other users to the task?</span>
+  <%= f.association :task_users, label: false, collection: current_user.followed_users_for_task.pluck(:user_name, :id), as: :check_boxes, input_html: { class: 'input-field' } %>
+  <div class='d-flex justify-content-center'>
+    <%= f.submit 'Save Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
+  </div>
+<% end %>

@@ -1,21 +1,21 @@
 <nav class="navbar fixed-bottom navbar-team d-flex justify-content-around">
   <div class="navbar-brand">
     <%= link_to tasks_path do %>
-      <i class="fa-solid fa-list"></i>
+      <i class="fa-solid fa-list" style="color: #e6e9ef;"></i>
     <% end %>
   </div>
   <div class="navbar-brand">
     <%= link_to todays_tasks_path do %>
-      <i class="fa-solid fa-house-user"></i>
+      <i class="fa-solid fa-house-user" style="color: #e6e9ef;"></i>
     <% end %>
   </div>
   <div class="navbar-brand">
     <% if user_signed_in? %>
       <%= link_to feed_user_path(current_user) do %>
-        <i class="fa-solid fa-user-group"></i>
+        <i class="fa-solid fa-user-group" style="color: #e6e9ef;"></i>
       <% end %>
     <% else %>
-      <i class="fa-solid fa-user-group"></i>
+      <i class="fa-solid fa-user-group" style="color: #e6e9ef;"></i>
     <% end %>
   </div>
 </nav>

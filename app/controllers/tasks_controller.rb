@@ -5,7 +5,7 @@ class TasksController < ApplicationController
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @users_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
+    @users_tasks = current_user.tasks.select { |task| task.due_date.nil? == false }
     @tasks = []
     @users_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @today
@@ -16,7 +16,7 @@ class TasksController < ApplicationController
   def dates_tasks
     @day = @task.due_date.strftime('%a, %d %B')
     @welcome_message = welcome_message
-    @users_tasks = Task.where(user_id: current_user).where.not(due_date: nil)
+    @users_tasks = current_user.tasks.select { |task| task.due_date.nil? == false }
     @tasks = []
     @users_tasks.each do |task|
       (@tasks << task) if task.due_date.strftime('%a, %d %B') == @day
@@ -26,16 +26,16 @@ class TasksController < ApplicationController
 
   def tasks_without_date
     @welcome_message = welcome_message
-    @tasks = Task.where(user_id: current_user).where(due_date: nil)
+    @tasks = current_user.tasks.select { |task| task.due_date.nil? }
     @tasks_category_names = @tasks.map { |task| category_names(task.id) }
   end
 
   def index
-    @tasks = Task.where(user_id: current_user).order(due_date: :asc, priority: :desc)
+    @tasks = current_user.tasks
     @tasks = filter_tasks(@tasks)
-    @tasks_without_due_date = @tasks.where(due_date: nil)
+    @tasks_without_due_date = @tasks.select { |task| task.due_date.nil? }
     @dates = dates_of_tasks(@tasks)
-    @tasks_grouped_by_dates = group_tasks_by_date(@dates, @tasks.where.not(due_date: nil))
+    @tasks_grouped_by_dates = group_tasks_by_date(@dates, @tasks.select { |task| task.due_date.nil? == false })
   end
 
   # def filter_by
@@ -51,20 +51,24 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
+    @task.task_users.build
   end
 
   def create
     task_categories_attributes = task_params[:task_categories_attributes]
     create_params = task_params.except(:task_categories_attributes)
     formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
-    @task = Task.new(create_params.merge({task_categories_attributes: formatted_task_categories_attributes}))
-    @task.user = current_user
-    if @task.save!
-      redirect_to message_task_path(@task), notice: "Good job!
-      Todo is very proud of you!"
+    task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
+    task.user = current_user
+    if task.save
+      user_ids_raw = params[:task][:task_user_ids]
+      user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
+      user_ids << current_user.id
+      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: user_id) }
+      redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
-      render :new
+      render :new, notice: "Task could not be saved."
     end
   end
 
@@ -162,7 +166,7 @@ class TasksController < ApplicationController
   # used in index
   def dates_of_tasks(tasks)
     @dates = Set.new([])
-    @tasks_with_due_date = tasks.where.not(due_date: nil)
+    @tasks_with_due_date = tasks.select { |task| task.due_date.nil? == false }
     @tasks_with_due_date.each do |task|
       @dates << task.due_date.strftime('%a, %d %B')
     end
@@ -177,12 +181,17 @@ class TasksController < ApplicationController
       grouped_tasks << dated_tasks
     end
     return grouped_tasks
+    # tasks_with_due_date.group_by(&:due_date) #=> { <date_one>: [..., ..., ...], <date_two>: [..., ..., ...] }
   end
 
   # used in create and update
   def task_params
-    params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
+    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
   end
+
+  # def task_users_params
+  #   params.require(:task).permit(:task_user_ids)
+  # end
 
   # used in create
   def sanitize_categories(attributes_array)
