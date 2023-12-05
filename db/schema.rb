@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_01_110953) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_04_162606) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "achievements", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -81,6 +88,29 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_110953) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
+  create_table "user_achievements", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "achievement_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["achievement_id"], name: "index_user_achievements_on_achievement_id"
+    t.index ["user_id"], name: "index_user_achievements_on_user_id"
+  end
+
+  create_table "user_progresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "number_completed_low_priority", default: 0, null: false
+    t.integer "number_completed_medium_priority", default: 0, null: false
+    t.integer "number_completed_high_priority", default: 0, null: false
+    t.integer "number_completed_all", default: 0, null: false
+    t.integer "number_completed_work", default: 0, null: false
+    t.integer "number_completed_personal", default: 0, null: false
+    t.integer "number_completed_groceries", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_progresses_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -103,4 +133,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_01_110953) do
   add_foreign_key "task_categories", "categories"
   add_foreign_key "task_categories", "tasks"
   add_foreign_key "tasks", "users"
+  add_foreign_key "user_achievements", "achievements"
+  add_foreign_key "user_achievements", "users"
+  add_foreign_key "user_progresses", "users"
 end

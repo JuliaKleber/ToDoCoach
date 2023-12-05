@@ -4,8 +4,21 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
   devise_for :users
+
+  resources :users, except: %i[index new create edit update destroy] do
+    member do
+      get :feed
+      get :achievements
+      get :connect
+      post :build_connection
+      get :disconnect
+      delete :destroy_connection
+    end
+  end
+
   root to: 'pages#home'
   get 'pages/reminder', to: 'pages#reminder'
+
   resources :tasks do
     collection do
       get :todays_tasks, as: 'todays'

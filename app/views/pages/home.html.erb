@@ -1,12 +1,20 @@
-<p>blablabla</p>
-<p>blablabla</p>
-<p>blablabla</p>
+<div class="header">
+<h2>Welcome to your</h2>
+</div>
 
+<div >
+<%= image_tag "sign-in-todocoach.png", class: "img-home"%>
+</div>
+
+<br>
+
+<div class="d-flex justify-content-around">
 <% if !user_signed_in? %>
   <%= link_to new_user_registration_path do %>
-    <button class="btn btn-primary">Sign up</button>
+    <button class="btn btn-primary btn-sign-home">Sign up</button>
   <% end %>
   <%= link_to new_user_session_path do %>
-    <button class="btn btn-primary">Log in</button>
+    <button class="btn btn-primary btn-log-home">Log in</button>
   <% end %>
 <% end %>
+</div>

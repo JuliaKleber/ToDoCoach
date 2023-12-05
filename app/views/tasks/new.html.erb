@@ -1,16 +1,35 @@
-<div class="container mt-2">
-<h6>Add your tasks and plan your day 🚀</h6>
-<div>
-<%= simple_form_for(@task) do |f| %>
-  <%= f.input :title %>
-  <%= f.input :description %>
+<div class="row">
+  <div class="col-12 col-sm-6">
+   <h5 class="text-center">Here you can add a new task 🚀</h5>
+
+  <%= simple_form_for(@task) do |f| %>
+  <div class='m-2'>
+   <%= f.input :title, label:false, input_html: { class: "task-new", id:"task-shadow"} %>
+  </div>
+  <div class='m-2'>
+  <%= f.input :description, label:false, input_html: { class: "task-due", id: "task-shadow"} %>
+  </div>
   <%= f.fields_for :task_categories do |tc| %>
-    <%= tc.association :category, collection: Category.all, multiple: true, input_html: { data: { controller: "tom-select" } } %>
+  <div >
+     <span class="p-4"> When is this task due?</span>
+       <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { id: "task-shadow"} %>
+    </div>
+   <div>
+   <span class="p-4">Categorize the task?</span>
+    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: {id: "task-shadow", data: { controller: "tom-select"}} %>
   <% end %>
-  <%= f.input :priority, as: :select, collection: Task.priorities.keys %>
-  <%= f.input :due_date, as: :datetime, html5: true %>
-  <%= f.input :reminder_date, as: :datetime, html5: true %>
+  </div>
+  <div>
+  <span class="p-4">How important is this to you?</span>
+    <%= f.input :priority, as: :select, label:false, collection: Task.priorities.keys, input_html: { id: "task-shadow"} %>
+   </div>
+   <div>
+    <span  class="p-4">Reminder Date</span>
+     <%= f.input :reminder_date, label:false, as: :datetime, html5: true, input_html: { id: "task-shadow"} %>
   <%# <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary w-25 btn-save" type="submit"> %>
   <%# </a> %>
+  </div class="d-flex justify-content-center">
   <%= f.submit "Save Task", class:"btn btn-primary btn-save" %>
   <% end %>
+  </div>
+ </div>

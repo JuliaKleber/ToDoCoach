@@ -1,0 +1,36 @@
+<div class='d-flex flex-row justify-content-between'>
+  <%# <div class='card d-flex flex-row'> %>
+    <div class='card' style='background-color: blue; color: white'>Following</div>
+    <%= link_to achievements_user_path, class: 'card' do %>
+      Your Achievements
+    <% end %>
+  <%# </div> %>
+  <%# <div class='card'>
+    <i class="fa-regular fa-bell"></i>
+  </div> %>
+  <%= link_to connect_user_path(current_user), class: 'card' do %>
+    <i class="fa-solid fa-user-plus"></i>
+  <% end %>
+  <%= link_to disconnect_user_path(current_user), class: 'card' do %>
+    <i class="fa-solid fa-user-slash"></i>
+  <% end %>
+</div>
+
+<h2 class='text-center'>Latest from your friends</h2>
+
+<% @followed.each do |followed| %>
+  <% followed.achievements.each do |achievement| %>
+    <div class='card'>
+      <div class='d-flex flex-row'>
+        <%# if followed.photo.attached? %>
+          <%# cl_image_tag current_user.photo.key, class: "avatar" %>
+        <%# else %>
+          <p><%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+        <%# end %>
+        <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
+      </div>
+      <p>Congratulate them <i class="fa-solid fa-champagne-glasses"></i><p>
+
+    </div>
+  <% end %>
+<% end %>

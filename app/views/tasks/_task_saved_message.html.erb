@@ -14,9 +14,9 @@
         </div>
 
         <div class="reminder-container mt-5 position-relative">
-          <p>Do you want to save another one?</p>
-          <%= link_to new_task_path do%>
-           <button class="btn-message btn btn-reminder">Add a New Task</button>
+          <p>Do you want to go to your task?</p>
+          <%= link_to task_path(task) do%>
+           <button class="btn-message btn btn-reminder">See Task</button>
         <% end %>
         </div>
      </div>
