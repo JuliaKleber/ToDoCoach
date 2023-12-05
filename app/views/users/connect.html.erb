@@ -18,8 +18,8 @@
 
 <% @not_following.each do |user| %>
   <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>
-    <% if current_user.photo.attached? %>
-      <%= cl_image_tag current_user.photo.key, class: "avatar" %>
+    <% if user.photo.attached? %>
+      <%= cl_image_tag user.photo.key, class: "avatar" %>
     <% else %>
       <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
     <% end %>
