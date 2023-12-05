@@ -23,8 +23,8 @@ user_names = {
 
 users = user_names.map do |name, file_name|
   user = User.new(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
-  file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
-  user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
+  # file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
+  # user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
   user.save
   user
 end
@@ -108,7 +108,6 @@ User.all.each do |user|
       reminder_date: due_date - rand(1..24).hours,
       user_id: user.id
     )
-    TaskUser.create(task_id: task.id, user_id: user.id)
     task_categories = user.categories.sample(rand(1..2))
     task_categories.each do |category|
       TaskCategory.create(task_id: task.id, category_id: category.id)
