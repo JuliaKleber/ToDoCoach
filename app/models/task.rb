@@ -13,9 +13,11 @@ class Task < ApplicationRecord
   validates_associated :task_categories
   enum :priority, { low: 0, medium: 1, high: 2 }
 
+  # validate :at_least_one_user
+
   private
 
-  def at_least_one_user
-    errors.add(:base, 'Task must have at least one user') if users.empty?
-  end
+  # def at_least_one_user
+  #   errors.add(:base, 'Task must have at least one user') if users.empty?
+  # end
 end
