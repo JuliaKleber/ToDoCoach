@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit update destroy toggle_completed dates_tasks]
-  before_action :set_last_collection_path, only: %i[todays_tasks index dates_tasks tasks_without_date]
+  before_action :set_task, only: %i[dates_tasks show edit update toggle_completed destroy]
+  before_action :set_last_collection_path, only: %i[todays_tasks dates_tasks tasks_without_date index]
 
   def todays_tasks
     @today = Time.now.strftime('%a, %d %B')
@@ -32,25 +32,18 @@ class TasksController < ApplicationController
 
   def index
     @tasks = Task.where(user_id: current_user).order(due_date: :asc, priority: :desc)
-    search_query = params.dig(:search, :query)
-    @tasks = @tasks.where("title ILIKE ?", "%#{search_query}%") if search_query.present?
-    search_category_id = params.dig(:search, :category)
-    if search_category_id.present?
-      @tasks = @tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id })
-    end
+    @tasks = filter_tasks(@tasks)
     @tasks_without_due_date = @tasks.where(due_date: nil)
-    @dates = dates_of_tasks
-    @tasks_grouped_by_dates = group_tasks_by_date
+    @dates = dates_of_tasks(@tasks)
+    @tasks_grouped_by_dates = group_tasks_by_date(@dates, @tasks.where.not(due_date: nil))
   end
 
-  def filter_by
-    @categorys = Category.where(nil)
-    filtering_params(params).each do |key, value|
-      @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
-    end
-  end
-
-  # testing
+  # def filter_by
+  #   @categorys = Category.where(nil)
+  #   filtering_params(params).each do |key, value|
+  #     @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
+  #   end
+  # end
 
   def show
   end
@@ -84,7 +77,6 @@ class TasksController < ApplicationController
     @task.update(task_params)
     # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
     # redirect_to task_path(@task)
-
     respond_to do |format|
       format.html { redirect_to todays_tasks_path }
       format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
@@ -115,10 +107,19 @@ class TasksController < ApplicationController
 
   private
 
-  def filtering_params(params)
-    params.slice(:name)
+  # def filtering_params(params)
+  #   params.slice(:name)
+  # end
+
+  def set_task
+    @task = Task.find(params[:id])
   end
 
+  def set_last_collection_path
+    session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
+  end
+
+  # used in todays_tasks, dates_tasks and tasks_without_date
   def welcome_message
     todays_hour = Time.now.hour
     if todays_hour < 2
@@ -132,18 +133,56 @@ class TasksController < ApplicationController
     end
   end
 
-  def set_task
-    @task = Task.find(params[:id])
+  # used in todays_tasks, dates_tasks and tasks_without_date
+  def category_names(task_id)
+    task_categories = TaskCategory.where(task_id: task_id)
+    @category_names = []
+    task_categories.each do |tc|
+      category = Category.where(id: tc.category_id)
+      @category_names << category.first.name
+    end
+    return @category_names
   end
 
-  def set_last_collection_path
-    session[:last_collection_path] = Rails.application.routes.recognize_path(request.fullpath)
+  # used in index
+  def filter_tasks(tasks)
+    search_query = params.dig(:search, :query)
+    tasks = tasks.where("title ILIKE ?", "%#{search_query}%") if search_query.present?
+    search_category_id = params.dig(:search, :category)
+    if search_category_id.present? && search_category_id != 'all'
+      tasks = tasks.joins(:task_categories).where(task_categories: { category_id: search_category_id })
+    end
+    search_priority = params.dig(:search, :priority)
+    tasks = tasks.where(priority: search_priority) if search_priority.present? && search_priority != 'all'
+    return tasks
   end
 
+  # used in index
+  def dates_of_tasks(tasks)
+    @dates = Set.new([])
+    @tasks_with_due_date = tasks.where.not(due_date: nil)
+    @tasks_with_due_date.each do |task|
+      @dates << task.due_date.strftime('%a, %d %B')
+    end
+    @dates = @dates.to_a
+  end
+
+  # used in index
+  def group_tasks_by_date(dates, tasks_with_due_date)
+    grouped_tasks = []
+    dates.each do |date|
+      dated_tasks = tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
+      grouped_tasks << dated_tasks
+    end
+    return grouped_tasks
+  end
+
+  # used in create and update
   def task_params
     params.require(:task).permit(:title, :description, :priority, :completed, :due_date, :reminder_date, :photo, task_categories_attributes: [category_id: []])
   end
 
+  # used in create
   def sanitize_categories(attributes_array)
     attributes_array.compact_blank.map do |category_info|
       if category_info.to_i.zero?
@@ -155,33 +194,7 @@ class TasksController < ApplicationController
     end
   end
 
-  def category_names(task_id)
-    task_categories = TaskCategory.where(task_id: task_id)
-    @category_names = []
-    task_categories.each do |tc|
-      category = Category.where(id: tc.category_id)
-      @category_names << category.first.name
-    end
-    return @category_names
-  end
-
-  def dates_of_tasks
-    @dates = Set.new([])
-    @tasks_with_due_date = @tasks.where.not(due_date: nil)
-    @tasks_with_due_date.each do |task|
-      @dates << task.due_date.strftime('%a, %d %B')
-    end
-    @dates = @dates.to_a
-  end
-
-  def group_tasks_by_date
-    @grouped_tasks = []
-    @dates.each do |date|
-      dated_tasks = @tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
-      @grouped_tasks << dated_tasks
-    end
-  end
-
+  # used in toggle_completed
   def check_for_achievements(task)
     threshold = [1, 5, 10, 20, 50, 100]
     achievements = {
