@@ -11,7 +11,7 @@
       </div>
         <%= f.input :category, as: :select, collection: categories_for_select, label: false, prompt: "Category", include_blank: false, required: false, selected: params.dig(:search, :category)%>
         <%= f.input :priority, as: :select, collection: priorities_for_select, label: false, prompt:"Priority",include_blank: false, required: false, selected: params.dig(:search, :priority) %>
-        <%= f.submit 'Search', class: "btn-ghost" %>
+        <%= f.submit 'Search', class: "btn-search" %>
       </div>
 <% end %>
 <%= link_to tasks_without_date_tasks_path, class: "text-black-50" do %>
