@@ -9,7 +9,11 @@ class UsersController < ApplicationController
 
   def connect
     @follow = Follow.new
-    @not_following = User.where.not(id: current_user.id).where.not(id: current_user.followeds.pluck(:id))
+    if params[:query].present?
+      @not_following = User.where.not(id: current_user.id).where.not(id: current_user.followeds.pluck(:id)).search_by_username_and_email(params[:query])
+    else
+      @not_following = User.where.not(id: current_user.id).where.not(id: current_user.followeds.pluck(:id))
+    end
   end
 
   def build_connection
@@ -41,6 +45,6 @@ class UsersController < ApplicationController
   private
 
   def follow_params
-    params.require(:follow).permit(:followed_id)
+    params.require(:follow).permit(:followed_id, :search)
   end
 end

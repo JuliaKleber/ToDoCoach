@@ -15,6 +15,15 @@
   <% end %>
 </div>
 
+<%= form_with url: connect_user_path, method: :get, class: "d-flex" do %>
+  <%= text_field_tag :query,
+       params[:query],
+       class: "form-control",
+       placeholder: "Search another User"
+    %>
+  <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+<% end %>
+
 <% @not_following.each do |user| %>
   <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>
     <% if current_user.photo.attached? %>
