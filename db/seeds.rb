@@ -4,25 +4,41 @@ UserProgress.destroy_all
 UserAchievement.destroy_all
 Achievement.destroy_all
 TaskCategory.destroy_all
-Task.destroy_all
+UserCategory.destroy_all
 Category.destroy_all
+TaskUser.destroy_all
+Task.destroy_all
 Follow.destroy_all
 User.destroy_all
 
 puts 'Creating users ...'
 
-user_names = ['Aisiri', 'Bilal', 'Elena', 'Julia', 'Ali']
+user_names = {
+  "Aisiri" => "aisiri.jpg",
+  "Bilal" => "bilal.jpg",
+  "Elena" => "elena.jpg",
+  "Julia" => "julia.jpg",
+  "Ali" => "bilal.jpg"
+}
 
-users = user_names.map do |name|
-  User.create(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
+users = user_names.map do |name, file_name|
+  user = User.new(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
+  file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
+  user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
+  user.save
+  user
 end
 
 puts 'Creating categories ...'
 
+personal_category = Category.create(name: 'Personal')
+work_category = Category.create(name: 'Work')
+groceries_category = Category.create(name: 'Groceries')
+
 User.all.each do |user|
-  general_categories = ['Work', 'Personal', 'Groceries'].map do |category_name|
-    category = user.categories.create(name: category_name, user_id: user.id)
-  end
+  UserCategory.create(user_id: user.id, category_id: personal_category.id)
+  UserCategory.create(user_id: user.id, category_id: work_category.id)
+  UserCategory.create(user_id: user.id, category_id: groceries_category.id)
 end
 
 user_specific_categories = [
@@ -39,7 +55,8 @@ user_specific_categories = [
 ]
 
 User.all.each do |user|
-  category = user.categories.create(name: user_specific_categories.sample)
+  costum_category = Category.create(name: user_specific_categories.sample)
+  UserCategory.create(user_id: user.id, category_id: costum_category.id)
 end
 
 puts 'Creating tasks ...'
@@ -88,11 +105,13 @@ User.all.each do |user|
       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
       completed: rand(2).zero?,
       due_date: due_date,
-      reminder_date: due_date - rand(1..24).hours
+      reminder_date: due_date - rand(1..24).hours,
+      user_id: user.id
     )
-    task_categories = user.categories.sample(rand(1..2)).compact
+    TaskUser.create(task_id: task.id, user_id: user.id)
+    task_categories = user.categories.sample(rand(1..2))
     task_categories.each do |category|
-      TaskCategory.create(task: task, category: category)
+      TaskCategory.create(task_id: task.id, category_id: category.id)
     end
   end
   5.times do
@@ -101,11 +120,12 @@ User.all.each do |user|
       title: random_task[0],
       description: random_task[1],
       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
-      completed: rand(0..1).zero?
+      completed: rand(0..1).zero?,
+      user_id: user.id
     )
-    task_categories = user.categories.sample(rand(1..2)).compact
+    task_categories = user.categories.sample(rand(1..2))
     task_categories.each do |category|
-      TaskCategory.create(task: task, category: category)
+      TaskCategory.create(task_id: task.id, category_id: category.id)
     end
   end
 end
