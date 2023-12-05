@@ -1,5 +1,5 @@
 <%= simple_form_for :search, url: tasks_path, method: :get do |f| %>
-  <div class="form-group d-flex flex-row">
+  <div class="m-4 form-group d-flex flex-row">
     <div class="d-flex flex-column">
       <% categories_for_select = current_user.categories.to_a %>
       <% categories_for_select << OpenStruct.new(name: 'All', id: 'all') %>
