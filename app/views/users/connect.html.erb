@@ -8,13 +8,22 @@
     <% end %>
   <%# </div> %>
   <%# <div class='card'>
-    <i class="fa-regular fa-bell"></i>
+    <i class="fa-regular fa-bell"></i>ps
   </div> %>
   <div class='card' style='background-color: blue; color: white'><i class="fa-solid fa-user-plus"></i></div>
   <%= link_to disconnect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-slash"></i>
   <% end %>
 </div>
+
+<%= form_with url: connect_user_path, method: :get, class: "d-flex" do %>
+  <%= text_field_tag :query,
+       params[:query],
+       class: "form-control",
+       placeholder: "Search another User"
+    %>
+  <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+<% end %>
 
 <% @not_following.each do |user| %>
   <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>

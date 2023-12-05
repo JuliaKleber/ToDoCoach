@@ -7,6 +7,7 @@
     <span class='p-3'>Categorize the task!</span>
     <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
   <% end %>
+
   <span class='p-3'>How important is this to you?</span>
   <%= f.input :priority, as: :select, label: false, collection: Task.priorities.keys, input_html: { class: 'input-field'} %>
   <span  class='p-3'>Reminder Date</span>
