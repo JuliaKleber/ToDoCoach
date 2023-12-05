@@ -100,7 +100,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @task.destroy
     flash[:success] = "The to-do item was successfully deleted."
-    redirect_to tasks_path, status: :see_other
+    redirect_to todays_tasks_path, status: :see_other
   end
 
   def message
