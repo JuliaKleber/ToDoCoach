@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     follow.follower = current_user
     if follow.save
       flash[:notice] = "You are now following #{follow.followed.user_name}"
-      redirect_to feed_user_path(current_user)
+      redirect_to connect_user_path(current_user)
     else
       render :connect, status: :unprocessable_entity
     end
