@@ -13,7 +13,18 @@ $save-green: rgb(116, 203, 116);
 .task-card {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  // border-left: 6px solid;
+}
+
+.task-title > a {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.due-date {
   font-size: $medium-font;
+  font-weight: 500;
+  color: $dark-blue;
 }
 
 .modal-body{
@@ -27,10 +38,8 @@ $save-green: rgb(116, 203, 116);
 .flex-child {
   flex: 1;
   width: 10.5rem;
-  // width: 50%;
   height: inherit;
   border-radius: 30px;
-
 }
 
 .action-button-delete{
@@ -76,33 +85,10 @@ $save-green: rgb(116, 203, 116);
     flex-grow: 1;
     backface-visibility: hidden;
     background: #F7F7F7;
-    padding: 5px $icon-area-width 5px 12px;
+    // padding: 5px $icon-area-width 5px 12px;
     cursor: grab;
     &:active{
       cursor: grabbing;
     }
   }
-
-  // $size: 2px;
-  // .tab-icon{
-  //   position: absolute;
-  //   top: 50%;
-  //   right: ($icon-area-width/2)-$size;
-  //   margin-top: -$size/2;
-  //   margin-right: $size/2;
-  //   width: $size;
-  //   height: $size;
-  //   &:before, &:after{
-  //     content: '';
-  //     position: absolute;
-  //     height: 100%;
-  //     width: 100%;
-  //   }
-  //   &:before{
-  //     top: -$size*2;
-  //   }
-  //   &:after{
-  //     top: $size*2;
-  //   }
-  // }
 }
