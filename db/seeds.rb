@@ -1,5 +1,6 @@
 puts 'Clearing the database ...'
 
+TaskInvitation.destroy_all
 UserProgress.destroy_all
 UserAchievement.destroy_all
 Achievement.destroy_all
@@ -23,8 +24,8 @@ user_names = {
 
 users = user_names.map do |name, file_name|
   user = User.new(user_name: name, email: "#{name.downcase}@todocoach.com", password: 'password')
-  # file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
-  # user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
+  file = File.open(Rails.root.join("app/assets/images/#{file_name}"))
+  user.photo.attach(io: file, filename: file_name, content_type: "image/jpg")
   user.save
   user
 end
