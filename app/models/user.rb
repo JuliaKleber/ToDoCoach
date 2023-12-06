@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :categories, through: :user_categories
   has_many :user_achievements
   has_many :achievements, through: :user_achievements
+  has_many :task_invitations
   has_one_attached :photo
 
   has_many :task_users, dependent: :destroy

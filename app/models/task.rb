@@ -3,6 +3,7 @@ class Task < ApplicationRecord
   has_many :categories, through: :task_categories
   has_many :task_users, dependent: :destroy
   has_many :users, through: :task_users
+  has_many :task_invitations
   belongs_to :user
 
   validates :title, presence: true, length: {minimum: 3, maximum: 60}

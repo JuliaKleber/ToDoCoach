@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   end
   devise_for :users
 
-  resources :users, except: %i[index new create edit update destroy] do
+  resources :users, except: %i[index show new create edit update destroy] do
     member do
       get :feed
       get :achievements
@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       patch :toggle_completed
       get :dates_tasks, as: 'dates'
       get :message
+      get :add_user
     end
   end
+
+  resources :task_invitations, except: %i[index show new create edit update]
 end
