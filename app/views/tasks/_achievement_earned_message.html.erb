@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-lg-6">
+        <div class="position-relative">
+        </div>
+
+        <div class="container text-center">
+           <%= image_tag "To Do Coach glasses (1).png", class: "avatar text-center", id: "pop-up-avatar" %>
+        </div>
+
+        <div class="text-center">
+        <h1 class="message-slogan text-center fw-bolder">You crushed this!</h1>
+         <span> Congratulations on completing: </span> <p><%= @task.title %> 🎉 </p>
+        </div>
+
+        <div class="reminder-container mt-4 position-relative">
+          <p>On to the next one!</p>
+        </div>
+
+      <div class="upcomming-task">
+         <%= render 'task_card', task: @remaining_task  , index: 0 %>
+        <%= link_to new_task_path do%>
+           <button class="btn-message btn btn-reminder">Let's Add a New Task</button>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
