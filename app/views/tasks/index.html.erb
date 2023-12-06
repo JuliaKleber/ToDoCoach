@@ -5,7 +5,9 @@
       <% categories_for_select << OpenStruct.new(name: 'All', id: 'all') %>
       <% priorities_for_select = Task.priorities.keys.map { |p| OpenStruct.new(name: p.capitalize, id: p) } %>
       <% priorities_for_select << OpenStruct.new(name: 'All', id: 'all') %>
-    <div class="d-flex flex-row h-100">
+
+    <div class="d-flex flex-column h-100">
+      <h4 class="opacity-50" style='color: #242474'>Find your tasks in a second</h4>
       <div>
         <input class="form-control string required" type="text" name="search[query]" id="search_query" value="<%= params.dig(:search, :query) %>", placeholder="Enter task name"/>
       </div>
@@ -15,10 +17,10 @@
       </div>
 <% end %>
 <%= link_to tasks_without_date_tasks_path, class: "text-black-50" do %>
-  <h4 class="m-3">Tasks with no dates assigned</h4>
+  <h4 class="mt-4 mb-2 opacity-50" style='color: #242474'>Tasks with no dates assigned</h4>
 <% end %>
 <% @tasks_without_due_date.each do |task| %>
-  <div class='card task-card'>
+  <div id="index-cards" class='card task-card'>
     <div class='d-flex flex-row justify-content-between'>
       <div>
         <%= render 'priority_dot', task: task %>
@@ -28,16 +30,16 @@
       </div>
       <%= render 'toggle_completed', task: task %>
     </div>
-    <p style="font-size: 14px"> <%= task.description %> </p>
+    <p class="mt-2" style="font-size: 14px"> <%= task.description %> </p>
   </div>
 <% end %>
 
 <% @tasks_grouped_by_dates.each_with_index do |tasks, index| %>
   <%= link_to dates_task_path(tasks[0]), class: "text-black-50" do %>
-    <h4><%= @dates[index] %></h4>
+    <h4 class="mt-3 mb-2 opacity-50" style='color: #242474'><%= @dates[index] %></h4>
   <% end %>
   <% tasks.each do |task| %>
-    <div class='card task-card'>
+    <div id="index-cards" class='card task-card'>
       <div class='d-flex flex-row justify-content-between'>
         <div>
           <%= render 'priority_dot', task: task %>
@@ -47,7 +49,7 @@
         </div>
         <%= render 'toggle_completed', task: task %>
       </div>
-      <p style="font-size: 14px"> <%= task.description %> </p>
+      <p class="mt-2" style="font-size: 14px"> <%= task.description %> </p>
     </div>
   <% end %>
 <% end %>

@@ -1,27 +1,35 @@
 <div class='d-flex flex-row justify-content-between'>
-  <%# <div class='card d-flex flex-row'> %>
+
+  <div class="toggle-look d-flex">
     <%= link_to feed_user_path, class: 'card' do %>
       Following
     <% end %>
     <%= link_to achievements_user_path, class: 'card' do %>
-      Your Achievements
+      Achievements
     <% end %>
-  <%# </div> %>
-  <%# <div class='card'>
-    <i class="fa-regular fa-bell"></i>
-  </div> %>
-  <div class='card' style='background-color: blue; color: white'><i class="fa-solid fa-user-plus"></i></div>
+  </div>
+
+  <div class='card' style='background-color: green; color: white'><i class="fa-solid fa-user-plus"></i></div>
   <%= link_to disconnect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-slash"></i>
   <% end %>
 </div>
 
+<%= form_with url: connect_user_path, method: :get, class: "d-flex" do %>
+  <%= text_field_tag :query,
+       params[:query],
+       class: "form-control",
+       placeholder: "Search another User"
+    %>
+  <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+<% end %>
+
 <% @not_following.each do |user| %>
   <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>
-    <% if current_user.photo.attached? %>
-      <%= cl_image_tag current_user.photo.key, class: "avatar" %>
+    <% if user.photo.attached? %>
+      <%= cl_image_tag user.photo.key, class: "avatar" %>
     <% else %>
-      <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+      <%= image_tag 'alf.jpg', class: "avatar" %>
     <% end %>
     <%= user.user_name %>
     <%= form.hidden_field :followed_id, value: user.id %>

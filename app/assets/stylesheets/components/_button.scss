@@ -31,10 +31,12 @@
 }
 
 .btn-search {
-  color: #4A4A4A;
   border-radius: 4px;
   font-weight: lighter;
   height: 38px;
+  background-color: $orange;
+  color: #F7F7F7;
+  border-style: none;
 }
 .rounded{
   border-radius: 8px !important;

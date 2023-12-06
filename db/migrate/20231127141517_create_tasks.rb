@@ -5,7 +5,7 @@ class CreateTasks < ActiveRecord::Migration[7.1]
       t.string :title
       t.string :description
       t.integer :priority
-      t.boolean :completed
+      t.boolean :completed, default: false
       t.datetime :due_date
       t.datetime :reminder_date
 
