@@ -64,7 +64,11 @@ class TasksController < ApplicationController
       user_ids_raw = params[:task][:task_user_ids]
       user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
       user_ids << current_user.id
-      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: user_id) }
+      user_ids.each do |user_id|
+        # TaskUser.create(task_id: task.id, user_id: user_id)
+        # TaskInvitation.create(user_id: user_id, task_user_id: TaskUser.last.id)
+        TaskInvitation.create(task_id: task.id, user_id: user_id)
+      end
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
