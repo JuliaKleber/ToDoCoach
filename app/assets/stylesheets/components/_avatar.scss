@@ -1,6 +1,5 @@
-.avatar {
-  width: 40px;
-  border-radius: 50%;
+.avatar-img {
+  width: 50px;
 }
 .avatar-large {
   width: 56px;
@@ -13,7 +12,6 @@
 //   border: white 1px solid;
 // }
 .avatar-square {
-  width: 40px;
   border-radius: 0px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
   border: white 1px solid;
@@ -31,7 +29,13 @@
   width: 80px;
 }
 
-.avatar-image {
-  border: rgb(25, 24, 24) 1px solid;
+// .avatar-image {
+//   border: rgb(25, 24, 24) 1px solid;
+//   border-radius: 50%;
+// }
+
+.avatar {
   border-radius: 50%;
+  height: 50px;
+  width: 60px;
 }

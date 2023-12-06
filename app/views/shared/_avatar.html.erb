@@ -1,16 +1,11 @@
 <% if user_signed_in? %>
-<div class="navbar navbar-expand navbar-light">
-  <div class="container-fluid navbar-lewagon navbar-brand img">
+<div class="navbar navbar-expand">
+  <div class="container-fluid navbar-lewagon">
     <%= link_to user_session_path, class: "navbar-brand" do %>
       <%= image_tag "todocoach.png" %>
     <% end %>
-
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse avatar-img" id="navbarSupportedContent avatar-image">
-      <ul class="navbar-nav me-auto avatar-img avatar-image">
+    <div class="collapse navbar-collapse avatar-img">
+      <ul class="navbar-nav me-auto">
         <% if user_signed_in?  %>
           <% if current_user.photo.attached?%>
             <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
