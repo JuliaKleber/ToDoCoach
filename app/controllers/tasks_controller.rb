@@ -97,12 +97,13 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @task = Task.find(params[:id])
-    @task.destroy
-    flash[:success] = "The to-do item was successfully deleted."
-
-    redirect_to session[:last_collection_path], status: :see_other
-
+    if @task.user == current_user
+      @task.destroy
+      flash[:success] = "The to-do item was successfully deleted."
+      redirect_to session[:last_collection_path], status: :see_other
+    else
+      redirect_to tasks_path, notice: "You are not the creator of the task!"
+    end
   end
 
   def message
