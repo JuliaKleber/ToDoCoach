@@ -22,11 +22,11 @@
     <% followed.achievements.each do |achievement| %>
       <div class='card'>
         <div class='d-flex flex-row'>
-          <%# if followed.photo.attached? %>
-            <%# cl_image_tag followed.photo.key, class: "avatar" %>
-          <%# else %>
+          <% if followed.photo.attached? %>
+            <%= cl_image_tag followed.photo.key, class: "avatar" %>
+          <% else %>
             <p><%= image_tag "alf.jpg", class: "avatar" %>
-          <%# end %>
+          <% end %>
           <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
         </div>
         <p>Congratulate them <i class="fa-solid fa-champagne-glasses"></i><p>
