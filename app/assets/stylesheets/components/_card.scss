@@ -62,6 +62,10 @@ $save-green: rgb(116, 203, 116);
   }
 }
 
+.input-field {
+  background-color: rgba(245, 245, 245, 0.877);
+}
+
 .action-button-edit{
   text-align: right;
   color: #F7F7F7;
@@ -122,4 +126,3 @@ $save-green: rgb(116, 203, 116);
   //     top: $size*2;
   //   }
   // }
-  
