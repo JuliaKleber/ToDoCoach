@@ -9,29 +9,33 @@
     <% end %>
   </div>
 
-  <div class='card' style='background-color: green; color: white'><i class="fa-solid fa-user-plus"></i></div>
+  <div class='card icon-plus' style='background-color: green; color: white'><i class="fa-solid fa-user-plus "></i></div>
   <%= link_to disconnect_user_path(current_user), class: 'card' do %>
     <i class="fa-solid fa-user-slash"></i>
   <% end %>
 </div>
 
+<div class="search-connect">
 <%= form_with url: connect_user_path, method: :get, class: "d-flex" do %>
   <%= text_field_tag :query,
        params[:query],
        class: "form-control",
-       placeholder: "Search another User"
+       placeholder: "Connect with other Users"
     %>
-  <%= submit_tag "Search", name: "", class: "btn btn-primary" %>
+  <%= submit_tag "Search", name: "", class: "btn btn-primary btn-connect" %>
 <% end %>
+</div>
 
 <% @not_following.each do |user| %>
-  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around') do |form| %>
+  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around card-connect') do |form| %>
     <% if user.photo.attached? %>
       <%= cl_image_tag user.photo.key, class: "avatar" %>
     <% else %>
       <%= image_tag 'alf.jpg', class: "avatar" %>
     <% end %>
-    <%= user.user_name %>
+    <div class="name_connect">
+    <%= user.user_name%>
+    </div>
     <%= form.hidden_field :followed_id, value: user.id %>
     <%= form.submit "Connect", class: "btn-reminder" %>
   <% end %>
