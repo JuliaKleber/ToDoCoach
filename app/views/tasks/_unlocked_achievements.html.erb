@@ -1,0 +1,17 @@
+  <div class="card achievement-card d-flex flex-row my-3">
+    <%=image_tag url_for("#{achievement.name}.png"), class: 'achievement-img' %>
+
+    <div class="achievement-info">
+      <h4></i> <%= achievement.name %> </h4>
+      <%= achievement.description %>
+    </div>
+  </div>
+
+ <%# <div class="card achievement-card d-flex flex-row my-3">
+    <%=image_tag url_for("#{achievement.name}.png"), class: 'achievement-img' %>
+
+    <%# <div class="achievement-info">
+      <h4></i> <%= achievement.name %> </h4>
+      <%# <%= achievement.description %>
+    <%# </div>
+  </div> %> 

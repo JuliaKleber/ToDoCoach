@@ -20,25 +20,11 @@
 
 <div class="achievements mt-3">
   <% @achievements.each do |achievement| %>
-  <div class="card achievement-card d-flex flex-row my-3">
-    <%=image_tag url_for("todo-badge.png"), class: 'achievement-img' %>
-
-    <div class="achievement-info">
-      <h4></i> <%= achievement.name %> </h4>
-      <%= achievement.description %>
-    </div>
-  </div>
+    <%= render 'tasks/unlocked_achievements', achievement: achievement %>
   <% end %>
 
   <h2 class='latest text-center mt-5 mb-0'>Todo can't wait for you to unlock some more rewards</h2>
   <% @achievements.each do |achievement| %>
-  <div class="card unlocked-achievement-card d-flex flex-row my-3">
-    <%=image_tag url_for("todo-badge.png"), class: 'unlocked-achievement-img' %>
-
-    <div class="unlocked-achievement-info">
-      <h4></i> <%= achievement.name %> </h4>
-      <%= achievement.description %>
-    </div>
-  </div>
+   <%= render 'tasks/locked_achievements', achievement: achievement %>
   <% end %>
 </div>
