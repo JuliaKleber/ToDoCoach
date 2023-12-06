@@ -118,10 +118,6 @@ User.all.each do |user|
     task_categories.each do |category|
       TaskCategory.create(task_id: task.id, category_id: category.id)
     end
-    TaskInvitation.create(task_id: Task.last.id, user_id: User.find_by(user_name: 'Julia').id)
-    puts Task.last.id
-    puts User.find_by(user_name: 'Julia').id
-    puts TaskInvitation.last
   end
   5.times do
     random_task = tasks.sample
@@ -147,3 +143,9 @@ User.all.each do |user|
 end
 
 require_relative 'seeds/achievements'
+
+puts 'Connect a user to a task ...'
+
+invite_tasks = Task.limit(5)
+
+invite_tasks.each { |task| TaskInvitation.create(task_id: task.id, user_id: User.find_by(user_name: 'Julia').id) }

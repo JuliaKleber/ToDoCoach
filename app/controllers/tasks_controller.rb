@@ -118,6 +118,17 @@ class TasksController < ApplicationController
     @latest_achievement = UserAchievement.last
   end
 
+  def add_user
+    task_user = TaskUser.new(user_id: current_user.id, task_id: params[:id])
+    if task_user.save
+      invitation = TaskInvitation.where(user_id: current_user.id).where(task_id: params[:id])
+      invitation.destroy_all
+      redirect_to feed_user_path, notice: "You were added to the task!"
+    else
+      redirect_to feed_user_path, notice: "You could not be added to the task."
+    end
+  end
+
   private
 
   # def filtering_params(params)

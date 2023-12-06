@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_06_130849) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_06_152738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -77,7 +77,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_06_130849) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "task_id"
+    t.bigint "task_id", null: false
+    t.index ["task_id"], name: "index_task_invitations_on_task_id"
     t.index ["user_id"], name: "index_task_invitations_on_user_id"
   end
 
@@ -155,6 +156,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_06_130849) do
   add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "task_categories", "categories"
   add_foreign_key "task_categories", "tasks"
+  add_foreign_key "task_invitations", "tasks"
   add_foreign_key "task_invitations", "users"
   add_foreign_key "task_users", "tasks"
   add_foreign_key "task_users", "users"
