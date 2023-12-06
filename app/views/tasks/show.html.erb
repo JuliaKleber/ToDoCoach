@@ -1,53 +1,58 @@
-<div class="bg-background-color rounded p-3">
-  <div>
-    <% @task.categories.each do |category| %>
-      <div class="d-flex justify-content-center">
-        <span class="border rounded category"><%= category.name %></span>
-      </div>
+<div class='bg-background-color rounded p-3'>
+
+  <% @task.categories.each do |category| %>
+    <div class='d-flex flex-row justify-content-center'>
+      <span class='border rounded category'><%= category.name %></span>
+    </div>
+  <% end %>
+
+  <div class='d-flex flex-row justify-content-begin m-2'>
+    <h5>
+      <%= render 'priority_dot', task: @task %>
+      <%= @task.title %>
+    </h5>
+  </div>
+
+  <div class='search-showpage showpage input-field m-2'>
+    <span>
+      <%= render 'toggle_completed', task: @task %>
+      <%= @task.description %>
+    </span>
+  </div>
+
+  <% if @task.due_date? || @task.reminder_date? %>
+    <div class='search-showpage showpage input-field m-2'>
+      <p>
+        <% if @task.due_date? %>
+          <i class='fa-solid fa-calendar-days'></i>
+          <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+        <% end %>
+      </p>
+      <p>
+        <% if @task.reminder_date? %>
+          <i class='fa-solid fa-bell'></i>
+          <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
+        <% end %>
+      </p>
+    </div>
+  <% end %>
+
+  <p>Task creator: <%= @task.user.user_name %></p>
+
+  <div class='d-flex justify-content-center'>
+    <button type='button' class='btn btn-reminder m-2'>Set reminder</button>
+  </div>
+
+  <div class='d-flex flex-row justify-content-center m-2'>
+    <%= link_to edit_task_path(@task), class: 'm-2' do %>
+      <i class='fa fa-pencil'></i>
+    <% end %>
+    <%= link_to task_path(@task.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'm-2' do %>
+      <i class='fa fa-trash' aria-hidden='true'></i>
+    <% end %>
+    <%= link_to 'javascript:history.back()', remote: true, class: 'm-2' do %>
+      <i class='fa fa-history'></i>
     <% end %>
   </div>
-  <p>
-    <div>
-     <h5><span><%= render 'priority_dot', task: @task %>
-      <%=@task.title %>
-     </span></h5>
-    </div>
-  </p>
-    <div class="search-showpage showpage input-field">
-     <p><span>
-    <i class="fa-regular fa-circle-check fa-lg" style="color: #20467e;"></i>
-       <%= @task.description %>
-         </span></p>
-    </div>
-      <div class="search-showpage showpage input-field">
-        <p><i class="fa-solid fa-calendar-days"></i>
-          <% if @task.due_date? %>
-            <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
-          <% end %>
-        </p>
-        <p>
-          <% if @task.reminder_date? %>
-            <span><i class="fa-solid fa-bell"></i>
-            <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-          <% end %>
-        </p>
-    </div>
-  </div>
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-reminder">Set reminder</button>
-      </div>
-      <div class="m-2">
-       <%= link_to edit_task_path(@task) do %>
-         <i class="fa fa-pencil"></i> Edit Task
-       <% end %>
-      </div>
-   <div class="m-2">
-         <%= link_to task_path(@task.id), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} do %>
-           <i class="fa fa-trash" aria-hidden="true"></i> Delete Task
-      <% end %>
-  </div>
-    <div class="m-2">
-      <%= link_to 'javascript:history.back()', remote: true do %>
-        <i class="fa fa-history"></i> Back to Tasks
-      <% end %>
-  </div>
+
+</div>
