@@ -18,7 +18,11 @@ class User < ApplicationRecord
   has_many :follows_as_followed, class_name: "Follow", foreign_key: "followed_id"
   has_many :followers, through: :follows_as_followed, class_name: "User"
 
-  def followed_users_for_task
-    self.followeds.where.not(id: self.id)
-  end
+
+  include PgSearch::Model
+  pg_search_scope :search_by_username_and_email,
+    against: [ :user_name, :email ],
+    using: {
+      tsearch: { prefix: true }
+    }
 end
