@@ -109,7 +109,7 @@ User.all.each do |user|
       title: random_task[0],
       description: random_task[1],
       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
-      completed: rand(2).zero?,
+      completed: rand(0..3).zero?,
       due_date: due_date,
       reminder_date: due_date - rand(1..24).hours,
       user_id: user.id
