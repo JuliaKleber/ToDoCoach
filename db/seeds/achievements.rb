@@ -4,7 +4,7 @@ User.all.each do |user|
   UserProgress.create(user_id: user.id)
 end
 
-puts 'Giving users batches for three fake achievements ...'
+puts 'Giving each user a badge for one fake achievement ...'
 
 achievements_not_implemented = [
   ["Multitasking Master", "You unlocked a new badge for adding tasks for 30 consecutive days"],
@@ -27,10 +27,8 @@ achievements_not_implemented.each do |achievement|
   Achievement.create(name: achievement[0], description: achievement[1])
 end
 
-User.all.each do |user|
-  user_achievement1 = UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.sample.id)
-  user_achievement2 = UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.where.not(id: user_achievement1.achievement_id).sample.id)
-  UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.where.not(id: user_achievement1.achievement_id).where.not(id: user_achievement2.achievement_id).sample.id)
+User.where.not(user_name: 'Eva').each do |user|
+  UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.sample.id)
 end
 
 puts 'Creating achievements ...'

@@ -19,11 +19,8 @@ class User < ApplicationRecord
   has_many :follows_as_followed, class_name: "Follow", foreign_key: "followed_id"
   has_many :followers, through: :follows_as_followed, class_name: "User"
 
-
   include PgSearch::Model
   pg_search_scope :search_by_username_and_email,
-    against: [ :user_name, :email ],
-    using: {
-      tsearch: { prefix: true }
-    }
+                  against: %i[user_name email],
+                  using: { tsearch: { prefix: true } }
 end

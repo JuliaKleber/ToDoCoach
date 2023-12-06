@@ -19,7 +19,6 @@ user_names = {
   "Bilal" => "bilal.jpg",
   "Elena" => "elena.jpg",
   "Julia" => "julia.jpg",
-  "Gerhard" => "gerhard.jpg",
   "Minaj" => "minaj.jpg",
   "Kanye" => "kanye.jpg",
   "Beyonce" => "beyonce.jpg",
@@ -49,7 +48,6 @@ User.all.each do |user|
 end
 
 user_specific_categories = [
-  'Work Projects',
   'Personal Goals',
   'Fitness Routine',
   'Travel Plans',
@@ -66,7 +64,7 @@ User.all.each do |user|
   UserCategory.create(user_id: user.id, category_id: costum_category.id)
 end
 
-puts 'Creating tasks ...'
+puts 'Creating tasks for all users except of Eva ...'
 
 tasks = [
   ["Doing the groceries", "Pick up fresh produce and household essentials from the local grocery store."],
@@ -102,10 +100,83 @@ tasks = [
 ]
 
 current_time = Time.now
-User.all.each do |user|
+puts current_time
+
+User.where.not(user_name: 'Eva').each do |user|
   30.times do |n|
     random_task = tasks.sample
     due_date = (current_time + (n.to_f / 3).days + rand(0..8).hours + rand(0..60).minutes)
+    task = user.tasks.create(
+      title: random_task[0],
+      description: random_task[1],
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(0..3).zero?,
+      due_date: due_date,
+      reminder_date: due_date - rand(1..24).hours,
+      user_id: user.id
+    )
+    task_categories = user.categories.sample(rand(1..2))
+    task_categories.each do |category|
+      TaskCategory.create(task_id: task.id, category_id: category.id)
+    end
+  end
+  5.times do
+    random_task = tasks.sample
+    task = user.tasks.create(
+      title: random_task[0],
+      description: random_task[1],
+      priority: rand(Task.priorities[:low]..Task.priorities[:high]),
+      completed: rand(0..1).zero?,
+      user_id: user.id
+    )
+    task_categories = user.categories.sample(rand(1..2))
+    task_categories.each do |category|
+      TaskCategory.create(task_id: task.id, category_id: category.id)
+    end
+  end
+end
+
+puts 'Creating tasks for Eva ...'
+
+eva = User.find_by(user_name: 'Eva')
+
+friday_evening = DateTime.new(2023, 12, 8, 20, 0, 0)
+friday_evening_time = friday_evening.to_time
+
+Task.create(
+  title: "Buying a cinnamon roll",
+  description: "I just love them! And I'll get one for Gerhard, too.",
+  priority: "low",
+  completed: false,
+  user_id: eva.id,
+  due_date: friday_evening_time - 0.2.hours,
+  reminder_date: friday_evening_time - 1.hours
+)
+
+Task.create(
+  title: "Talking with Gerhard",
+  description: "Talking with Gerhard about this crazy To Do App I found",
+  priority: "high",
+  completed: false,
+  user_id: eva.id,
+  due_date: friday_evening_time,
+  reminder_date: friday_evening_time - 2.hours
+)
+
+Task.create(
+  title: "Jenny's Birthday Party",
+  description: "Talking with Gerhard about this crazy To Do App I found",
+  priority: "medium",
+  completed: false,
+  user_id: eva.id,
+  due_date: friday_evening_time + 2.hours,
+  reminder_date: friday_evening_time
+)
+
+User.where(user_name: 'Eva').each do |user|
+  30.times do |n|
+    random_task = tasks.sample
+    due_date = (current_time + 1.days + (n.to_f / 3).days + rand(0..8).hours + rand(0..60).minutes)
     task = user.tasks.create(
       title: random_task[0],
       description: random_task[1],
@@ -145,8 +216,9 @@ end
 
 require_relative 'seeds/achievements'
 
-puts 'Connect a user to a task ...'
+puts 'Connecting Eva to a task of someone else ...'
 
-invite_tasks = Task.limit(5)
+eva = User.find_by(user_name: 'Eva')
+aisiri = User.find_by(user_name: 'Aisiri')
 
-invite_tasks.each { |task| TaskInvitation.create(task_id: task.id, user_id: User.find_by(user_name: 'Julia').id) }
+TaskInvitation.create(task_id: Task.where(user_id: aisiri.id).first.id, user_id: eva.id)
