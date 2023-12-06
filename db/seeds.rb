@@ -118,6 +118,10 @@ User.all.each do |user|
     task_categories.each do |category|
       TaskCategory.create(task_id: task.id, category_id: category.id)
     end
+    TaskInvitation.create(task_id: Task.last.id, user_id: User.find_by(user_name: 'Julia').id)
+    puts Task.last.id
+    puts User.find_by(user_name: 'Julia').id
+    puts TaskInvitation.last
   end
   5.times do
     random_task = tasks.sample
