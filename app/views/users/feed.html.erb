@@ -23,9 +23,9 @@
       <div class='card'>
         <div class='d-flex flex-row'>
           <%# if followed.photo.attached? %>
-            <%# cl_image_tag current_user.photo.key, class: "avatar" %>
+            <%# cl_image_tag followed.photo.key, class: "avatar" %>
           <%# else %>
-            <p><%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar" %>
+            <p><%= image_tag "alf.jpg", class: "avatar" %>
           <%# end %>
           <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
         </div>
