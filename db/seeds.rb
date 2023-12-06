@@ -19,12 +19,13 @@ user_names = {
   "Bilal" => "bilal.jpg",
   "Elena" => "elena.jpg",
   "Julia" => "julia.jpg",
-  "Ali" => "bilal.jpg",
+  "Gerhard" => "gerhard.jpg",
   "Minaj" => "minaj.jpg",
   "Kanye" => "kanye.jpg",
   "Beyonce" => "beyonce.jpg",
   "Obama" => "obama.jpg",
-  "Jayz" => "jayz.jpg"
+  "Jayz" => "jayz.jpg",
+  "Eva" => "eva.jpg"
 }
 
 users = user_names.map do |name, file_name|
