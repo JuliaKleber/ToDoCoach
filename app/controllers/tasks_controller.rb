@@ -107,9 +107,11 @@ class TasksController < ApplicationController
   end
 
   def message
+    @achievement_earned = flash[:achievement_notice].present?
     @task = Task.find(params[:id])
     @remaining_task = Task.where(completed: false, priority: 'high').first
     @tasks_category_names = [category_names(@remaining_task[:id])]
+    @latest_achievement = UserAchievement.last
   end
 
   private
@@ -208,6 +210,21 @@ class TasksController < ApplicationController
 
   # used in toggle_completed
   def check_for_achievements(task)
+    user_progress = UserProgress.find_by(user_id: current_user.id)
+    general_achievement = check_for_task_completed_achievement(task, user_progress)
+    category_achievement = check_for_category_achievements(task, user_progress)
+    priority_achievment = check_for_priority_achievements(task, user_progress)
+    achievement_earned = general_achievement || category_achievement || priority_achievment
+    if achievement_earned
+      flash[:achievement_notice] = "Congratulations! You earned a new badch"
+      redirect_to message_task_path(task)
+    else
+      redirect_to message_task_path(task), notice: "Task completed successfully"
+    end
+  end
+
+  # used in check_for_achievements
+  def check_for_task_completed_achievement(task, user_progress)
     threshold = [1, 5, 10, 20, 50, 100]
     achievements = {
       1 => ["Bronze", "You've completed 1 task! Keep it up!"],
@@ -217,35 +234,118 @@ class TasksController < ApplicationController
       50 => ["Diamond", "50 tasks completed! Incredible achievement!"],
       100 => ["Master", "100 tasks completed! You're a task management master!"]
     }
-    user_progress = UserProgress.find_by(user_id: current_user.id)
+    achievement_earned = false
     user_progress.number_completed_all += 1
     user_progress.save
     if threshold.include?(user_progress.number_completed_all)
-      new_achievement = UserAchievement.new(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id)
-      new_achievement.save
-      redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch"
-    else
-      redirect_to message_task_path(task), notice: "Task completed successfully"
+      UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id)
+      achievement_earned = true
     end
+    return achievement_earned
   end
 
-  # def check_for_category_batch(task)
-  #   threshold = [1, 5, 10, 20, 50, 100]
-  #   user_progress = UserProgress.find(user_id: current_user.id)
-  #   if task.category == 'Work'
-  #     user_progress.number_completed_work += 1
-  #     if threshold.includes(user_progress.number_completed_work)
-  #       UserAchievement.new(user_id: current_user.id, achievement_id: Achievement.find()
-  #       redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch"
-  #     elsif task.category == 'Personal'
-  #     user_progress.number_completed_personal += 1
-  #     redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch" if threshold.includes(user_progress.number_completed_personal)
-  #   elsif task.category == 'Groceries'
-  #     user_progress.number_completed_groceries += 1
-  #     redirect_to message_task_path(task), notice: "Congratulations! You earned a new batch" if threshold.includes(user_progress.number_completed_groceries)
-  #   end
-  # end
+  # used in check_for_achievements
+  def check_for_category_achievements(task, user_progress)
+    grocery_achievements = {
+      1 => ["Task Novice", "Completed your first grocery task. Welcome to the world of productive shopping!"],
+      5 => ["Grocery Explorer", "Accomplished 5 grocery-related tasks. You're on your way to becoming a shopping pro!"],
+      10 => ["Perfect 10 Shopper", "Successfully completed 10 grocery tasks. You've mastered the art of efficient shopping!"],
+      20 => ["20-Task Triumph", "Achieved 20 grocery tasks! Your commitment to organized shopping is truly commendable."],
+      50 => ["50 Grocery Conquests", "Completed 50 grocery tasks. You're a grocery hero, saving the day with every task!"],
+      100 => ["Master Shopper", "Completed a whopping 100 grocery tasks. You are the undisputed master of the grocery list!"]
+    }
+    work_achievements = {
+      1 => ["Work Task Rookie", "Completed your first work-related task. Welcome to the world of productivity at work!"],
+      5 => ["Office Explorer", "Accomplished 5 work-related tasks. You're making strides in professional efficiency!"],
+      10 => ["Perfect 10 Professional", "Successfully completed 10 work tasks. You're on your way to mastering your workday!"],
+      20 => ["20-Task Triumph", "Achieved 20 work-related tasks! Your dedication to productivity is truly commendable."],
+      50 => ["Corporate Conqueror", "Completed 50 work tasks. You're a work superhero, conquering tasks like a pro!"],
+      100 => ["Task Mastermind", "Completed a monumental 100 work tasks. You are the undisputed master of workplace productivity!"]
+    }
+    personal_achievements = {
+      1 => ["Personal Task Pioneer", "Completed your first personal task. Welcome to the world of organized personal life!"],
+      5 => ["Life Explorer", "Accomplished 5 personal tasks. You're taking charge of your personal goals and aspirations!"],
+      10 => ["Perfect 10 Achiever", "Successfully completed 10 personal tasks. You're on your way to mastering your personal to-do list!"],
+      20 => ["20-Task Triumph", "Achieved 20 personal tasks! Your commitment to personal growth is truly commendable."],
+      50 => ["Life Champion", "Completed 50 personal tasks. You're a personal achievement champion, conquering tasks with flair!"],
+      100 => ["Task Zen Master", "Completed a Zen-like 100 personal tasks. You are the undisputed master of personal productivity!"]
+    }
+    threshold = [1, 5, 10, 20, 50, 100]
+    achievement_earned = false
+    if task.categories.exists?(name: 'Groceries')
+      user_progress.number_completed_groceries += 1
+      if threshold.include?(user_progress.number_completed_groceries)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: grocery_achievements[user_progress.number_completed_groceries][0]).id)
+        achievement_earned = true
+      end
+    end
+    if task.categories.exists?(name: 'Work')
+      user_progress.number_completed_work += 1
+      if threshold.include?(user_progress.number_completed_work)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: work_achievements[user_progress.number_completed_work][0]).id)
+        achievement_earned = true
+      end
+    end
+    if task.categories.exists?(name: 'Personal')
+      user_progress.number_completed_personal += 1
+      if threshold.include?(user_progress.number_completed_personal)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: personal_achievements[user_progress.number_completed_personal][0]).id)
+        achievement_earned = true
+      end
+    end
+    user_progress.save
+    return achievement_earned
+  end
 
-  # def check_for_priority_batch
-  # end
+  # used in check_for_achievements
+  def check_for_priority_achievements(task, user_progress)
+    threshold = [1, 5, 10, 20, 50, 100]
+    low_priority_achievements = {
+      1 => ["Low Priority Starter", "Completed your first low-priority task. Kicking off your journey towards task management!"],
+      5 => ["Easy-Going Achiever", "Accomplished 5 low-priority tasks. You're handling the less urgent tasks with ease!"],
+      10 => ["Perfect 10 Laid Back", "Successfully completed 10 low-priority tasks. You've mastered the art of staying calm under low-pressure situations!"],
+      20 => ["20-Task Serenity", "Achieved 20 low-priority tasks! Your ability to maintain composure in the face of low urgency is truly commendable."],
+      50 => ["Zen Tasker", "Completed 50 low-priority tasks. You're a zen master, gliding through tasks with tranquility!"],
+      100 => ["Chill Task Connoisseur", "Completed a serene 100 low-priority tasks. You've attained the highest level of chill in task management!"]
+    }
+    medium_priority_achievements = {
+      1 => ["Medium Priority Explorer", "Completed your first medium-priority task. Welcome to the world of balanced task management!"],
+      5 => ["Balanced Achiever", "Accomplished 5 medium-priority tasks. You're maintaining equilibrium in your task list!"],
+      10 => ["Perfect 10 Equilibrium", "Successfully completed 10 medium-priority tasks. You're achieving balance in your task priorities!"],
+      20 => ["20-Task Harmony", "Achieved 20 medium-priority tasks! Your knack for maintaining harmony in task management is truly commendable."],
+      50 => ["Task Balancer", "Completed 50 medium-priority tasks. You're a master at balancing priorities!"],
+      100 => ["Priority Maestro", "Completed a harmonious 100 medium-priority tasks. You've reached the pinnacle of task priority mastery!"]
+    }
+    high_priority_achievements = {
+      1 => ["High Priority Dynamo", "Completed your first high-priority task. Welcome to the fast-paced world of urgent tasks!"],
+      5 => ["Urgency Explorer", "Accomplished 5 high-priority tasks. You're navigating through urgency with skill and precision!"],
+      10 => ["Perfect 10 Urgent Achiever", "Successfully completed 10 high-priority tasks. You're a force to be reckoned with in urgent matters!"],
+      20 => ["20-Task Blitz", "Achieved 20 high-priority tasks! Your ability to handle urgency with speed and accuracy is truly commendable."],
+      50 => ["Priority Warrior", "Completed 50 high-priority tasks. You're a warrior in the battlefield of urgent priorities!"],
+      100 => ["Urgent Task Legend", "Completed a legendary 100 high-priority tasks. You're the undisputed legend of urgent task management!"]
+    }
+    achievement_earned = false
+    if task.priority == 'low'
+      user_progress.number_completed_low_priority += 1
+      if threshold.include?(user_progress.number_completed_low_priority)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: low_priority_achievements[user_progress.number_completed_low_priority][0]).id)
+        achievement_earned = true
+      end
+    elsif task.priority == 'medium'
+      user_progress.number_completed_medium_priority += 1
+      if threshold.include?(user_progress.number_completed_medium_priority)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: medium_priority_achievements[user_progress.number_completed_medium_priority][0]).id)
+        achievement_earned = true
+      end
+    elsif task.priority == 'high'
+      user_progress.number_completed_high_priority += 1
+      if threshold.include?(user_progress.number_completed_high_priority)
+        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: high_priority_achievements[user_progress.number_completed_high_priority][0]).id)
+        achievement_earned = true
+      end
+    end
+    user_progress.save
+    return achievement_earned
+  end
+
 end

@@ -1,9 +1,9 @@
 <% if @task.completed? %>
-  <%# if achievement earned %>
-    <%# render "achievement_earned_message" %>
-  <%# else %>
+  <% if @achievement_earned %>
+    <%= render "achievement_earned_message" %>
+  <% else %>
     <%= render "tasks/task_done_message" %>
-  <%# end %>
+  <% end %>
 <% else %>
   <%= render "tasks/task_saved_message", task: @task %>
 <% end %>
