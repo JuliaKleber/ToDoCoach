@@ -42,7 +42,6 @@ achievements = [
   ["Platinum", "20 tasks completed! You're on the right track!"],
   ["Diamond", "50 tasks completed! Incredible achievement!"],
   ["Master", "100 tasks completed! You're a task management master!"],
--------------------------------------------------------------------------
   ["Task Novice", "Completed your first grocery task. Welcome to the world of productive shopping!"],
   ["Grocery Explorer", "Accomplished 5 grocery-related tasks. You're on your way to becoming a shopping pro!"],
   ["Perfect 10 Shopper", "Successfully completed 10 grocery tasks. You've mastered the art of efficient shopping!"],
