@@ -1,17 +1,36 @@
-.flexbox-class {
+.icon-plus{
   display: flex;
-  align-items: flex-end;
   justify-content: center;
+  align-items: center;
 
-  .btn-primary {
-    margin-bottom: 16px;
-    margin-right:10px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-  }
 }
 
-.form-border {
+
+.search-connect{
+  margin-top: 36px;
+  margin-bottom: 36px;
+}
+
+
+
+.form-control{
   border-radius: 8px;
+}
+
+
+
+.btn-connect{
+  border-radius:8px ;
+  color: white;
+  font-weight: 600;
+}
+
+
+.card-connect{
+  margin-bottom: 16px;
+  }
+
+.name_connect{
+  display: flex;
+  align-items: center;
 }
