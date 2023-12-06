@@ -22,7 +22,7 @@ user_names = {
   "Minaj" => "minaj.jpg",
   "Kanye" => "kanye.jpg",
   "Beyonce" => "beyonce.jpg",
-  "Obama" =>"obama.jpg",
+  "Obama" => "obama.jpg",
   "Jayz" => "jayz.jpg"
 }
 
