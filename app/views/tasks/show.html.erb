@@ -2,7 +2,11 @@
   <div>
     <% @task.categories.each do |category| %>
       <div class="d-flex justify-content-center">
-        <span class="border rounded category"><%= category.name %></span>
+      <% if category.name.include?(@task.categories.name) %>
+            <span class="task-category border rounded category <%= category.name %>-color"><%= category.name %></span>
+      <% else %>
+            <span class="task-category border rounded category" style='background-color: #ecaa2e;'><%= category.name %></span>
+      <% end %>
       </div>
     <% end %>
   </div>
