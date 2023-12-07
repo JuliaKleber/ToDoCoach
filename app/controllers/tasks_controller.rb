@@ -106,7 +106,8 @@ class TasksController < ApplicationController
       flash[:success] = "The to-do item was successfully deleted."
       redirect_to session[:last_collection_path], status: :see_other
     else
-      redirect_to tasks_path, notice: "You are not the creator of the task!"
+      TaskUser.where(user_id: current_user.id).where(task_id: params[:id]).destroy_all
+      redirect_to tasks_path, notice: "The to-do item was successfully deleted."
     end
   end
 
