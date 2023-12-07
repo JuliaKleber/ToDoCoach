@@ -139,10 +139,12 @@ puts 'Creating tasks for Eva ...'
 
 eva = User.find_by(user_name: 'Eva')
 
+personal_category.find_by(name: 'personal')
+
 friday_evening = DateTime.new(2023, 12, 8, 20, 0, 0)
 friday_evening_time = friday_evening.to_time
 
-eva.tasks.create(
+task = eva.tasks.create(
   title: "Buying a cinnamon roll",
   description: "I just love them! And I'll get one for Gerhard, too.",
   priority: "low",
@@ -151,6 +153,7 @@ eva.tasks.create(
   due_date: friday_evening_time - 0.2.hours,
   reminder_date: friday_evening_time - 1.hours
 )
+TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
 eva.tasks.create(
   title: "Talking with Gerhard",
@@ -161,6 +164,7 @@ eva.tasks.create(
   due_date: friday_evening_time,
   reminder_date: friday_evening_time - 2.hours
 )
+TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
 eva.tasks.create(
   title: "Jenny's Birthday Party",
@@ -171,6 +175,7 @@ eva.tasks.create(
   due_date: friday_evening_time + 2.hours,
   reminder_date: friday_evening_time
 )
+TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
 User.where(user_name: 'Eva').each do |user|
   30.times do |n|
