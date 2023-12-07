@@ -219,7 +219,7 @@ end
 
 require_relative 'seeds/achievements'
 
-puts 'Sending Eva an invitation for a task of someone else ...'
+puts 'Inviting Eva to a task of someone else ...'
 
 eva = User.find_by(user_name: 'Eva')
 aisiri = User.find_by(user_name: 'Aisiri')
