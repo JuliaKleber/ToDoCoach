@@ -20,15 +20,15 @@ export default class extends Controller {
       element: this.innerTarget,
       maxPosition: 50,
       minPosition: -50,
-      disable: 'left'
+      resistance: 1,
     })
 
-    this.snapper = new Snap({
-      element: this.innerTarget,
-      maxPosition: 50,
-      minPosition: -50,
-      disable: 'right'
-    })
+    // this.snapper = new Snap({
+    //   element: this.innerTarget,
+    //   maxPosition: 50,
+    //   minPosition: -50,
+    //   disable: 'right'
+    // })
   }
 
   displayForm() {
