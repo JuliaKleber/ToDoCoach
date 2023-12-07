@@ -29,3 +29,25 @@
   width: 100px;
   height: 100px;
 }
+
+.notifications{
+  padding-top: 15px;
+}
+
+.following-card{
+  height: 40px;
+}
+
+.btn-reject{
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  background-color: $orange;
+  border-style: none;
+  margin-right: 30px;
+  &:hover {
+    background-color: $orange;
+    color: $dark-blue;
+    opacity: 0.8;
+}
+}
