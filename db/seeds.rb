@@ -37,9 +37,9 @@ end
 
 puts 'Creating categories ...'
 
-personal_category = Category.create(name: 'Personal')
-work_category = Category.create(name: 'Work')
-groceries_category = Category.create(name: 'Groceries')
+personal_category = Category.create(name: 'personal')
+work_category = Category.create(name: 'work')
+groceries_category = Category.create(name: 'groceries')
 
 User.all.each do |user|
   UserCategory.create(user_id: user.id, category_id: personal_category.id)

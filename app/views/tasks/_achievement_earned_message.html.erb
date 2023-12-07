@@ -17,7 +17,7 @@
       </div>
 
       <div class="upcomming-task">
-        <%= render 'task_card', task: @remaining_task  , index: 0 %>
+        <%= render 'task_card', task: @remaining_task , index: 0 %>
         <%= link_to new_task_path do%>
           <button class="btn-message btn btn-reminder">Let's Add a New Task</button>
         <% end %>
