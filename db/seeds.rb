@@ -140,8 +140,6 @@ puts 'Creating tasks for Eva ...'
 eva = User.find_by(user_name: 'Eva')
 personal_category = Category.find_by(name: 'personal')
 
-personal_category.find_by(name: 'personal')
-
 friday_evening = DateTime.new(2023, 12, 8, 20, 0, 0)
 friday_evening_time = friday_evening.to_time
 
@@ -221,7 +219,7 @@ end
 
 require_relative 'seeds/achievements'
 
-puts 'Connecting Eva to a task of someone else ...'
+puts 'Inviting Eva to a task of someone else ...'
 
 eva = User.find_by(user_name: 'Eva')
 aisiri = User.find_by(user_name: 'Aisiri')
