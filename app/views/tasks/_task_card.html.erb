@@ -2,8 +2,6 @@
   class="swipeable"
   data-controller="edit-task">
   <div class='inner card task-card d-flex'
-       data-edit-task-target="inner"
-       data-edit-task-id="<%= task.id %>">
 
     <%# icons %>
     <div class="my-2">
@@ -21,7 +19,7 @@
         <% one_of_three_standard_categories_asigned = true %>
       <% end %>
       <% if !one_of_three_standard_categories_asigned %>
-        <i class="fa-solid fa-ghost"></i>
+        <i class="fa-solid fa-ghost fa-2xl" style='color: #e8b532;'></i>
       <% end %>
     </div>
 

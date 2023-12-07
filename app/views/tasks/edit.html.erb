@@ -1,18 +1,15 @@
 
-<div class="row">
-    <div class="col-12 col-md-6">
-      <div class="bg-white rounded p-3"><p><strong>EDIT TASK</p></strong>
+      <div><p><strong>EDIT TASK</p></strong>
 
       <%= simple_form_for(@task) do |f| %>
-        <%= f.input :title %>
-        <%= f.input :description %>
-        <%= f.input :priority %>
-        <%= f.input :due_date, as: :datetime, html5: true %>
-        <%= f.input :reminder_date, as: :datetime, html5: true %>
+        <%= f.input :title, input_html: { class: 'input-field'} %>
+        <%= f.input :description, input_html: { class: 'input-field'} %>
+        <%= f.input :priority, input_html: { class: 'input-field'}%>
+        <%= f.input :due_date, as: :datetime, html5: true, input_html: { class: 'input-field'}%>
+        <%= f.input :reminder_date, as: :datetime, html5: true, input_html: { class: 'input-field'} %>
         <%= f.input :photo, as: :file,
                     required: true %>
-        <%= f.submit %>
+        <div class='d-flex justify-content-center'>
+          <%= f.submit 'Update Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
       <% end %>
-    </div>
-  </div>
-</div>
+      </div>
