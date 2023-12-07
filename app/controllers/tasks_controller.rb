@@ -99,6 +99,7 @@ class TasksController < ApplicationController
 
   def destroy
     if @task.user == current_user
+      TaskInvitation.where(task_id: @task.id).destroy_all
       @task.destroy
       TaskCategory.where(task_id: params[:id]).destroy_all if @task.users == []
       flash[:success] = "The to-do item was successfully deleted."
