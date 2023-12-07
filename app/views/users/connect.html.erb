@@ -20,14 +20,14 @@
   <%= text_field_tag :query,
        params[:query],
        class: "form-control",
-       placeholder: "Enter username"
+       placeholder: "Connect with other Users"
     %>
   <%= submit_tag "Search", name: "", class: "btn-connect" %>
 <% end %>
 </div>
 
 <% @not_following.each do |user| %>
-  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-between card-connect') do |form| %>
+  <%= form_with(model: Follow.new, url: build_connection_user_path(current_user), method: :post, class: 'card d-flex flex-row justify-content-around card-connect') do |form| %>
     <% if user.photo.attached? %>
       <%= cl_image_tag user.photo.key, class: "avatar" %>
     <% else %>
