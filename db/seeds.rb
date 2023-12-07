@@ -138,6 +138,7 @@ end
 puts 'Creating tasks for Eva ...'
 
 eva = User.find_by(user_name: 'Eva')
+personal_category = Category.find_by(name: 'personal')
 
 personal_category.find_by(name: 'personal')
 
@@ -155,7 +156,7 @@ task = eva.tasks.create(
 )
 TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
-eva.tasks.create(
+task = eva.tasks.create(
   title: "Talking with Gerhard",
   description: "Talking with Gerhard about this crazy To Do App I found",
   priority: "high",
@@ -166,7 +167,7 @@ eva.tasks.create(
 )
 TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
-eva.tasks.create(
+task = eva.tasks.create(
   title: "Jenny's Birthday Party",
   description: "Talking with Gerhard about this crazy To Do App I found",
   priority: "medium",
