@@ -139,6 +139,7 @@ puts 'Creating tasks for Eva ...'
 
 eva = User.find_by(user_name: 'Eva')
 personal_category = Category.find_by(name: 'personal')
+groceries_category = Category.find_by(name: 'groceries')
 
 friday_evening = DateTime.new(2023, 12, 8, 20, 0, 0)
 friday_evening_time = friday_evening.to_time
@@ -152,7 +153,7 @@ task = eva.tasks.create(
   due_date: friday_evening_time - 0.2.hours,
   reminder_date: friday_evening_time - 1.hours
 )
-TaskCategory.create(task_id: task.id, category_id: personal_category.id)
+TaskCategory.create(task_id: task.id, category_id: groceries_category.id)
 
 task = eva.tasks.create(
   title: "Talking with Gerhard",
