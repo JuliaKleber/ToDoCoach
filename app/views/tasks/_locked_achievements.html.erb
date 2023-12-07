@@ -6,13 +6,3 @@
       <%= achievement.description %>
     </div>
 </div>
-
- <% if @tasks_category_names[index].include?("Work") %>
-                  <i class="fa-solid fa-briefcase fa-2xl <%= task.priority %>-priority-color"></i>
-                <% elsif @tasks_category_names[index].include?("Groceries") %>
-                  <i class="fa-solid fa-basket-shopping fa-2xl <%= task.priority %>-priority-color"></i>
-                <% elsif @tasks_category_names[index].include?("Personal") %>
-                  <i class="fa-solid fa-user fa-2xl <%= task.priority %>-priority-color"></i>
-                <% else %>
-                  <i class="fa-solid fa-ghost"></i>
-                <% end %>
