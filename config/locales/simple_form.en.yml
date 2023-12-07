@@ -4,7 +4,7 @@ en:
     "no": 'No'
     required:
       text: 'required'
-      mark: '*'
+      mark: ' '
 
     placeholders:
       task:
