@@ -2,8 +2,8 @@
   <% if @achievement_earned %>
     <%= render "achievement_earned_message" %>
   <% else %>
-    <%= render "tasks/task_done_message" %>
+    <%= render "task_done_message" %>
   <% end %>
 <% else %>
-  <%= render "tasks/task_saved_message", task: @task %>
+  <%= render "task_saved_message", task: @task %>
 <% end %>

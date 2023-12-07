@@ -4,6 +4,10 @@
   color: white;
   padding: 20px;
   box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.223);
+  &:hover {
+    background-color: $orange;
+    color: $dark-blue;
+  }
 }
 
 .btn-save{
@@ -18,6 +22,25 @@
   font-weight: 600;
   background-color: $orange;
   border-style: none;
+  &:hover {
+    background-color: $orange;
+    color: $dark-blue;
+  }
+}
+
+.btn-primary{
+  border-radius: 8px;
+}
+
+.btn-message{
+  border-radius: 8px;
+  color: $dark-blue;
+  background-color: $orange;
+  width: calc(100vw-16);
+  &:hover {
+    background-color: $orange;
+    color: white;
+  }
 }
 
 .btn-ghost {
@@ -34,13 +57,12 @@
   background-color: $orange;
   color: #F7F7F7;
   border-style: none;
-}
-.rounded{
-  border-radius: 8px !important;
+  &:hover {
+    background-color: $orange;
+    color: $dark-blue;
+  }
 }
 
-.btn-message{
-  color: $dark-blue;
-  background-color: $orange;
-  width: calc(100vw-16);
+.rounded{
+  border-radius: 8px !important;
 }

@@ -7,20 +7,22 @@
 
       <div class="text-center">
         <h1 class="message-slogan text-center fw-bolder">You earned a new badge!</h1>
-        <span> Congratulations on achieving: </span>
+        <p> Congratulations on achieving: </p>
         <p><%= @latest_achievement.achievement.name %> 🎉 </p>
-        <p><%= @latest_achievement.achievement.description %> 🎉 </p>
+        <p><%= @latest_achievement.achievement.description %> </p>
       </div>
 
       <div class="reminder-container mt-4 position-relative">
         <p>On to the next one!</p>
       </div>
 
-      <div class="upcomming-task">
-        <%= render 'task_card', task: @remaining_task , index: 0 %>
-        <%= link_to new_task_path do%>
-          <button class="btn-message btn btn-reminder">Let's Add a New Task</button>
-        <% end %>
+      <div class="upcoming-task">
+        <%= render 'task_card_with_date', task: @remaining_task, index: 0 %>
+        <div class="d-flex justify-content-center">
+          <%= link_to new_task_path do%>
+            <button class="btn btn-message">Let's Add a New Task</button>
+          <% end %>
+        </div>
       </div>
 
     </div>

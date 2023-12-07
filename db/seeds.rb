@@ -100,7 +100,6 @@ tasks = [
 ]
 
 current_time = Time.now
-puts current_time
 
 User.where.not(user_name: 'Eva').each do |user|
   30.times do |n|
