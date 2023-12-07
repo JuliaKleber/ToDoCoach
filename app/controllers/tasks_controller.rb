@@ -102,10 +102,12 @@ class TasksController < ApplicationController
   def destroy
     if @task.user == current_user
       @task.destroy
+      TaskCategory.where(task_id: params[:id]).destroy_all if @task.users == []
       flash[:success] = "The to-do item was successfully deleted."
       redirect_to session[:last_collection_path], status: :see_other
     else
       TaskUser.where(user_id: current_user.id).where(task_id: params[:id]).destroy_all
+      TaskCategory.where(task_id: params[:id]).destroy_all if @task.users == []
       redirect_to tasks_path, notice: "The to-do item was successfully deleted."
     end
   end
