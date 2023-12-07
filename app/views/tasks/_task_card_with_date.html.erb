@@ -36,19 +36,13 @@
       </p>
     </div>
 
-    <div class="d-flex justify-content-end justify-content-between">
+    <div class="d-flex justify-content-between">
       <% if task.due_date != nil %>
-        <p class="due-date mb-0 opacity-75">
-          <% if task.due_date.hour < 12 %>
-            <%= task.due_date.strftime("%H:%M") %>
-            AM
-          <% else %>
-            <%= (task.due_date - (12*60*60)).strftime("%H:%M") %>
-            PM
-          <% end %>
-        </p>
+      <p class="due-date mb-0 opacity-75">
+        <%= task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+      </p>
       <% end %>
-      <p class="mb-0"><%= render 'toggle_completed', task: task %></p>
+      <p class="mb-0 d-flex justify-content-end"><%= render 'toggle_completed', task: task %></p>
     </div>
 
   </div>
