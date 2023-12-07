@@ -21,14 +21,14 @@
   <%= text_field_tag :query,
        params[:query],
        class: "form-control",
-       placeholder: "Search Follower"
+       placeholder: "Enter username"
     %>
   <%= submit_tag "Search", name: "", class: "btn btn-primary btn-connect" %>
 <% end %>
 </div>
 
 <% @following.each do |user| %>
-  <%= form_with(model: follow, url: destroy_connection_user_path(current_user), method: :delete, class: 'card d-flex flex-row justify-content-around card-connect') do |form| %>
+  <%= form_with(model: follow, url: destroy_connection_user_path(current_user), method: :delete, class: 'card d-flex flex-row justify-content-between card-connect') do |form| %>
     <% if user.photo.attached? %>
       <%= cl_image_tag user.photo.key, class: "avatar" %>
     <% else %>
