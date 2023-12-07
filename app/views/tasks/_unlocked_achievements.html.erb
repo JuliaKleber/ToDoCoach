@@ -1,18 +1,7 @@
-
-<% if ["Diamond", "Bronze", "Gold", "Master", "Platinum", "Silver"].include?(achievement.name) %>
-  <div class="card achievement-card d-flex flex-row my-3">
-    <%=image_tag url_for("#{achievement.name}.png"), class: 'achievement-img' %>
-    <div class="achievement-info">
-      <h4></i> <%= achievement.name %></h4>
-      <%= achievement.description %>
-    </div>
+<div class="card achievement-card d-flex flex-row my-3">
+  <%= cl_image_tag key_name, class: 'achievement-img' %>
+  <div class="achievement-info">
+    <h4></i> <%= achievement.name %></h4>
+    <%= achievement.description %>
   </div>
-<% else %>
-  <div class="card achievement-card d-flex flex-row my-3">
-    <%=image_tag url_for("default-badge.png"), class: 'achievement-img' %>
-    <div class="achievement-info">
-      <h4></i> <%= achievement.name %></h4>
-      <%= achievement.description %>
-    </div>
-  </div>
-<% end %>
+</div>
