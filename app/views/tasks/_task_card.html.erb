@@ -1,25 +1,25 @@
 <div
   class="swipeable"
   data-controller="edit-task">
-  <div class='inner card task-card d-flex'
+  <div class='inner card task-card d-flex'>
 
     <%# icons %>
     <div class="my-2">
       <% one_of_three_standard_categories_asigned = false %>
-      <% if @tasks_category_names[index].include?("Work") %>
+      <% if task.categories.exists?(name: 'work') %>
         <i class="fa-solid fa-briefcase fa-2xl me-3 <%= task.priority %>-priority-color"></i>
         <% one_of_three_standard_categories_asigned = true %>
       <% end %>
-      <% if @tasks_category_names[index].include?("Groceries") %>
+      <% if task.categories.exists?(name: 'groceries') %>
         <i class="fa-solid fa-basket-shopping fa-2xl me-3 <%= task.priority %>-priority-color"></i>
         <% one_of_three_standard_categories_asigned = true %>
       <% end %>
-      <% if @tasks_category_names[index].include?("Personal") %>
+      <% if task.categories.exists?(name: 'personal') %>
         <i class="fa-solid fa-user fa-2xl me-3 <%= task.priority %>-priority-color"></i>
         <% one_of_three_standard_categories_asigned = true %>
       <% end %>
       <% if !one_of_three_standard_categories_asigned %>
-        <i class="fa-solid fa-ghost fa-2xl" style='color: #e8b532;'></i>
+        <i class="fa-solid fa-ghost fa-2xl <%= task.priority %>-priority-color"></i>
       <% end %>
     </div>
 
