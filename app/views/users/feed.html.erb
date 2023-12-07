@@ -26,6 +26,7 @@
         <%# end %>
         <h4> <i class="fa-solid fa-ribbon"></i> <%= invitation.task.title %> </h4>
       </div>
+
       <%= link_to add_user_task_path(invitation.task) do %>
         <button class='btn btn-primary'>Accept</button>
       <% end %>
@@ -39,16 +40,16 @@
 <div class="notifications mt-3">
   <% @followed.each do |followed| %>
     <% followed.achievements.each do |achievement| %>
-      <div class='card'>
+      <div class='card my-3'>
         <div class='d-flex flex-row'>
           <% if followed.photo.attached? %>
             <%= cl_image_tag followed.photo.key, class: "avatar" %>
           <% else %>
             <p><%= image_tag "alf.jpg", class: "avatar" %>
           <% end %>
-          <h4> <i class="fa-solid fa-ribbon"></i> <%= achievement.name %> </h4>
+          <h4><%= achievement.name %> 🎉 </h4>
         </div>
-        <p>Congratulate them <i class="fa-solid fa-champagne-glasses"></i><p>
+        <button class='btn btn-primary congrats mt-3'>Send congratulations!</button>
       </div>
     <% end %>
   <% end %>
