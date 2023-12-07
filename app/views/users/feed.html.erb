@@ -1,6 +1,6 @@
 <div class='d-flex flex-row justify-content-between'>
 
-  <div class="toggle-look d-flex">
+  <div class="d-flex">
     <div class='card' style='background-color: #242474; color: white'>Following</div>
       <%= link_to achievements_user_path, class: 'card' do %>
       Achievements
@@ -28,16 +28,18 @@
       </div>
 
       <%= link_to add_user_task_path(invitation.task) do %>
-        <button class='btn btn-primary'>Accept</button>
+      <div class="d-flex justify-content-center">
+        <button class='btn btn-reject'>Accept</button>
       <% end %>
       <%= link_to task_invitation_path(invitation), data: { turbo_method: :delete } do %>
-        <button class='btn btn-primary'>Reject</button>
+        <button class='btn btn-reject'>Reject</button>
       <% end %>
+      </div>
     </div>
   <% end %>
 </div>
 
-<div class="notifications mt-3">
+<div class="notifications">
   <% @followed.each do |followed| %>
     <% followed.achievements.each do |achievement| %>
       <div class='card my-3'>

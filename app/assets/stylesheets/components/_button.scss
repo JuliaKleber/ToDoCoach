@@ -39,14 +39,14 @@
 
 .btn-message{
   border-radius: 8px;
-  color: $dark-blue;
   background-color: $orange;
+  color: white;
   width: calc(100vw-16);
   &:hover {
     background-color: $orange;
-    color: white;
+    color: $dark-blue;
   }
-}
+}s
 
 .btn-ghost {
   color: #4A4A4A;
