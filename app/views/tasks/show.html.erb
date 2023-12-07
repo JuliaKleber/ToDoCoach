@@ -1,46 +1,14 @@
-<div class="bg-background-color rounded p-3">
-  <div>
-    <% @task.categories.each do |category| %>
-      <div class="d-flex justify-content-center">
+<div class='bg-background-color rounded p-3'>
+
+  <% @task.categories.each do |category| %>
+    <div class="d-flex justify-content-center">
       <% if category.name.include?(@task.categories.name) %>
-            <span class="task-category border rounded category <%= category.name %>-color"><%= category.name %></span>
+        <span class="task-category border rounded category <%= category.name %>-color"><%= category.name %></span>
       <% else %>
-            <span class="task-category border rounded category" style='background-color: #ecaa2e;'><%= category.name %></span>
+        <span class="task-category border rounded category" style='background-color: #ecaa2e;'><%= category.name %></span>
       <% end %>
-      </div>
-    <% end %>
-  </div>
-  <p>
-    <div>
-     <h5><span><%= render 'priority_dot', task: @task %>
-      <%=@task.title %>
-     </span></h5>
-    </div>
-  </p>
-    <div class="search-showpage showpage input-field">
-     <p><span>
-    <i class="fa-regular fa-circle-check fa-lg" style="color: #20467e;"></i>
-       <%= @task.description %>
-         </span></p>
-    </div>
-      <div class="search-showpage showpage input-field">
-        <p><i class="fa-solid fa-calendar-days"></i>
-          <% if @task.due_date? %>
-            <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
-          <% end %>
-        </p>
-        <p>
-          <% if @task.reminder_date? %>
-            <span><i class="fa-solid fa-bell"></i>
-            <%=@task.reminder_date.strftime('%a, %d %B, %I:%M %p') %> </span>
-          <% end %>
-        </p>
     </div>
   <% end %>
-
-
-
-
 
   <div class='d-flex flex-row justify-content-begin m-2'>
     <h5>
@@ -87,7 +55,7 @@
       <i class='fa fa-trash' aria-hidden='true'></i>
     <% end %>
     <%= link_to 'javascript:history.back()', remote: true, class: 'm-2' do %>
-      <i class='fa fa-history'></i>
+      <i class="fa-solid fa-rotate-left"></i>
     <% end %>
   </div>
 
