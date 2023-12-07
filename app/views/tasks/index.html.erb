@@ -30,10 +30,8 @@
       </div>
       <%= render 'toggle_completed', task: task %>
     </div>
-    <p class="mt-2" style="font-size: 14px"> <%= task.description %> </p>
   </div>
 <% end %>
-
 <% @tasks_grouped_by_dates.each_with_index do |tasks, index| %>
   <%= link_to dates_task_path(tasks[0]), class: "text-black-50" do %>
     <h4 class="mt-3 mb-2 opacity-50" style='color: #242474'><%= @dates[index] %></h4>
@@ -49,7 +47,6 @@
         </div>
         <%= render 'toggle_completed', task: task %>
       </div>
-      <p class="mt-2" style="font-size: 14px"> <%= task.description %> </p>
     </div>
   <% end %>
 <% end %>
