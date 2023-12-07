@@ -4,36 +4,10 @@ User.all.each do |user|
   UserProgress.create(user_id: user.id)
 end
 
-puts 'Giving each user a badge for one fake achievement ...'
-
-achievements_not_implemented = [
-  ["Multitasking Master", "You unlocked a new badge for adding tasks for 30 consecutive days"],
-  ["Busy Bee", "You have added 20 tasks in the category Work this week"],
-  ["Productivity Pro", "Completed 10 tasks in a single day"],
-  ["Task Explorer", "Explored and completed tasks in 3 different categories"],
-  ["Early Bird", "Completed a task before 8 AM"],
-  ["Night Owl", "Completed a task after midnight"],
-  ["Streak Starter", "Added tasks for 7 consecutive days"],
-  ["Weekend Warrior", "Completed tasks on both Saturday and Sunday"],
-  ["Focused Finisher", "Completed a task with high priority"],
-  ["Diverse Achiever", "Added tasks covering work, personal, and groceries categories in a single day"],
-  ["Master Planner", "Scheduled tasks for the entire week"],
-  ["Task Ninja", "Quickly completed a task within 10 minutes of adding it"],
-  ["Team Player", "Collaborated on a task with a fellow user"],
-  ["Task Marathoner", "Completed 5 tasks in a single day"],
-]
-
-achievements_not_implemented.each do |achievement|
-  Achievement.create(name: achievement[0], description: achievement[1])
-end
-
-User.where.not(user_name: 'Eva').each do |user|
-  UserAchievement.create(user_id: user.id, achievement_id: Achievement.all.sample.id)
-end
-
 puts 'Creating achievements ...'
 
 achievements = [
+  ["Task Initiator", "Created your account! Welcome to the world of organized task management!"],
   ["Bronze", "You've completed 1 task! Keep it up!"],
   ["Silver", "5 tasks completed! Well done!"],
   ["Gold", "10 tasks completed! You're doing great!"],
@@ -81,3 +55,26 @@ achievements = [
 achievements.each do |achievement|
   Achievement.create(name: achievement[0], description: achievement[1])
 end
+
+puts 'Giving each user a badge for an achievement ...'
+
+User.all.each do |user|
+  UserAchievement.create(user_id: user.id, achievement_id: Achievement.first)
+end
+
+# achievements_not_implemented = [
+#   ["Multitasking Master", "You unlocked a new badge for adding tasks for 30 consecutive days"],
+#   ["Busy Bee", "You have added 20 tasks in the category Work this week"],
+#   ["Productivity Pro", "Completed 10 tasks in a single day"],
+#   ["Task Explorer", "Explored and completed tasks in 3 different categories"],
+#   ["Early Bird", "Completed a task before 8 AM"],
+#   ["Night Owl", "Completed a task after midnight"],
+#   ["Streak Starter", "Added tasks for 7 consecutive days"],
+#   ["Weekend Warrior", "Completed tasks on both Saturday and Sunday"],
+#   ["Focused Finisher", "Completed a task with high priority"],
+#   ["Diverse Achiever", "Added tasks covering work, personal, and groceries categories in a single day"],
+#   ["Master Planner", "Scheduled tasks for the entire week"],
+#   ["Task Ninja", "Quickly completed a task within 10 minutes of adding it"],
+#   ["Team Player", "Collaborated on a task with a fellow user"],
+#   ["Task Marathoner", "Completed 5 tasks in a single day"],
+# ]
