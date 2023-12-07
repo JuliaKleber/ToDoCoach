@@ -2,13 +2,6 @@
   margin: 70px 20px;
 }
 
-// .icon {
-//   position: absolute;
-//   top: 8px;
-//   left: 8px;
-//   font-size: 18px;
-// }
-
 .search-form {
   height: 3.5rem;
   box-shadow: 6px 6px 6px rgba(0,0,0,0.08);
@@ -30,16 +23,22 @@
 }
 
 .search-showpage {
-  height: 5rem;
-  box-shadow: 6px 6px 6px rgba(0,0,0,0.08);
+  height: inherit;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.08);
   border: 2px solid #E7E7E7;
   border-radius: 10px;
   margin-top: 10px;
 }
+
 .category {
   margin: 3px
 }
 
 .showpage {
   padding: 10px
+}
+
+.show-task-creator {
+  font-weight: 500;
+  color: $dark-blue;
 }
