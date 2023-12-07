@@ -54,6 +54,7 @@ $save-green: rgb(116, 203, 116);
 
 .flex-child {
   flex: 1;
+  position: relative;
   width: 10.5rem;
   height: inherit;
   border-radius: 30px;
@@ -68,7 +69,7 @@ $save-green: rgb(116, 203, 116);
       background: darken($delete-red, 10);
     }
   i{
-    line-height: 220px;
+    line-height: 120px;
   }
 }
 
@@ -89,7 +90,7 @@ $save-green: rgb(116, 203, 116);
     background: darken($save-green, 10);
   }
   i{
-    line-height: 220px;
+    line-height: 120px;
   }
 }
 
