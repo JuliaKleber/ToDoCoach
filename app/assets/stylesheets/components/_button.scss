@@ -41,10 +41,11 @@
   border-radius: 8px;
   background-color: $orange;
   color: white;
-  width: calc(100vw-16);
+  font-weight: 600;
   &:hover {
     background-color: $orange;
     color: $dark-blue;
+    opacity: 0.8;
   }
 }s
 
