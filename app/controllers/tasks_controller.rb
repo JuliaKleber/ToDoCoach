@@ -65,8 +65,7 @@ class TasksController < ApplicationController
       user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
       user_ids << current_user.id
       user_ids.each do |user_id|
-        # TaskUser.create(task_id: task.id, user_id: user_id)
-        # TaskInvitation.create(user_id: user_id, task_user_id: TaskUser.last.id)
+        TaskUser.create(task_id: task.id, user_id: current_user.id)
         TaskInvitation.create(task_id: task.id, user_id: user_id)
       end
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
@@ -207,10 +206,6 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
   end
-
-  # def task_users_params
-  #   params.require(:task).permit(:task_user_ids)
-  # end
 
   # used in create
   def sanitize_categories(attributes_array)
