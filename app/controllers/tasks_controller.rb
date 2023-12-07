@@ -287,21 +287,21 @@ class TasksController < ApplicationController
     }
     threshold = [1, 5, 10, 20, 50, 100]
     achievement_earned = false
-    if task.categories.exists?(name: 'Groceries')
+    if task.categories.exists?(name: 'groceries')
       user_progress.number_completed_groceries += 1
       if threshold.include?(user_progress.number_completed_groceries)
         UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: grocery_achievements[user_progress.number_completed_groceries][0]).id)
         achievement_earned = true
       end
     end
-    if task.categories.exists?(name: 'Work')
+    if task.categories.exists?(name: 'work')
       user_progress.number_completed_work += 1
       if threshold.include?(user_progress.number_completed_work)
         UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: work_achievements[user_progress.number_completed_work][0]).id)
         achievement_earned = true
       end
     end
-    if task.categories.exists?(name: 'Personal')
+    if task.categories.exists?(name: 'personal')
       user_progress.number_completed_personal += 1
       if threshold.include?(user_progress.number_completed_personal)
         UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: personal_achievements[user_progress.number_completed_personal][0]).id)
