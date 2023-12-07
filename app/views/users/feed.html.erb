@@ -15,7 +15,26 @@
   <% end %>
 </div>
 
-<h2 class='latest text-center mt-3 mb-0'>Latest from your friends</h2>
+<div class="notifications mt-3">
+  <% @invitations.each do |invitation| %>
+    <div class='card'>
+      <div class='d-flex flex-row'>
+        <%# if followed.photo.attached? %>
+          <%# cl_image_tag followed.photo.key, class: "avatar" %>
+        <%# else %>
+          <p><% image_tag "alf.jpg", class: "avatar" %>
+        <%# end %>
+        <h4> <i class="fa-solid fa-ribbon"></i> <%= invitation.task.title %> </h4>
+      </div>
+      <%= link_to add_user_task_path(invitation.task) do %>
+        <button class='btn btn-primary'>Accept</button>
+      <% end %>
+      <%= link_to task_invitation_path(invitation), data: { turbo_method: :delete } do %>
+        <button class='btn btn-primary'>Reject</button>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
 <div class="notifications mt-3">
   <% @followed.each do |followed| %>

@@ -64,7 +64,11 @@ class TasksController < ApplicationController
       user_ids_raw = params[:task][:task_user_ids]
       user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
       user_ids << current_user.id
-      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: user_id) }
+      user_ids.each do |user_id|
+        # TaskUser.create(task_id: task.id, user_id: user_id)
+        # TaskInvitation.create(user_id: user_id, task_user_id: TaskUser.last.id)
+        TaskInvitation.create(task_id: task.id, user_id: user_id)
+      end
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
@@ -112,6 +116,17 @@ class TasksController < ApplicationController
     @remaining_task = Task.where(completed: false, priority: 'high').first
     @tasks_category_names = [category_names(@remaining_task[:id])]
     @latest_achievement = UserAchievement.last
+  end
+
+  def add_user
+    task_user = TaskUser.new(user_id: current_user.id, task_id: params[:id])
+    if task_user.save
+      invitation = TaskInvitation.where(user_id: current_user.id).where(task_id: params[:id])
+      invitation.destroy_all
+      redirect_to feed_user_path, notice: "You were added to the task!"
+    else
+      redirect_to feed_user_path, notice: "You could not be added to the task."
+    end
   end
 
   private
