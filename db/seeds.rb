@@ -143,7 +143,7 @@ eva = User.find_by(user_name: 'Eva')
 friday_evening = DateTime.new(2023, 12, 8, 20, 0, 0)
 friday_evening_time = friday_evening.to_time
 
-Task.create(
+eva.tasks.create(
   title: "Buying a cinnamon roll",
   description: "I just love them! And I'll get one for Gerhard, too.",
   priority: "low",
@@ -153,7 +153,7 @@ Task.create(
   reminder_date: friday_evening_time - 1.hours
 )
 
-Task.create(
+eva.tasks.create(
   title: "Talking with Gerhard",
   description: "Talking with Gerhard about this crazy To Do App I found",
   priority: "high",
@@ -163,7 +163,7 @@ Task.create(
   reminder_date: friday_evening_time - 2.hours
 )
 
-Task.create(
+eva.tasks.create(
   title: "Jenny's Birthday Party",
   description: "Talking with Gerhard about this crazy To Do App I found",
   priority: "medium",
