@@ -1,0 +1,10 @@
+.checkbox-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox-line label {
+  margin-right: 10px;
+  color: black
+}
