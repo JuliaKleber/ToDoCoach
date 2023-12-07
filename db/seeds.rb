@@ -157,7 +157,7 @@ TaskCategory.create(task_id: task.id, category_id: groceries_category.id)
 
 task = eva.tasks.create(
   title: "Talking with Gerhard",
-  description: "Talking with Gerhard about this crazy To Do App I found",
+  description: "Talking with Gerhard about this crazy new To Do App I found",
   priority: "high",
   completed: false,
   user_id: eva.id,
@@ -168,7 +168,7 @@ TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
 task = eva.tasks.create(
   title: "Jenny's Birthday Party",
-  description: "Talking with Gerhard about this crazy To Do App I found",
+  description: "Going with Gerhard to Jenny's Birthday Party at the ballroom",
   priority: "medium",
   completed: false,
   user_id: eva.id,
