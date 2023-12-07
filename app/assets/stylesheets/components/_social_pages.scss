@@ -30,6 +30,24 @@
   height: 100px;
 }
 
+h4 {
+  font-size: 20px;
+  font-weight: 600;
+  align-self: center;
+  margin: 12px;
+  color: #1f1f79;
+}
+
+.congrats {
+  color: #fffbee;
+  font-weight: bold;
+  background-color: $orange;
+  width: 250px;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+
 .notifications{
   padding-top: 15px;
 }
@@ -49,5 +67,4 @@
     background-color: $orange;
     color: $dark-blue;
     opacity: 0.8;
-}
 }
