@@ -12,9 +12,9 @@
       </div>
       <div class="d-flex flex-row h-100">
         <div style="width: 150px">
-          <%= f.input :category, as: :select, collection: categories_for_select,  input_html: { style: "text-transform: capitalize;"}, label: false, prompt: "Category", include_blank: false, required: false, selected: params.dig(:search, :category)%>
+          <%= f.input :category, as: :select, collection: categories_for_select,  input_html: { style: "text-transform: capitalize;", class: "form-control"}, label: false, prompt: "Category", include_blank: false, required: false, selected: params.dig(:search, :category)%>
         </div>
-        <%= f.input :priority, as: :select, collection: priorities_for_select, label: false, prompt:"Priority",include_blank: false, required: false, selected: params.dig(:search, :priority) %>
+        <%= f.input :priority, as: :select, collection: priorities_for_select, label: false, prompt:"Priority",include_blank: false, input_html: { class: "form-control"}, required: false, selected: params.dig(:search, :priority) %>
         <%= f.submit 'Search', class: "btn-search", style: "width: 80px" %>
       </div>
 <% end %>
