@@ -13,16 +13,17 @@ $save-green: rgb(116, 203, 116);
 .task-card {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  // border-left: 6px solid;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
 }
 
 .task-title > a {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
 }
 
 .due-date {
-  font-size: $medium-font;
+  font-size: $small-font;
   font-weight: 500;
   color: $dark-blue;
 }
@@ -95,9 +96,8 @@ $save-green: rgb(116, 203, 116);
 .swipeable{
   display: flex;
   position: relative;
-  // overflow: hidden;
   z-index: 2;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   vertical-align: bottom;
   backface-visibility: hidden;
   &:last-child{
