@@ -6,9 +6,9 @@ class Task < ApplicationRecord
   has_many :task_invitations
   belongs_to :user
 
-  validates :title, presence: true, length: {minimum: 3, maximum: 60}
+  validates :title, presence: true, length: { minimum: 3, maximum: 60 }
 
-  validates :description, presence: true, length: {maximum: 250}
+  validates :description, length: { maximum: 250 }
 
   accepts_nested_attributes_for :task_categories
   validates_associated :task_categories
