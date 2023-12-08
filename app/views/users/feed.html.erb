@@ -19,12 +19,12 @@
   <% @invitations.each do |invitation| %>
     <div class='card'>
       <div class='d-flex flex-row'>
-        <%# if followed.photo.attached? %>
-          <%# cl_image_tag followed.photo.key, class: "avatar" %>
-        <%# else %>
+        <% if invitation.task.user.photo.attached? %>
+          <%= cl_image_tag invitation.task.user.photo.key, class: "avatar" %>
+        <% else %>
           <p><% image_tag "alf.jpg", class: "avatar" %>
-        <%# end %>
-        <h4> <i class="fa-solid fa-ribbon"></i> <%= invitation.task.title %> </h4>
+        <% end %>
+        <h4> <%= invitation.task.title %> </h4>
       </div>
 
       <%= link_to add_user_task_path(invitation.task) do %>
@@ -43,6 +43,7 @@
   <% @followed.each do |followed| %>
     <% followed.achievements.each do |achievement| %>
       <div class='card my-3'>
+        <%# <p class="text-center"> <%= followed.user_name %> <%# earned a new badge: </p> %>
         <div class='d-flex flex-row'>
           <% if followed.photo.attached? %>
             <%= cl_image_tag followed.photo.key, class: "avatar" %>
