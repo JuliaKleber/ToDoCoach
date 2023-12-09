@@ -258,54 +258,55 @@ class TasksController < ApplicationController
 
   # used in check_for_achievements
   def check_for_category_achievements(task, user_progress)
-    grocery_achievements = {
-      1 => ["Task Novice", "Completed your first grocery task. Welcome to the world of productive shopping!"],
-      5 => ["Grocery Explorer", "Accomplished 5 grocery-related tasks. You're on your way to becoming a shopping pro!"],
-      10 => ["Perfect 10 Shopper", "Successfully completed 10 grocery tasks. You've mastered the art of efficient shopping!"],
-      20 => ["20-Task Triumph", "Achieved 20 grocery tasks! Your commitment to organized shopping is truly commendable."],
-      50 => ["50 Grocery Conquests", "Completed 50 grocery tasks. You're a grocery hero, saving the day with every task!"],
-      100 => ["Master Shopper", "Completed a whopping 100 grocery tasks. You are the undisputed master of the grocery list!"]
-    }
-    work_achievements = {
-      1 => ["Work Task Rookie", "Completed your first work-related task. Welcome to the world of productivity at work!"],
-      5 => ["Office Explorer", "Accomplished 5 work-related tasks. You're making strides in professional efficiency!"],
-      10 => ["Perfect 10 Professional", "Successfully completed 10 work tasks. You're on your way to mastering your workday!"],
-      20 => ["20-Task Triumph", "Achieved 20 work-related tasks! Your dedication to productivity is truly commendable."],
-      50 => ["Corporate Conqueror", "Completed 50 work tasks. You're a work superhero, conquering tasks like a pro!"],
-      100 => ["Task Mastermind", "Completed a monumental 100 work tasks. You are the undisputed master of workplace productivity!"]
-    }
-    personal_achievements = {
-      1 => ["Personal Task Pioneer", "Completed your first personal task. Welcome to the world of organized personal life!"],
-      5 => ["Life Explorer", "Accomplished 5 personal tasks. You're taking charge of your personal goals and aspirations!"],
-      10 => ["Perfect 10 Achiever", "Successfully completed 10 personal tasks. You're on your way to mastering your personal to-do list!"],
-      20 => ["20-Task Triumph", "Achieved 20 personal tasks! Your commitment to personal growth is truly commendable."],
-      50 => ["Life Champion", "Completed 50 personal tasks. You're a personal achievement champion, conquering tasks with flair!"],
-      100 => ["Task Zen Master", "Completed a Zen-like 100 personal tasks. You are the undisputed master of personal productivity!"]
+    category_achievements = {
+      'groceries' => {
+        1 => ["Task Novice", "Completed your first grocery task. Welcome to the world of productive shopping!"],
+        5 => ["Grocery Explorer", "Accomplished 5 grocery-related tasks. You're on your way to becoming a shopping pro!"],
+        10 => ["Perfect 10 Shopper", "Successfully completed 10 grocery tasks. You've mastered the art of efficient shopping!"],
+        20 => ["20-Task Triumph", "Achieved 20 grocery tasks! Your commitment to organized shopping is truly commendable."],
+        50 => ["50 Grocery Conquests", "Completed 50 grocery tasks. You're a grocery hero, saving the day with every task!"],
+        100 => ["Master Shopper", "Completed a whopping 100 grocery tasks. You are the undisputed master of the grocery list!"]
+      },
+      'work' => {
+        1 => ["Work Task Rookie", "Completed your first work-related task. Welcome to the world of productivity at work!"],
+        5 => ["Office Explorer", "Accomplished 5 work-related tasks. You're making strides in professional efficiency!"],
+        10 => ["Perfect 10 Professional", "Successfully completed 10 work tasks. You're on your way to mastering your workday!"],
+        20 => ["20-Task Triumph", "Achieved 20 work-related tasks! Your dedication to productivity is truly commendable."],
+        50 => ["Corporate Conqueror", "Completed 50 work tasks. You're a work superhero, conquering tasks like a pro!"],
+        100 => ["Task Mastermind", "Completed a monumental 100 work tasks. You are the undisputed master of workplace productivity!"]
+      },
+      'personal' => {
+        1 => ["Personal Task Pioneer", "Completed your first personal task. Welcome to the world of organized personal life!"],
+        5 => ["Life Explorer", "Accomplished 5 personal tasks. You're taking charge of your personal goals and aspirations!"],
+        10 => ["Perfect 10 Achiever", "Successfully completed 10 personal tasks. You're on your way to mastering your personal to-do list!"],
+        20 => ["20-Task Triumph", "Achieved 20 personal tasks! Your commitment to personal growth is truly commendable."],
+        50 => ["Life Champion", "Completed 50 personal tasks. You're a personal achievement champion, conquering tasks with flair!"],
+        100 => ["Task Zen Master", "Completed a Zen-like 100 personal tasks. You are the undisputed master of personal productivity!"]
+      }
     }
     threshold = [1, 5, 10, 20, 50, 100]
     achievement_earned = false
-    if task.categories.exists?(name: 'groceries')
-      user_progress.number_completed_groceries += 1
-      if threshold.include?(user_progress.number_completed_groceries)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: grocery_achievements[user_progress.number_completed_groceries][0]).id)
-        achievement_earned = true
+    task.categories.pluck(:name).each do |category_name|
+      if ['work', 'personal', 'groceries'].include?(category_name)
+        user_progress.increment!("number_completed_#{category_name}".to_sym)
+        if threshold.include?(user_progress.send("number_completed_#{category_name}"))
+          (0..5).each do |i|
+            achievement_name = category_achievements[category_name][user_progress.send("number_completed_#{category_name}")][i]
+            achievement = Achievement.find_by(name: achievement_name)
+            if achievement.present?
+              user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
+              if user_achievement.present?
+                user_achievement.destroy!
+              end
+            end
+          end
+          achievement_name = category_achievements[category_name][user_progress.send("number_completed_#{category_name}")][0]
+          achievement = Achievement.find_by(name: achievement_name)
+          UserAchievement.create(user_id: current_user.id, achievement_id: achievement.id, date: Time.now.to_date)
+          achievement_earned = true
+        end
       end
     end
-    if task.categories.exists?(name: 'work')
-      user_progress.number_completed_work += 1
-      if threshold.include?(user_progress.number_completed_work)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: work_achievements[user_progress.number_completed_work][0]).id)
-        achievement_earned = true
-      end
-    end
-    if task.categories.exists?(name: 'personal')
-      user_progress.number_completed_personal += 1
-      if threshold.include?(user_progress.number_completed_personal)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: personal_achievements[user_progress.number_completed_personal][0]).id)
-        achievement_earned = true
-      end
-    end
-    user_progress.save
     return achievement_earned
   end
 
