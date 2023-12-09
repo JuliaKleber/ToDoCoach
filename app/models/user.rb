@@ -23,4 +23,13 @@ class User < ApplicationRecord
   pg_search_scope :search_by_username_and_email,
                   against: %i[user_name email],
                   using: { tsearch: { prefix: true } }
+
+  after_create :initialize_user_progress
+
+  private
+
+  def initialize_user_progress
+    UserProgress.create(user_id: User.last.id)
+    UserAchievement.create(user_id: User.last.id, achievement_id: Achievement.first.id)
+  end
 end
