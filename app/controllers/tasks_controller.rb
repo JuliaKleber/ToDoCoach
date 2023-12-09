@@ -250,6 +250,16 @@ class TasksController < ApplicationController
     user_progress.number_completed_all += 1
     user_progress.save
     if threshold.include?(user_progress.number_completed_all)
+      [1, 5, 10, 20, 50].each do |number|
+        achievement_name = achievements[number][0]
+        achievement = Achievement.find_by(name: achievement_name)
+        if achievement.present?
+          user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
+          if user_achievement.present?
+            user_achievement.destroy!
+          end
+        end
+      end
       UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id)
       achievement_earned = true
     end
@@ -290,8 +300,8 @@ class TasksController < ApplicationController
       if ['work', 'personal', 'groceries'].include?(category_name)
         user_progress.increment!("number_completed_#{category_name}".to_sym)
         if threshold.include?(user_progress.send("number_completed_#{category_name}"))
-          (0..5).each do |i|
-            achievement_name = category_achievements[category_name][user_progress.send("number_completed_#{category_name}")][i]
+          [1, 5, 10, 20, 50].each do |number|
+            achievement_name = category_achievements[category_name][number][0]
             achievement = Achievement.find_by(name: achievement_name)
             if achievement.present?
               user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
@@ -312,53 +322,54 @@ class TasksController < ApplicationController
 
   # used in check_for_achievements
   def check_for_priority_achievements(task, user_progress)
+    priority_achievements = {
+      'low' => {
+        1 => ["Low Priority Starter", "Completed your first low-priority task. Kicking off your journey towards task management!"],
+        5 => ["Easy-Going Achiever", "Accomplished 5 low-priority tasks. You're handling the less urgent tasks with ease!"],
+        10 => ["Perfect 10 Laid Back", "Successfully completed 10 low-priority tasks. You've mastered the art of staying calm under low-pressure situations!"],
+        20 => ["20-Task Serenity", "Achieved 20 low-priority tasks! Your ability to maintain composure in the face of low urgency is truly commendable."],
+        50 => ["Zen Tasker", "Completed 50 low-priority tasks. You're a zen master, gliding through tasks with tranquility!"],
+        100 => ["Chill Task Connoisseur", "Completed a serene 100 low-priority tasks. You've attained the highest level of chill in task management!"]
+      },
+      'medium' => {
+        1 => ["Medium Priority Explorer", "Completed your first medium-priority task. Welcome to the world of balanced task management!"],
+        5 => ["Balanced Achiever", "Accomplished 5 medium-priority tasks. You're maintaining equilibrium in your task list!"],
+        10 => ["Perfect 10 Equilibrium", "Successfully completed 10 medium-priority tasks. You're achieving balance in your task priorities!"],
+        20 => ["20-Task Harmony", "Achieved 20 medium-priority tasks! Your knack for maintaining harmony in task management is truly commendable."],
+        50 => ["Task Balancer", "Completed 50 medium-priority tasks. You're a master at balancing priorities!"],
+        100 => ["Priority Maestro", "Completed a harmonious 100 medium-priority tasks. You've reached the pinnacle of task priority mastery!"]
+      },
+      'high' => {
+        1 => ["High Priority Dynamo", "Completed your first high-priority task. Welcome to the fast-paced world of urgent tasks!"],
+        5 => ["Urgency Explorer", "Accomplished 5 high-priority tasks. You're navigating through urgency with skill and precision!"],
+        10 => ["Perfect 10 Urgent Achiever", "Successfully completed 10 high-priority tasks. You're a force to be reckoned with in urgent matters!"],
+        20 => ["20-Task Blitz", "Achieved 20 high-priority tasks! Your ability to handle urgency with speed and accuracy is truly commendable."],
+        50 => ["Priority Warrior", "Completed 50 high-priority tasks. You're a warrior in the battlefield of urgent priorities!"],
+        100 => ["Urgent Task Legend", "Completed a legendary 100 high-priority tasks. You're the undisputed legend of urgent task management!"]
+      }
+    }
     threshold = [1, 5, 10, 20, 50, 100]
-    low_priority_achievements = {
-      1 => ["Low Priority Starter", "Completed your first low-priority task. Kicking off your journey towards task management!"],
-      5 => ["Easy-Going Achiever", "Accomplished 5 low-priority tasks. You're handling the less urgent tasks with ease!"],
-      10 => ["Perfect 10 Laid Back", "Successfully completed 10 low-priority tasks. You've mastered the art of staying calm under low-pressure situations!"],
-      20 => ["20-Task Serenity", "Achieved 20 low-priority tasks! Your ability to maintain composure in the face of low urgency is truly commendable."],
-      50 => ["Zen Tasker", "Completed 50 low-priority tasks. You're a zen master, gliding through tasks with tranquility!"],
-      100 => ["Chill Task Connoisseur", "Completed a serene 100 low-priority tasks. You've attained the highest level of chill in task management!"]
-    }
-    medium_priority_achievements = {
-      1 => ["Medium Priority Explorer", "Completed your first medium-priority task. Welcome to the world of balanced task management!"],
-      5 => ["Balanced Achiever", "Accomplished 5 medium-priority tasks. You're maintaining equilibrium in your task list!"],
-      10 => ["Perfect 10 Equilibrium", "Successfully completed 10 medium-priority tasks. You're achieving balance in your task priorities!"],
-      20 => ["20-Task Harmony", "Achieved 20 medium-priority tasks! Your knack for maintaining harmony in task management is truly commendable."],
-      50 => ["Task Balancer", "Completed 50 medium-priority tasks. You're a master at balancing priorities!"],
-      100 => ["Priority Maestro", "Completed a harmonious 100 medium-priority tasks. You've reached the pinnacle of task priority mastery!"]
-    }
-    high_priority_achievements = {
-      1 => ["High Priority Dynamo", "Completed your first high-priority task. Welcome to the fast-paced world of urgent tasks!"],
-      5 => ["Urgency Explorer", "Accomplished 5 high-priority tasks. You're navigating through urgency with skill and precision!"],
-      10 => ["Perfect 10 Urgent Achiever", "Successfully completed 10 high-priority tasks. You're a force to be reckoned with in urgent matters!"],
-      20 => ["20-Task Blitz", "Achieved 20 high-priority tasks! Your ability to handle urgency with speed and accuracy is truly commendable."],
-      50 => ["Priority Warrior", "Completed 50 high-priority tasks. You're a warrior in the battlefield of urgent priorities!"],
-      100 => ["Urgent Task Legend", "Completed a legendary 100 high-priority tasks. You're the undisputed legend of urgent task management!"]
-    }
     achievement_earned = false
-    if task.priority == 'low'
-      user_progress.number_completed_low_priority += 1
-      if threshold.include?(user_progress.number_completed_low_priority)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: low_priority_achievements[user_progress.number_completed_low_priority][0]).id)
-        achievement_earned = true
-      end
-    elsif task.priority == 'medium'
-      user_progress.number_completed_medium_priority += 1
-      if threshold.include?(user_progress.number_completed_medium_priority)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: medium_priority_achievements[user_progress.number_completed_medium_priority][0]).id)
-        achievement_earned = true
-      end
-    elsif task.priority == 'high'
-      user_progress.number_completed_high_priority += 1
-      if threshold.include?(user_progress.number_completed_high_priority)
-        UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: high_priority_achievements[user_progress.number_completed_high_priority][0]).id)
+    priority_names = ['low', 'medium', 'high']
+    priority_names.each do |priority_name|
+      user_progress.increment!("number_completed_#{priority_name}_priority".to_sym)
+      if threshold.include?(user_progress.send("number_completed_#{priority_name}_priority"))
+        [1, 5, 10, 20, 50].each do |number|
+          achievement_name = priority_achievements[priority_name][number][0]
+          achievement = Achievement.find_by(name: achievement_name)
+          if achievement.present?
+            user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
+            if user_achievement.present?
+              user_achievement.destroy!
+            end
+          end
+        end
+        achievement_name = priority_achievements[priority_name][user_progress.send("number_completed_#{priority_name}_priority")][0]
+        achievement = Achievement.find_by(name: achievement_name)
+        UserAchievement.create(user_id: current_user.id, achievement_id: achievement.id, date: Time.now.to_date)
         achievement_earned = true
       end
     end
-    user_progress.save
     return achievement_earned
   end
-
 end
