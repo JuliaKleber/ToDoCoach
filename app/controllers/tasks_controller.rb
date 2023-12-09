@@ -51,23 +51,19 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
-    @task.task_users.build
   end
 
   def create
-    task_categories_attributes = task_params[:task_categories_attributes]
-    create_params = task_params.except(:task_categories_attributes)
-    formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
-    task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
-    task.user = current_user
+    # task_categories_attributes = task_params[:task_categories_attributes]
+    task_params = task_and_task_categories_params.except(:task_categories_attributes)
+    # formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
+    # task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
+    task = Task.new(task_params)
     if task.save
-      user_ids_raw = params[:task][:task_user_ids]
-      user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
-      user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
-      user_ids << current_user.id
-      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: current_user.id) }
-      redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
+      create_user_invitations
+      TaskUser.create(task_id: task.id, user_id: current_user.id)
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
+      redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
     else
       render :new, notice: "Task could not be saved."
     end
@@ -79,7 +75,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     # @old_task = @task
-    @task.update(task_params)
+    @task.update(task_and_task_categories_params)
     # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
     # redirect_to task_path(@task)
     respond_to do |format|
@@ -206,7 +202,7 @@ class TasksController < ApplicationController
   end
 
   # used in create and update
-  def task_params
+  def task_and_task_categories_params
     params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
   end
 
@@ -220,6 +216,13 @@ class TasksController < ApplicationController
         { category_id: category_info.to_i }
       end
     end
+  end
+
+  # used in create
+  def create_user_invitations
+    user_ids_raw = params[:task][:task_user_ids]
+    user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
+    user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
   end
 
   # used in toggle_completed

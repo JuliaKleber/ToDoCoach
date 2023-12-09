@@ -5,7 +5,7 @@
   <%= f.input :due_date, label: false, as: :datetime, html5: true, input_html: { class: 'input-field'} %>
   <%= f.fields_for :task_categories do |tc| %>
     <span class='p-3'>Categorize the task!</span>
-    <%= tc.association :category, label: false, collection: Category.all, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
+    <%= tc.association :category, label: false, collection: current_user.categories, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
   <% end %>
 
   <span class='p-3'>How important is this to you?</span>
@@ -18,3 +18,5 @@
     <%= f.submit 'Save Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
   </div>
 <% end %>
+
+    <%# capitalized_categories = current_user.categories.map { |category| category.capitalize } %>
