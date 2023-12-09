@@ -2,8 +2,7 @@
   class="swipeable"
   data-controller="edit-task">
   <div class='inner card task-card d-flex'
-       data-edit-task-target="inner"
-       data-edit-task-id="<%= task.id %>">
+       data-edit-task-target="inner">
 
     <div>
       <% one_of_three_standard_categories_asigned = false %>
@@ -34,9 +33,9 @@
 
     <div class="d-flex justify-content-between">
       <% if task.due_date != nil %>
-      <p class="due-date mb-0 opacity-75">
-        <%= task.due_date.strftime('%a, %d %B, %I:%M %p') %>
-      </p>
+        <p class="due-date mb-0 opacity-75">
+          <%= task.due_date.strftime('%a, %d %B, %I:%M %p') %>
+        </p>
       <% end %>
       <p class="mb-0 d-flex justify-content-end"><%= render 'toggle_completed', task: task %></p>
     </div>
@@ -51,7 +50,7 @@
     </div>
     <div class="flex-child action-button-edit"
          data-edit-task-target="modal">
-      <i class="fa-solid fa-pen fa-lg"
+      <i class="fa-solid fa-pen fa-lg pen-btn"
          style="color: #e3e3e8;"
          aria-hidden="true"
          data-action="click->edit-task#displayForm"></i>
