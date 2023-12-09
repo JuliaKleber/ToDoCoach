@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   end
 
   def index
-    @tasks = current_user.tasks
+    @tasks = current_user.tasks.order(due_date: :asc)
     @tasks = filter_tasks(@tasks)
     @tasks_without_due_date = @tasks.select { |task| task.due_date.nil? }
     @dates = dates_of_tasks(@tasks)
