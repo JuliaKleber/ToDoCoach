@@ -51,6 +51,7 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
+    @task.task_users.build
   end
 
   def create
