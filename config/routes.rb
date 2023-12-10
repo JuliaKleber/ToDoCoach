@@ -33,4 +33,6 @@ Rails.application.routes.draw do
   end
 
   resources :task_invitations, except: %i[index show new create edit update]
+
+  resources :user_achievement_congratulations
 end

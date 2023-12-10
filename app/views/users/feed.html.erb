@@ -52,7 +52,9 @@
           <% end %>
           <h4><%= achievement.name %> 🎉 </h4>
         </div>
-        <button class='btn btn-primary congrats mt-3'>Send congratulations!</button>
+        <%= link_to congratulate_path do %>
+          <button class='btn btn-primary con grats mt-3'>Send congratulations!</button>
+        <% end %>
       </div>
     <% end %>
   <% end %>
