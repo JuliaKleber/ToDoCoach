@@ -40,27 +40,19 @@
 </div>
 
 <div class="notifications">
-  <% @followed.each do |followed| %>
-    <% followed.user_achievement_congratulations.each do |congratulation| %>
-      <% if Time.now.to_date - congratulation.date < 7 %>
-        <div class='card my-3'>
-          <%# <p class="text-center"> <%= followed.user_name %> <%# earned a new badge: </p> %>
-          <div class='d-flex flex-row'>
-            <% if followed.photo.attached? %>
-              <%= cl_image_tag followed.photo.key, class: "avatar" %>
-            <% else %>
-              <p><%= image_tag "alf.jpg", class: "avatar" %>
-            <% end %>
-            <p class="mb-0 pb-0"><%= "#{followed.user_name} congratulated you on achieving" %></p>
-            <h4><%= congratulation.achievement.name %>🎉</h4>
-          </div>
-          <button class='btn btn-primary congrats mt-3'>Send congratulations!</button>
+  <% @congrats.each do |congrat| %>
+    <% if Time.now.to_date - congrat.date < 7 %>
+      <div class='card my-3'>
+        <div class='d-flex flex-row'>
+          <% if congrat.follower.photo.attached? %>
+            <%= cl_image_tag congrat.follower.photo.key, class: "avatar" %>
+          <% else %>
+            <p><%= image_tag "alf.jpg", class: "avatar" %>
+          <% end %>
+          <p class="mb-0 pb-0"><%= "#{congrat.follower.user_name} congratulated you on achieving" %></p>
+          <h4><%= congrat.achievement.name %>🎉</h4>
         </div>
-        <%= link_to congratulate_path do %>
-          <button class='btn btn-primary con grats mt-3'>Send congratulations!</button>
-        <% end %>
       </div>
-      <% end %>
     <% end %>
   <% end %>
 </div>
@@ -88,7 +80,9 @@
             <% end %>
           </div>
 
-          <button class='btn btn-primary congrats mt-3'>Send congratulations!</button>
+          <%= link_to congratulate_user_path(followed, achievement) do %>
+            <button class='btn btn-primary con grats mt-3'>Send congratulations!</button>
+          <% end %>
         </div>
       <% end %>
     <% end %>
