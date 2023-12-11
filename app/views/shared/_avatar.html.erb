@@ -1,32 +1,32 @@
 <% if user_signed_in? %>
-<div class="navbar navbar-expand">
-  <div class="container-fluid navbar-lewagon">
-    <%= link_to user_session_path, class: "navbar-brand" do %>
-      <%= image_tag "todocoach.png" %>
-    <% end %>
-    <div class="collapse navbar-collapse avatar-img avatar">
-      <ul class="navbar-nav me-auto">
-        <% if user_signed_in?  %>
-          <% if current_user.photo.attached?%>
-            <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
-          <% else %>
-            <%= image_tag "image.jpg", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
-          <% end %>
+  <div class="navbar navbar-expand">
+    <div class="container-fluid navbar-lewagon">
+      <%= link_to user_session_path, class: "navbar-brand" do %>
+        <%= image_tag "todocoach.png" %>
+      <% end %>
+      <div class="collapse navbar-collapse avatar-img avatar">
+        <ul class="navbar-nav me-auto">
+          <% if user_signed_in?  %>
+            <% if current_user.photo.attached?%>
+              <%= cl_image_tag current_user.photo.key, class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" } %>
+            <% else %>
+              <%= image_tag "woman-avatar.webp", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false %>
+            <% end %>
 
-          <li class="nav-item dropdown">
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <%= link_to "Settings", "#", class: "dropdown-item" %>
-              <%= link_to "Edit Profile", edit_user_registration_path, class: "dropdown-item" %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
-            </div>
-          </li>
-        <% else %>
-          <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
-          </li>
-        <% end %>
-      </ul>
+            <li class="nav-item dropdown">
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                <%= link_to "Settings", "#", class: "dropdown-item" %>
+                <%= link_to "Edit Profile", edit_user_registration_path, class: "dropdown-item" %>
+                <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item" %>
+              </div>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 <% end %>

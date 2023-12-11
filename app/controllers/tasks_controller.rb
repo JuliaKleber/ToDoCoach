@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   end
 
   def index
-    @tasks = current_user.tasks
+    @tasks = current_user.tasks.order(due_date: :asc, title: :asc)
     @tasks = filter_tasks(@tasks)
     @tasks_without_due_date = @tasks.select { |task| task.due_date.nil? }
     @dates = dates_of_tasks(@tasks)
@@ -51,7 +51,7 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
-    @task.task_users.build
+    # @task.task_users.build
   end
 
   def create
@@ -61,11 +61,8 @@ class TasksController < ApplicationController
     task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
     task.user = current_user
     if task.save
-      user_ids_raw = params[:task][:task_user_ids]
-      user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
-      user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
-      user_ids << current_user.id
-      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: current_user.id) }
+      create_user_invitations(task)
+      TaskUser.create(task_id: task.id, user_id: current_user.id)
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
@@ -79,7 +76,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     # @old_task = @task
-    @task.update(task_params)
+    @task.update(task__params)
     # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
     # redirect_to task_path(@task)
     respond_to do |format|
@@ -114,8 +111,10 @@ class TasksController < ApplicationController
   def message
     @achievement_earned = flash[:achievement_notice].present?
     @task = Task.find(params[:id])
-    @remaining_task = Task.where(completed: false, priority: 'high').first
-    @tasks_category_names = [category_names(@remaining_task[:id])]
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'high').first
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'medium').first if @remaining_task.nil?
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'low').first if @remaining_task.nil?
+    # @tasks_category_names = [category_names(@remaining_task[:id])]
     @latest_achievement = UserAchievement.last
   end
 
@@ -218,6 +217,13 @@ class TasksController < ApplicationController
         { category_id: category_info.to_i }
       end
     end
+  end
+
+  # used in create
+  def create_user_invitations(task)
+    user_ids_raw = params[:task][:task_user_ids]
+    user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
+    user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
   end
 
   # used in toggle_completed
