@@ -58,8 +58,8 @@ end
 
 puts 'Giving each user a badge for an achievement ...'
 
-User.where.not(user_name: 'Eva').each do |user|
-  UserAchievement.create(user_id: user.id, achievement_id: Achievement.first.id)
+User.all.each do |user|
+  UserAchievement.create(user_id: user.id, achievement_id: Achievement.first.id, date: Time.now.to_date)
 end
 
 # achievements_not_implemented = [

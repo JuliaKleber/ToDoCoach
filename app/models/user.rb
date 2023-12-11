@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :categories, through: :user_categories
   has_many :user_achievements
   has_many :achievements, through: :user_achievements
+  has_many :user_achievement_congratulations
   has_many :task_invitations
   has_one_attached :photo
 

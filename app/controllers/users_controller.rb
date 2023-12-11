@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   def feed
-    @followed = current_user.followeds.includes(:achievements)
     @invitations = current_user.task_invitations
+    @followed = current_user.followeds.includes(achievements: :user_achievements)
   end
 
   def achievements
