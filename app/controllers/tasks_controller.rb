@@ -90,6 +90,7 @@ class TasksController < ApplicationController
     if @task.completed?
       check_for_achievements(@task)
     else
+      decrement_user_progress(@task)
       redirect_back(fallback_location: todays_tasks_path)
     end
   end
@@ -356,26 +357,35 @@ class TasksController < ApplicationController
     }
     threshold = [1, 5, 10, 20, 50, 100]
     achievement_earned = false
-    priority_names = ['low', 'medium', 'high']
-    priority_names.each do |priority_name|
-      user_progress.increment!("number_completed_#{priority_name}_priority".to_sym)
-      if threshold.include?(user_progress.send("number_completed_#{priority_name}_priority"))
-        [1, 5, 10, 20, 50].each do |number|
-          achievement_name = priority_achievements[priority_name][number][0]
-          achievement = Achievement.find_by(name: achievement_name)
-          if achievement.present?
-            user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
-            if user_achievement.present?
-              user_achievement.destroy!
-            end
+    user_progress.increment!("number_completed_#{task.priority}_priority".to_sym)
+    if threshold.include?(user_progress.send("number_completed_#{task.priority}_priority"))
+      [1, 5, 10, 20, 50].each do |number|
+        achievement_name = priority_achievements[task.priority][number][0]
+        achievement = Achievement.find_by(name: achievement_name)
+        if achievement.present?
+          user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
+          if user_achievement.present?
+            user_achievement.destroy!
           end
         end
-        achievement_name = priority_achievements[priority_name][user_progress.send("number_completed_#{priority_name}_priority")][0]
-        achievement = Achievement.find_by(name: achievement_name)
-        UserAchievement.create(user_id: current_user.id, achievement_id: achievement.id, date: Time.now.to_date)
-        achievement_earned = true
       end
+      achievement_name = priority_achievements[task.priority][user_progress.send("number_completed_#{task.priority}_priority")][0]
+      achievement = Achievement.find_by(name: achievement_name)
+      UserAchievement.create(user_id: current_user.id, achievement_id: achievement.id, date: Time.now.to_date)
+      achievement_earned = true
     end
     return achievement_earned
+  end
+
+  def decrement_user_progress(task)
+    user_progress = UserProgress.find_by(user_id: current_user.id)
+    user_progress.number_completed_all -= 1
+    user_progress.number_completed_low_priority -= 1 if task.priority == "low"
+    user_progress.number_completed_medium_priority -= 1 if task.priority == "medium"
+    user_progress.number_completed_high_priority -= 1 if task.priority == "high"
+    user_progress.number_completed_personal -= 1 if task.categories.include?(Category.find_by(name: 'personal'))
+    user_progress.number_completed_groceries -= 1 if task.categories.include?(Category.find_by(name: 'groceries'))
+    user_progress.number_completed_work -= 1 if task.categories.include?(Category.find_by(name: 'work'))
+    user_progress.save
   end
 end
