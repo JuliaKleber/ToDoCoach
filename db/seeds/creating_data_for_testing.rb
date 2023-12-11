@@ -96,7 +96,6 @@ User.all.each do |user|
       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
       completed: rand(0..3).zero?,
       due_date: due_date,
-      reminder_date: due_date - rand(1..24).hours,
       user_id: user.id
     )
     task_categories = user.categories.sample(rand(1..2))
@@ -135,7 +134,6 @@ end
 #   completed: false,
 #   user_id: eva.id,
 #   due_date: friday_evening_time - 0.2.hours,
-#   reminder_date: friday_evening_time - 1.hours
 # )
 # TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
@@ -146,7 +144,6 @@ end
 #   completed: false,
 #   user_id: eva.id,
 #   due_date: friday_evening_time,
-#   reminder_date: friday_evening_time - 2.hours
 # )
 # TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
@@ -157,7 +154,6 @@ end
 #   completed: false,
 #   user_id: eva.id,
 #   due_date: friday_evening_time + 2.hours,
-#   reminder_date: friday_evening_time
 # )
 # TaskCategory.create(task_id: task.id, category_id: personal_category.id)
 
@@ -171,7 +167,6 @@ end
 #       priority: rand(Task.priorities[:low]..Task.priorities[:high]),
 #       completed: rand(0..3).zero?,
 #       due_date: due_date,
-#       reminder_date: due_date - rand(1..24).hours,
 #       user_id: user.id
 #     )
 #     task_categories = user.categories.sample(rand(1..2))
