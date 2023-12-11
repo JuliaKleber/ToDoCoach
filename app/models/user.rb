@@ -37,7 +37,7 @@ class User < ApplicationRecord
 
   def initialize_user_progress
     UserProgress.create(user_id: User.last.id)
-    UserAchievement.create(user_id: User.last.id, achievement_id: Achievement.first.id)
+    UserAchievement.create(user_id: User.last.id, achievement_id: Achievement.first.id, date: Time.now.to_date)
     UserCategory.create(user_id: User.last.id, category_id: Category.first.id)
     UserCategory.create(user_id: User.last.id, category_id: Category.second.id)
     UserCategory.create(user_id: User.last.id, category_id: Category.third.id)

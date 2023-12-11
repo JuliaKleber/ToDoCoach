@@ -266,7 +266,7 @@ class TasksController < ApplicationController
           end
         end
       end
-      UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id)
+      UserAchievement.create(user_id: current_user.id, achievement_id: Achievement.find_by(name: achievements[user_progress.number_completed_all][0]).id, date: Time.now.to_date)
       achievement_earned = true
     end
     return achievement_earned

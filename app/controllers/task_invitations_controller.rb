@@ -4,7 +4,7 @@ class TaskInvitationsController < ApplicationController
     if task_invitation.destroy
       redirect_to feed_user_path, notice: "You were not added to the task!"
     else
-      render :feed, notice: "This request could not be processed!"
+      render :feed, notice: "The request could not be processed!"
     end
   end
 end
