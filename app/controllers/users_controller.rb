@@ -2,10 +2,27 @@ class UsersController < ApplicationController
   def feed
     @invitations = current_user.task_invitations
     @followed = current_user.followeds.includes(achievements: :user_achievements)
+    @congrats = current_user.user_achievement_congratulations
   end
 
   def achievements
     @achievements = current_user.achievements
+  end
+
+  def congratulate
+    congrat = UserAchievementCongratulation.new(
+      user_id: params[:id],
+      follower_id: current_user.id,
+      achievement_id: params[:format],
+      date: Time.now.to_date
+    )
+    if congrat.save
+      # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
+      flash[:notice] = "You congratulated #{User.find(params[:id]).user_name}"
+      redirect_to feed_user_path(current_user)
+    else
+      render :feed, status: :unprocessable_entity
+    end
   end
 
   def connect

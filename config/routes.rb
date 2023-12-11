@@ -5,19 +5,20 @@ Rails.application.routes.draw do
   end
   devise_for :users
 
+  root to: 'pages#home'
+  get 'pages/reminder', to: 'pages#reminder'
+
   resources :users, except: %i[index show new create edit update destroy] do
     member do
       get :feed
       get :achievements
+      get :congratulate
       get :connect
       post :build_connection
       get :disconnect
       delete :destroy_connection
     end
   end
-
-  root to: 'pages#home'
-  get 'pages/reminder', to: 'pages#reminder'
 
   resources :tasks do
     collection do

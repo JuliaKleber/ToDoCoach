@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_09_155741) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_10_135047) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,12 +105,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_09_155741) do
   end
 
   create_table "user_achievement_congratulations", force: :cascade do |t|
-    t.bigint "user_achievement_id", null: false
     t.bigint "user_id", null: false
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_achievement_id"], name: "index_user_achievement_congratulations_on_user_achievement_id"
+    t.bigint "follower_id", null: false
+    t.bigint "achievement_id", null: false
+    t.index ["achievement_id"], name: "index_user_achievement_congratulations_on_achievement_id"
+    t.index ["follower_id"], name: "index_user_achievement_congratulations_on_follower_id"
     t.index ["user_id"], name: "index_user_achievement_congratulations_on_user_id"
   end
 
@@ -182,8 +184,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_09_155741) do
   add_foreign_key "task_users", "tasks"
   add_foreign_key "task_users", "users"
   add_foreign_key "tasks", "users"
-  add_foreign_key "user_achievement_congratulations", "user_achievements"
+  add_foreign_key "user_achievement_congratulations", "achievements"
   add_foreign_key "user_achievement_congratulations", "users"
+  add_foreign_key "user_achievement_congratulations", "users", column: "follower_id"
   add_foreign_key "user_achievements", "achievements"
   add_foreign_key "user_achievements", "users"
   add_foreign_key "user_achievment_congratulations", "user_achievements"
