@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   end
 
   def index
-    @tasks = current_user.tasks
+    @tasks = current_user.tasks.order(due_date: :asc, title: :asc)
     @tasks = filter_tasks(@tasks)
     @tasks_without_due_date = @tasks.select { |task| task.due_date.nil? }
     @dates = dates_of_tasks(@tasks)
@@ -51,7 +51,7 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
-    @task.task_users.build
+    # @task.task_users.build
   end
 
   def create
@@ -61,11 +61,8 @@ class TasksController < ApplicationController
     task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
     task.user = current_user
     if task.save
-      user_ids_raw = params[:task][:task_user_ids]
-      user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
-      user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
-      user_ids << current_user.id
-      user_ids.each { |user_id| TaskUser.create(task_id: task.id, user_id: current_user.id) }
+      create_user_invitations(task)
+      TaskUser.create(task_id: task.id, user_id: current_user.id)
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
       # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
@@ -79,7 +76,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find(params[:id])
     # @old_task = @task
-    @task.update(task_params)
+    @task.update(task__params)
     # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
     # redirect_to task_path(@task)
     respond_to do |format|
@@ -114,8 +111,10 @@ class TasksController < ApplicationController
   def message
     @achievement_earned = flash[:achievement_notice].present?
     @task = Task.find(params[:id])
-    @remaining_task = Task.where(completed: false, priority: 'high').first
-    @tasks_category_names = [category_names(@remaining_task[:id])]
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'high').first
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'medium').first if @remaining_task.nil?
+    @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'low').first if @remaining_task.nil?
+    # @tasks_category_names = [category_names(@remaining_task[:id])]
     @latest_achievement = UserAchievement.last
   end
 
@@ -220,6 +219,13 @@ class TasksController < ApplicationController
     end
   end
 
+  # used in create
+  def create_user_invitations(task)
+    user_ids_raw = params[:task][:task_user_ids]
+    user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
+    user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
+  end
+
   # used in toggle_completed
   def check_for_achievements(task)
     user_progress = UserProgress.find_by(user_id: current_user.id)
@@ -262,7 +268,7 @@ class TasksController < ApplicationController
       1 => ["Task Novice", "Completed your first grocery task. Welcome to the world of productive shopping!"],
       5 => ["Grocery Explorer", "Accomplished 5 grocery-related tasks. You're on your way to becoming a shopping pro!"],
       10 => ["Perfect 10 Shopper", "Successfully completed 10 grocery tasks. You've mastered the art of efficient shopping!"],
-      20 => ["20-Task Triumph", "Achieved 20 grocery tasks! Your commitment to organized shopping is truly commendable."],
+      20 => ["20-Grocery-Task Triumph", "Achieved 20 grocery tasks! Your commitment to organized shopping is truly commendable."],
       50 => ["50 Grocery Conquests", "Completed 50 grocery tasks. You're a grocery hero, saving the day with every task!"],
       100 => ["Master Shopper", "Completed a whopping 100 grocery tasks. You are the undisputed master of the grocery list!"]
     }
@@ -270,7 +276,7 @@ class TasksController < ApplicationController
       1 => ["Work Task Rookie", "Completed your first work-related task. Welcome to the world of productivity at work!"],
       5 => ["Office Explorer", "Accomplished 5 work-related tasks. You're making strides in professional efficiency!"],
       10 => ["Perfect 10 Professional", "Successfully completed 10 work tasks. You're on your way to mastering your workday!"],
-      20 => ["20-Task Triumph", "Achieved 20 work-related tasks! Your dedication to productivity is truly commendable."],
+      20 => ["20-Work-Task Triumph", "Achieved 20 work-related tasks! Your dedication to productivity is truly commendable."],
       50 => ["Corporate Conqueror", "Completed 50 work tasks. You're a work superhero, conquering tasks like a pro!"],
       100 => ["Task Mastermind", "Completed a monumental 100 work tasks. You are the undisputed master of workplace productivity!"]
     }
@@ -278,7 +284,7 @@ class TasksController < ApplicationController
       1 => ["Personal Task Pioneer", "Completed your first personal task. Welcome to the world of organized personal life!"],
       5 => ["Life Explorer", "Accomplished 5 personal tasks. You're taking charge of your personal goals and aspirations!"],
       10 => ["Perfect 10 Achiever", "Successfully completed 10 personal tasks. You're on your way to mastering your personal to-do list!"],
-      20 => ["20-Task Triumph", "Achieved 20 personal tasks! Your commitment to personal growth is truly commendable."],
+      20 => ["20-Personal-Task Triumph", "Achieved 20 personal tasks! Your commitment to personal growth is truly commendable."],
       50 => ["Life Champion", "Completed 50 personal tasks. You're a personal achievement champion, conquering tasks with flair!"],
       100 => ["Task Zen Master", "Completed a Zen-like 100 personal tasks. You are the undisputed master of personal productivity!"]
     }

@@ -3,6 +3,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  validates :user_name, presence: true, uniqueness: true
+
   has_many :tasks_as_creator, class_name: "Task", foreign_key: "user_id"
   has_many :user_categories
   has_many :categories, through: :user_categories
@@ -23,4 +26,16 @@ class User < ApplicationRecord
   pg_search_scope :search_by_username_and_email,
                   against: %i[user_name email],
                   using: { tsearch: { prefix: true } }
+
+  after_create :initialize_user_progress
+
+  private
+
+  def initialize_user_progress
+    UserProgress.create(user_id: User.last.id)
+    UserAchievement.create(user_id: User.last.id, achievement_id: Achievement.first.id)
+    UserCategory.create(user_id: User.last.id, category_id: Category.first.id)
+    UserCategory.create(user_id: User.last.id, category_id: Category.second.id)
+    UserCategory.create(user_id: User.last.id, category_id: Category.third.id)
+  end
 end
