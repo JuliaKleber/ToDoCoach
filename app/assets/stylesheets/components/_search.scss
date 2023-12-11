@@ -35,7 +35,13 @@
 }
 
 .showpage {
-  padding: 10px
+  height: inherit;
+  padding: 10px;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.08);
+  border: 2px solid #E7E7E7;
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: rgba(245, 245, 245, 0.877);
 }
 
 .show-task-creator {
