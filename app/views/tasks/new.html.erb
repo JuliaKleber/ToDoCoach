@@ -10,13 +10,9 @@
 
   <span class='p-3'>How important is this to you?</span>
   <%= f.input :priority, as: :select, label: false, collection: Task.priorities.keys, input_html: { class: 'input-field'} %>
-  <span  class='p-3'>Reminder Date</span>
-  <%= f.input :reminder_date, label: false, as: :datetime, html5: true, input_html: { class: 'input-field'} %>
   <span  class='p-3'>Do you want to connect other users to the task?</span>
   <%= f.association :task_users, label: false, collection: current_user.followeds.pluck(:user_name, :id), as: :check_boxes, input_html: { class: 'input-field' } %>
   <div class='d-flex justify-content-center'>
     <%= f.submit 'Save Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
   </div>
 <% end %>
-
-    <%# capitalized_categories = current_user.categories.map { |category| category.capitalize } %>
