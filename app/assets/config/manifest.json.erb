@@ -1,0 +1,77 @@
+{
+ "name": "App",
+ "icons": [
+  {
+   "src": "\/android-icon-36x36.png",
+   "sizes": "36x36",
+   "type": "image\/png",
+   "density": "0.75"
+  },
+  {
+   "src": "\/android-icon-48x48.png",
+   "sizes": "48x48",
+   "type": "image\/png",
+   "density": "1.0"
+  },
+  {
+   "src": "\/android-icon-72x72.png",
+   "sizes": "72x72",
+   "type": "image\/png",
+   "density": "1.5"
+  },
+  {
+   "src": "\/android-icon-96x96.png",
+   "sizes": "96x96",
+   "type": "image\/png",
+   "density": "2.0"
+  },
+  {
+   "src": "\/android-icon-144x144.png",
+   "sizes": "144x144",
+   "type": "image\/png",
+   "density": "3.0"
+  },
+  {
+   "src": "\/android-icon-192x192.png",
+   "sizes": "192x192",
+   "type": "image\/png",
+   "density": "4.0"
+  }
+ ]
+}
+
+{
+  "background_color": "white",
+  "description": "Journey 60 is world's best app for former bootcampers that need to becreative and perhaps become an entrepreneur. Learn to focus on what's is the journey that will take you to the moon.",
+  "display": "fullscreen",
+  "name": "Journey 60",
+  "screenshots" : [
+  {
+    "src": "screenshot1.webp",
+    "sizes": "1280x720",
+    "type": "image/webp",
+    "form_factor": "narrow",
+    "label": "Homescreen of Awesome App"
+  },
+  {
+    "src": "screenshot1.webp",
+    "sizes": "1280x720",
+    "type": "image/webp",
+    "form_factor": "narrow",
+    "label": "Homescreen of Awesome App"
+  }
+  ],
+    "icons": [
+      <% files = Dir.entries(Rails.root.join("app/assets/images/icons/")).select {|f| !File.directory? f} %>
+      <% files.each_with_index do |file, index| %>
+        <% match = file.match(/.+-(?<size>\d{2,3}x\d{2,3}).png/) %>
+        <% if match && match[:size] %>
+        {
+          "src": "<%= image_path "icons/#{file}" %>",
+          "sizes": "<%= match && match[:size] %>",
+          "type": "image/png"
+        }<%= "," unless (files.size - 1) == index %>
+      <% end %>
+      <% end %>
+    ]
+}
