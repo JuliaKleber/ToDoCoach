@@ -55,15 +55,16 @@ class TasksController < ApplicationController
   end
 
   def create
-    task_categories_attributes = complete_task_params[:task_categories]
-    task_params = complete_task_params.except(:task_categories_attributes)
+    task_categories_attributes = task_params[:task_categories_attributes]
+    create_params = task_params.except(:task_categories_attributes)
     formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
-    task = Task.new(task_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
+    task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
     task.user = current_user
     if task.save
       create_user_invitations(task)
       TaskUser.create(task_id: task.id, user_id: current_user.id)
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
+      # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new, notice: "Task could not be saved."
     end
