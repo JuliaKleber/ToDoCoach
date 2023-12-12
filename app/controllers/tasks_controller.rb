@@ -34,16 +34,9 @@ class TasksController < ApplicationController
     @tasks = current_user.tasks.order(due_date: :asc, title: :asc)
     @tasks = filter_tasks(@tasks)
     @tasks_without_due_date = @tasks.select { |task| task.due_date.nil? }
-    @dates = dates_of_tasks(@tasks)
-    @tasks_grouped_by_dates = group_tasks_by_date(@dates, @tasks.select { |task| task.due_date.nil? == false })
+    tasks_with_due_date = @tasks.select { |task| task.due_date.nil? == false }
+    @tasks_grouped_by_dates = tasks_with_due_date.group_by { |task| task.due_date.to_date }
   end
-
-  # def filter_by
-  #   @categorys = Category.where(nil)
-  #   filtering_params(params).each do |key, value|
-  #     @categorys = @categorys.public_send("filter_by_#{key}", value) if value.present?
-  #   end
-  # end
 
   def show
   end
@@ -51,7 +44,6 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
     @task.task_categories.build
-    # @task.task_users.build
   end
 
   def create
@@ -64,7 +56,6 @@ class TasksController < ApplicationController
       create_user_invitations(task)
       TaskUser.create(task_id: task.id, user_id: current_user.id)
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
-      # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new, notice: "Task could not be saved."
     end
@@ -114,7 +105,6 @@ class TasksController < ApplicationController
     @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'high').first
     @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'medium').first if @remaining_task.nil?
     @remaining_task = Task.where(user_id: current_user.id).where(completed: false, priority: 'low').first if @remaining_task.nil?
-    # @tasks_category_names = [category_names(@remaining_task[:id])]
     @latest_achievement = UserAchievement.last
   end
 
@@ -130,10 +120,6 @@ class TasksController < ApplicationController
   end
 
   private
-
-  # def filtering_params(params)
-  #   params.slice(:name)
-  # end
 
   def set_task
     @task = Task.find(params[:id])
@@ -181,27 +167,6 @@ class TasksController < ApplicationController
     return tasks
   end
 
-  # used in index
-  def dates_of_tasks(tasks)
-    @dates = Set.new([])
-    @tasks_with_due_date = tasks.select { |task| task.due_date.nil? == false }
-    @tasks_with_due_date.each do |task|
-      @dates << task.due_date.strftime('%a, %d %B')
-    end
-    @dates = @dates.to_a
-  end
-
-  # used in index
-  def group_tasks_by_date(dates, tasks_with_due_date)
-    grouped_tasks = []
-    dates.each do |date|
-      dated_tasks = tasks_with_due_date.select { |task| task.due_date.strftime('%a, %d %B') == date }
-      grouped_tasks << dated_tasks
-    end
-    return grouped_tasks
-    # tasks_with_due_date.group_by(&:due_date) #=> { <date_one>: [..., ..., ...], <date_two>: [..., ..., ...] }
-  end
-
   # used in create and update
   def task_params
     params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :task_user_ids, task_categories_attributes: [category_id: []])
@@ -231,8 +196,8 @@ class TasksController < ApplicationController
     user_progress = UserProgress.find_by(user_id: current_user.id)
     general_achievement = check_for_task_completed_achievement(task, user_progress)
     category_achievement = check_for_category_achievements(task, user_progress)
-    priority_achievment = check_for_priority_achievements(task, user_progress)
-    achievement_earned = general_achievement || category_achievement || priority_achievment
+    priority_achievement = check_for_priority_achievements(task, user_progress)
+    achievement_earned = general_achievement || category_achievement || priority_achievement
     if achievement_earned
       flash[:achievement_notice] = "Congratulations! You earned a new badch"
       redirect_to message_task_path(task)
@@ -311,9 +276,7 @@ class TasksController < ApplicationController
             achievement = Achievement.find_by(name: achievement_name)
             if achievement.present?
               user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
-              if user_achievement.present?
-                user_achievement.destroy!
-              end
+              user_achievement.destroy! if user_achievement.present?
             end
           end
           achievement_name = category_achievements[category_name][user_progress.send("number_completed_#{category_name}")][0]
@@ -363,9 +326,7 @@ class TasksController < ApplicationController
         achievement = Achievement.find_by(name: achievement_name)
         if achievement.present?
           user_achievement = UserAchievement.find_by(user_id: current_user.id, achievement_id: achievement.id)
-          if user_achievement.present?
-            user_achievement.destroy!
-          end
+          user_achievement.destroy! if user_achievement.present?
         end
       end
       achievement_name = priority_achievements[task.priority][user_progress.send("number_completed_#{task.priority}_priority")][0]
