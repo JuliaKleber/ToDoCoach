@@ -3,13 +3,9 @@
   <%= f.input :description, input_html: { class: 'input-field' } %>
   <%= f.input :completed, input_html: { class: 'input-field' } %>
   <%= f.input :priority, collection: Task.priorities.keys, input_html: { class: 'input-field' } %>
-  <%= f.fields_for :task_categories do |tc| %>
-    <%= tc.association :category, collection: current_user.categories, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
-  <% end %>
+  <%= f.association :categories, collection: current_user.categories, input_html: { class: 'input-field', data: { controller: 'tom-select' } } %>
   <%= f.input :due_date, as: :datetime, html5: true, input_html: { class: 'input-field' } %>
-  <%# f.fields_for :task_users do |u| %>
-    <%# u.association :user, collection: current_user.followeds.pluck(:user_name, :id), multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
-  <%# end %>
+  <%= f.association :users, collection: current_user.followeds.pluck(:user_name, :id), input_html: { class: 'input-field', data: { controller: 'tom-select' } } %>
   <div class='d-flex justify-content-center'>
     <%= f.submit 'Update Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
   </div>

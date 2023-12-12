@@ -74,8 +74,8 @@ class TasksController < ApplicationController
   end
 
   def update
-    task_params = complete_task_params.except(:task_categories, :user_ids)
-    if @task.update(task_params)
+    task_model_params = task_params.except(:task_categories, :user_ids)
+    if @task.update(task_model_params)
       # wenn neue User hinzugekommen sind, müssen Einladungen herausgeschickt werden
       # wenn User gelöscht werden, muss der entsprechende TaskUser-Eintrag gelöscht werden
       redirect_to task_path(@task), notice: 'Task details have been updated.'
@@ -203,21 +203,12 @@ class TasksController < ApplicationController
   end
 
   # used in create and update
-  # def task_params
-  #   params.require(:task).permit(:title, :description, :due_date, :priority, :completed,
-  #                                :task_user_ids,
-  #                                task_categories_attributes: [category_id: []])
-  # end
-
-  def complete_task_params
-    params.require(:task).permit(:title, :description, :due_date, :priority, :completed,
-                                 user_ids: [],
-                                 task_categories_attributes: [:id, :category_id, :_destroy])
+  def task_params
+    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :task_user_ids, task_categories_attributes: [category_id: []])
   end
 
   # used in create
   def sanitize_categories(attributes_array)
-    raise
     attributes_array.compact_blank.map do |category_info|
       if category_info.to_i.zero?
         new_category = Category.create(user: current_user, name: category_info)
