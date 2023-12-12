@@ -20,9 +20,5 @@
   <% @achievements.each do |achievement| %>
     <%= render 'unlocked_achievements', achievement: achievement %>
   <% end %>
-
   <h2 class='latest text-center mt-5 mb-0'>Todo can't wait for you to unlock some more rewards</h2>
-  <% @achievements.each do |achievement| %>
-   <%= render 'locked_achievements', achievement: achievement %>
-  <% end %>
 </div>
