@@ -12,13 +12,16 @@ class Task < ApplicationRecord
 
   accepts_nested_attributes_for :task_categories
   validates_associated :task_categories
-  enum :priority, { low: 0, medium: 1, high: 2 }
 
-  # validate :at_least_one_user
+  enum :priority, { low: 0, medium: 1, high: 2 }
+  before_validation :set_default_priority
+
+  accepts_nested_attributes_for :task_users
+  validates_associated :task_users
 
   private
 
-  # def at_least_one_user
-  #   errors.add(:base, 'Task must have at least one user') if users.empty?
-  # end
+  def set_default_priority
+    self.priority ||= :low if priority.nil?
+  end
 end

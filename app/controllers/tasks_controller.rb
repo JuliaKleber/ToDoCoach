@@ -65,11 +65,13 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = Task.find(params[:id])
-    @task.update(task__params)
-    respond_to do |format|
-      format.html { redirect_to todays_tasks_path }
-      format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
+    task_model_params = task_params.except(:task_categories, :user_ids)
+    if @task.update(task_model_params)
+      # wenn neue User hinzugekommen sind, müssen Einladungen herausgeschickt werden
+      # wenn User gelöscht werden, muss der entsprechende TaskUser-Eintrag gelöscht werden
+      redirect_to task_path(@task), notice: 'Task details have been updated.'
+    else
+      render :edit, notice: 'Task could not be updated.'
     end
   end
 
@@ -167,7 +169,7 @@ class TasksController < ApplicationController
 
   # used in create and update
   def task_params
-    params.require(:task).permit(:title, :description, :due_date, :priority, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
+    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :task_user_ids, task_categories_attributes: [category_id: []])
   end
 
   # used in create
