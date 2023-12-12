@@ -6,7 +6,7 @@
       <% priorities_for_select = Task.priorities.keys.map { |p| OpenStruct.new(name: p.capitalize, id: p) } %>
       <% priorities_for_select << OpenStruct.new(name: 'All', id: 'all') %>
 
-    <h4 class="opacity-50" style='color: #242474'>Find your tasks in a second</h4>
+      <h4 class="opacity-50" style='color: #242474'>Find your tasks in a second</h4>
       <div>
         <input class="form-control string required" type="text" name="search[query]" id="search_query" value="<%= params.dig(:search, :query) %>" placeholder="Enter task name" />
       </div>
@@ -17,7 +17,10 @@
         <%= f.input :priority, as: :select, collection: priorities_for_select, label: false, prompt:"Priority",include_blank: false, input_html: { class: "form-control"}, required: false, selected: params.dig(:search, :priority) %>
         <%= f.submit 'Search', class: "btn-search", style: "width: 80px" %>
       </div>
+    </div>
+  </div>
 <% end %>
+
 <%= link_to tasks_without_date_tasks_path, class: "text-black-50" do %>
   <h4 class="mt-4 mb-2 opacity-50" style='color: #242474'>Tasks with no dates assigned</h4>
 <% end %>
@@ -34,9 +37,11 @@
     </div>
   </div>
 <% end %>
-<% @tasks_grouped_by_dates.each_with_index do |tasks, index| %>
+
+
+<% @tasks_grouped_by_dates.each do |date, tasks| %>
   <%= link_to dates_task_path(tasks[0]), class: "text-black-50" do %>
-    <h4 class="mt-3 mb-2 opacity-50" style='color: #242474'><%= @dates[index] %></h4>
+    <h4 class="mt-3 mb-2 opacity-50" style='color: #242474'><%= date.strftime('%a, %d %B') %></h4>
   <% end %>
   <% tasks.each do |task| %>
     <div id="index-cards" class='card task-card'>
