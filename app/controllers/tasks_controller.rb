@@ -64,7 +64,6 @@ class TasksController < ApplicationController
       create_user_invitations(task)
       TaskUser.create(task_id: task.id, user_id: current_user.id)
       redirect_to message_task_path(task), notice: "Good job! Todo is very proud of you!"
-      # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @task.reminder_date != null
     else
       render :new, notice: "Task could not be saved."
     end
@@ -75,10 +74,7 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
-    # @old_task = @task
     @task.update(task__params)
-    # ReminderJob.set(wait_until: @task.reminder_date).perform_later(@task) if @old_task.reminder_date != @task.reminder_date
-    # redirect_to task_path(@task)
     respond_to do |format|
       format.html { redirect_to todays_tasks_path }
       format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
@@ -205,7 +201,7 @@ class TasksController < ApplicationController
 
   # used in create and update
   def task_params
-    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
+    params.require(:task).permit(:title, :description, :due_date, :priority, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
   end
 
   # used in create
