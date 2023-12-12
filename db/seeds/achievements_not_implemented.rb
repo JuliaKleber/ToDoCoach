@@ -1,0 +1,17 @@
+achievements_not_implemented = [
+  ["Task Initiator", "Created your account! Welcome to the world of organized task management!"],
+  ["Multitasking Master", "You unlocked a new badge for adding tasks for 30 consecutive days"],
+  ["Busy Bee", "You have added 20 tasks in the category Work this week"],
+  ["Productivity Pro", "Completed 10 tasks in a single day"],
+  ["Task Explorer", "Explored and completed tasks in 3 different categories"],
+  ["Early Bird", "Completed a task before 8 AM"],
+  ["Night Owl", "Completed a task after midnight"],
+  ["Streak Starter", "Added tasks for 7 consecutive days"],
+  ["Weekend Warrior", "Completed tasks on both Saturday and Sunday"],
+  ["Focused Finisher", "Completed a task with high priority"],
+  ["Diverse Achiever", "Added tasks covering work, personal, and groceries categories in a single day"],
+  ["Master Planner", "Scheduled tasks for the entire week"],
+  ["Task Ninja", "Quickly completed a task within 10 minutes of adding it"],
+  ["Team Player", "Collaborated on a task with a fellow user"],
+  ["Task Marathoner", "Completed 5 tasks in a single day"],
+]
