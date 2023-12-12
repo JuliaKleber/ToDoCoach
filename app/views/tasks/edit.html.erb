@@ -1,13 +1,16 @@
-
-      <div><p><strong>EDIT TASK</p></strong>
-
-      <%= simple_form_for(@task) do |f| %>
-        <%= f.input :title, input_html: { class: 'input-field'} %>
-        <%= f.input :description, input_html: { class: 'input-field'} %>
-        <%= f.input :priority, input_html: { class: 'input-field'}%>
-        <%= f.input :due_date, as: :datetime, html5: true, input_html: { class: 'input-field'}%>
-        <%# f.input :photo, as: :file, required: true %>
-        <div class='d-flex justify-content-center'>
-          <%= f.submit 'Update Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
-      <% end %>
-      </div>
+<%= simple_form_for(@task) do |f| %>
+  <%= f.input :title, input_html: { class: 'input-field' } %>
+  <%= f.input :description, input_html: { class: 'input-field' } %>
+  <%= f.input :completed, input_html: { class: 'input-field' } %>
+  <%= f.input :priority, collection: Task.priorities.keys, input_html: { class: 'input-field' } %>
+  <%= f.fields_for :task_categories do |tc| %>
+    <%= tc.association :category, collection: current_user.categories, multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
+  <% end %>
+  <%= f.input :due_date, as: :datetime, html5: true, input_html: { class: 'input-field' } %>
+  <%# f.fields_for :task_users do |u| %>
+    <%# u.association :user, collection: current_user.followeds.pluck(:user_name, :id), multiple: true, input_html: { class: 'input-field', data: { controller: 'tom-select'}} %>
+  <%# end %>
+  <div class='d-flex justify-content-center'>
+    <%= f.submit 'Update Task', class:'btn btn-primary btn-save d-flex justify-content-center' %>
+  </div>
+<% end %>

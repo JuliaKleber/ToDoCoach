@@ -3,9 +3,9 @@
   <div class="d-flex flex-row justify-content-center">
     <% @task.categories.each do |category| %>
       <% if ['groceries', 'work', 'personal'].include?(category.name) %>
-        <span class="task-category <%= category.name %>-color"><%= category.name %></span>
+        <span class="task-category <%= category.name %>-color"><%= category.name.capitalize %></span>
       <% else %>
-        <span class="task-category" style='background-color: #ecaa2e;'><%= category.name %></span>
+        <span class="task-category" style='background-color: #ecaa2e;'><%= category.name.capitalize %></span>
       <% end %>
       <%# raise %>
     <% end %>

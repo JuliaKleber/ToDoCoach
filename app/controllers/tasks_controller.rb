@@ -55,10 +55,10 @@ class TasksController < ApplicationController
   end
 
   def create
-    task_categories_attributes = task_params[:task_categories_attributes]
-    create_params = task_params.except(:task_categories_attributes)
+    task_categories_attributes = complete_task_params[:task_categories]
+    task_params = complete_task_params.except(:task_categories_attributes)
     formatted_task_categories_attributes = sanitize_categories(task_categories_attributes["0"][:category_id])
-    task = Task.new(create_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
+    task = Task.new(task_params.merge({ task_categories_attributes: formatted_task_categories_attributes }))
     task.user = current_user
     if task.save
       create_user_invitations(task)
@@ -73,11 +73,13 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = Task.find(params[:id])
-    @task.update(task__params)
-    respond_to do |format|
-      format.html { redirect_to todays_tasks_path }
-      format.text { render partial: "tasks/task_card", locals: { task: @task }, formats: [:html] }
+    task_params = complete_task_params.except(:task_categories, :user_ids)
+    if @task.update(task_params)
+      # wenn neue User hinzugekommen sind, müssen Einladungen herausgeschickt werden
+      # wenn User gelöscht werden, muss der entsprechende TaskUser-Eintrag gelöscht werden
+      redirect_to task_path(@task), notice: 'Task details have been updated.'
+    else
+      render :edit, notice: 'Task could not be updated.'
     end
   end
 
@@ -200,12 +202,21 @@ class TasksController < ApplicationController
   end
 
   # used in create and update
-  def task_params
-    params.require(:task).permit(:title, :description, :due_date, :priority, :completed, :photo, :task_user_ids, task_categories_attributes: [category_id: []])
+  # def task_params
+  #   params.require(:task).permit(:title, :description, :due_date, :priority, :completed,
+  #                                :task_user_ids,
+  #                                task_categories_attributes: [category_id: []])
+  # end
+
+  def complete_task_params
+    params.require(:task).permit(:title, :description, :due_date, :priority, :completed,
+                                 user_ids: [],
+                                 task_categories_attributes: [:id, :category_id, :_destroy])
   end
 
   # used in create
   def sanitize_categories(attributes_array)
+    raise
     attributes_array.compact_blank.map do |category_info|
       if category_info.to_i.zero?
         new_category = Category.create(user: current_user, name: category_info)
