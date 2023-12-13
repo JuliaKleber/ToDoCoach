@@ -65,13 +65,14 @@ class TasksController < ApplicationController
   end
 
   def update
-    task_model_params = task_params.except(:task_categories, :user_ids)
-    if @task.update(task_model_params)
-      # wenn neue User hinzugekommen sind, müssen Einladungen herausgeschickt werden
-      # wenn User gelöscht werden, muss der entsprechende TaskUser-Eintrag gelöscht werden
-      redirect_to task_path(@task), notice: 'Task details have been updated.'
-    else
-      render :edit, notice: 'Task could not be updated.'
+    if @task.user == current_user
+      task_model_params = task_params.except(:task_categories, :user_ids)
+      if @task.update(task_model_params)
+        edit_task_users(@task)
+        redirect_to task_path(@task), notice: 'Task details have been updated.'
+      else
+        render :edit, notice: 'Task could not be updated.'
+      end
     end
   end
 
@@ -169,7 +170,7 @@ class TasksController < ApplicationController
 
   # used in create and update
   def task_params
-    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :task_user_ids, task_categories_attributes: [category_id: []])
+    params.require(:task).permit(:title, :description, :due_date, :priority, :reminder_date, :completed, :user_ids, task_categories_attributes: [category_id: []])
   end
 
   # used in create
@@ -186,9 +187,21 @@ class TasksController < ApplicationController
 
   # used in create
   def create_user_invitations(task)
-    user_ids_raw = params[:task][:task_user_ids]
+    user_ids_raw = params[:task][:user_ids]
     user_ids = user_ids_raw.select { |user_id| user_id.to_i.positive? }.map(&:to_i)
     user_ids.each { |user_id| TaskInvitation.create(task_id: task.id, user_id: user_id) }
+  end
+
+  # used in update
+  def edit_task_users(task)
+    already_connected_user_ids = task.users.where.not(id: current_user.id).pluck(:id).map { |user| user.id }
+    already_invited_user_ids = TaskInvitation.where(task_id: task.id).pluck(:user_id)
+    new_user_ids = params[:task][:user_ids].select { |user_id| user_id.to_i.positive? }.map(&:to_i)
+    new_user_ids.each do |user_id|
+      TaskInvitation.create(task_id: task.id, user_id: user_id) unless already_connected_user_ids.include?(user_id)
+    end
+    TaskInvitation.where(task_id: task.id, user_id: already_invited_user_ids - new_user_ids).destroy_all
+    TaskUser.where(task_id: task.id, user_id: already_connected_user_ids - new_user_ids).destroy_all
   end
 
   # used in toggle_completed

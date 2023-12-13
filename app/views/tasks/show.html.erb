@@ -43,8 +43,10 @@
   <% end %>
 
   <div class='d-flex flex-row justify-content-center m-2'>
-    <%= link_to edit_task_path(@task), class: 'm-2' do %>
-      <i class='fa fa-pencil' style='color: #2c2c91;'></i>
+    <% if @task.user == current_user %>
+      <%= link_to edit_task_path(@task), class: 'm-2' do %>
+        <i class='fa fa-pencil' style='color: #2c2c91;'></i>
+      <% end %>
     <% end %>
     <%= link_to task_path(@task.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, class: 'm-2' do %>
       <i class='fa fa-trash' aria-hidden='true' style='color: #2c2c91;'></i>
