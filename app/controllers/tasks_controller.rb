@@ -73,6 +73,8 @@ class TasksController < ApplicationController
       else
         render :edit, notice: 'Task could not be updated.'
       end
+    else
+      redirect_to task_path(@task), notice: 'Task could not be updated as you are not the task owner.'
     end
   end
 
