@@ -1,11 +1,11 @@
 # To Do Coach
 
-This project is a task management application built with Ruby on Rails. It allows users to create, edit, update and delete tasks. Users can also toggle the completion status of tasks and the application provides feedback based on the user's progress. You can connect to other users and share tasks with them. The user is being motivate to keep on completing tasks via positive reinforcement, earning achievements and the possibility to share the achievments on the social feed.
+This project is a task management application built with Ruby on Rails. It allows users to create, edit, update and delete tasks. Users can also toggle the completion status of tasks and the application provides feedback based on the user's progress. You can connect to other users and share tasks with them. The user is being motivated to keep on completing tasks via positive reinforcement, earning achievements and the possibility to share the achievments on the social feed.
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/yourusername/your-repo-name.git`
-2. Navigate to the project directory: `cd your-repo-name`
+1. Clone the repository: `git clone https://github.com/GoldieCrystal/ToDoCoach.git`
+2. Navigate to the project directory: `cd ToDoCoach`
 3. Install dependencies: `bundle install`
 4. Setup the database: `rails db:create db:migrate`
 5. Start the server: `rails server`
