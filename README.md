@@ -18,3 +18,14 @@ After starting the server, navigate to `http://localhost:3000` in your web brows
 
 ![image](https://github.com/GoldieCrystal/ToDoCoach/assets/142741980/cb872df1-7b02-44b2-9b0e-21ba908b7024)
 
+![image](https://github.com/GoldieCrystal/ToDoCoach/assets/142741980/dca0159b-2447-47f7-92e1-bba0b64cb488)
+
+## Authors
+
+[Ehiaghe Aisiri](https://github.com/aghe-eng)
+
+[Bilal Can Sinaci](https://github.com/canosin46)
+
+[Elena Voda](https://github.com/ElenaVoda)
+
+[Julia Kleber](https://github.com/GoldieCrystal)
