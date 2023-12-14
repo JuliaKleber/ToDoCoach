@@ -39,6 +39,8 @@ class TasksController < ApplicationController
   end
 
   def show
+    collaborators = @task.users.reject { |user| user == @task.user }
+    @collaborators_list = collaborators.map(&:user_name).join(', ')
   end
 
   def new
@@ -68,6 +70,9 @@ class TasksController < ApplicationController
     if @task.user == current_user
       task_model_params = task_params.except(:task_categories, :user_ids)
       if @task.update(task_model_params)
+        @task.categories.destroy_all
+        category_ids = params[:task][:category_ids].map(&:to_i).select { |id| id > 0 }
+        category_ids.each { |category_id| TaskCategory.create(task_id: @task.id, category_id: category_id) }
         edit_task_users(@task)
         redirect_to task_path(@task), notice: 'Task details have been updated.'
       else
@@ -196,7 +201,7 @@ class TasksController < ApplicationController
 
   # used in update
   def edit_task_users(task)
-    already_connected_user_ids = task.users.where.not(id: current_user.id).pluck(:id).map { |user| user.id }
+    already_connected_user_ids = task.users.where.not(id: current_user.id).pluck(:id)
     already_invited_user_ids = TaskInvitation.where(task_id: task.id).pluck(:user_id)
     new_user_ids = params[:task][:user_ids].select { |user_id| user_id.to_i.positive? }.map(&:to_i)
     new_user_ids.each do |user_id|

@@ -25,20 +25,16 @@
 
   <p>
     <% if @task.due_date? %>
-      <i class='fa-solid fa-calendar-days' style='color: #2c2c917a'></i>
+      <i class='fa-solid fa-calendar-days'  style='color: #2c2c91;'></i>
       <%=@task.due_date.strftime('%a, %d %B, %I:%M %p') %>
     <% end %>
   </p>
 
-  <p><i class="fa-solid fa-user-pen"></i> <span class="show-task-creator mb-0"><%= @task.user.user_name %></span></p>
+  <p><i class="fa-solid fa-user-pen" style='color: #2c2c91;'></i> <span class="show-task-creator mb-0"><%= @task.user.user_name %></span></p>
   <% if @task.users.length > 1 %>
     <p>
       <i class="fa-solid fa-link"></i>
-      <% @task.users.each do |user| %>
-        <% if user != @task.user %>
-          <span class="show-task-creator mb-0"><%= user.user_name %></span>
-        <% end %>
-      <% end %>
+      <%= @collaborators_list %>
     </p>
   <% end %>
 
