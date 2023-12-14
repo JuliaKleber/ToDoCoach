@@ -27,6 +27,8 @@ After starting the server, navigate to `http://localhost:3000` in your web brows
 
 ![image](https://github.com/GoldieCrystal/ToDoCoach/assets/142741980/bede4e34-bc13-4796-8c39-c4602a2006fb)
 
+![image](https://github.com/GoldieCrystal/ToDoCoach/assets/142741980/e62f46f7-f52a-443c-9d98-5f9dde89d4b0)
+
 ## Authors
 
 [Ehiaghe Aisiri](https://github.com/aghe-eng)
