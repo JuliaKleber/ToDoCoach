@@ -37,4 +37,4 @@ After starting the server, navigate to `http://localhost:3000` in your web brows
 
 [Elena Voda](https://github.com/ElenaVoda)
 
-[Julia Kleber](https://github.com/GoldieCrystal)
+[Julia Kleber](https://github.com/JuliaKleber)
