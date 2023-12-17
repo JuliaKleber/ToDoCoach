@@ -6,21 +6,23 @@ This project is a task management application built with Ruby on Rails. It allow
 
 1. Clone the repository:
 
-`git clone https://github.com/JuliaKleber/ToDoCoach.git`
+   `git clone https://github.com/JuliaKleber/ToDoCoach.git`
 
 2. Navigate to the project directory:
 
-`cd ToDoCoach`
+   `cd ToDoCoach`
 
 3. Install dependencies:
 
-`bundle install`
+   `bundle install`
 
 4. Setup the database:
 
-`rails db:create db:migrate sb:seed`
+   `rails db:create db:migrate sb:seed`
 
-5. Start the server: `rails server`
+5. Start the server:
+
+   `rails server`
 
 ## Usage
 
