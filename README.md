@@ -38,7 +38,7 @@ After starting the server, navigate to `http://localhost:3000` in your web brows
 
 ## Link
 
-[link](https://to-do-coach-f75c7e0f7968.herokuapp.com/)
+[Heroku Link](https://to-do-coach-f75c7e0f7968.herokuapp.com/)
 
 Optimized for usage on mobile devices
   
