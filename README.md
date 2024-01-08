@@ -31,6 +31,7 @@ After starting the server, navigate to `http://localhost:3000` in your web brows
 ## Built with
 
 - Ruby on Rails
+- HTML
 - JavaScript / Stimulus
 - SCSS
 - Bootstrap
