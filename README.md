@@ -1,6 +1,8 @@
 # To Do Coach
 
-This project is a task management application built with Ruby on Rails. It allows users to create, edit, update and delete tasks. Users can also toggle the completion status of tasks and the application provides feedback based on the user's progress. You can connect to other users and share tasks with them. The user is being motivated to keep on completing tasks via positive reinforcement, earning achievements and the possibility to share the achievements on the social feed.
+This project is a task management application built with Ruby on Rails. It allows users to create, edit, update and delete tasks. You can connect to other users and share tasks with them.
+
+The user is being motivated to keep on completing tasks via positive reinforcement, earning achievements and the possibility to share the achievements on the social feed.
 
 ## Installation
 
